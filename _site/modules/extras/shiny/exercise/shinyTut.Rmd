@@ -1,0 +1,312 @@
+---
+title: "Shiny Tutorial"
+author: "Reka Solymosi (reka.solymosi@mancheser.ac.uk)"
+#date: "1 July 2016"
+output: html_document
+---
+
+#Quick intro to building Shiny apps
+
+Shiny apps allow you to create interactive web apps using R.
+I mostly use it to build dashboards for interrogating and displaying data. 
+You can see an example of a shiny app for interrogating government petition data [here](https://rekarrr.shinyapps.io/trumpPetition/) 
+
+and another one for looking at collisions in London [here](https://rcatlord.shinyapps.io/STATS19_scanner/)
+
+You can use shiny to build relatively flashy-looking things with short time/ effort. For example, [this app](https://rekarrr.shinyapps.io/UKDS_data_dive_prototype/) was one we created with a Hackathon team for the UKDS hackathon in November last year. It doesn't *fully* work, but to demonstrate proof of concept, these things are very handy. And they make you look good :) 
+
+In this tutorial, I'll just go through the basic concepts behind building a shiny app, and provide some building blocks to get people started on the way to develop their own apps. 
+
+#Installing shiny
+
+As usual, you will need to install the package from cran, 
+
+```{r, eval=FALSE}
+install.packages("shiny")
+```
+
+and then load it up in your R session.
+
+```{r, eval=FALSE}
+library("shiny")
+```
+
+
+#Anatomy of a shiny app
+
+Basically your app will need to have at least 2 components, a ui.R file, and a server.r 
+
+The ui.R file creates your user interface. Think of this as the code that controls the layout of your app. So you will put here any buttons, anything that will capture user input (eg a text field, or drop down menu), and anything that will display our outputs. So if you will be showing a map in your app, you will put a map display object here. 
+
+The server.r file is where you do all your data manipulation, data processing, and where you create the outputs to be displayed. So for example, if you will be displaying a map, you will write all the code to create the map here, and you will then pass that to an output that will place it in the appropriate slot you've created for it in the ui file. 
+
+An optional component to include with your app is a css file. This will be familiar if you do any sort of web development, but this is essentually some code for making your shiny app more beautiful. We will not cover this today, but if you are interested there is a comprehensive article [here](http://shiny.rstudio.com/articles/css.html). 
+
+##So let's illustrate with quick example
+
+Here is a shiny app that does nothing, just to illustrate the layout of an app: 
+
+```{r, eval=FALSE}
+ui <- fluidPage(
+  titlePanel("title panel"),
+
+  sidebarLayout(
+    sidebarPanel( "sidebar panel"),
+    mainPanel("main panel")
+  )
+)
+
+server <- function(input, output) {
+  #this app literally does nothing
+}
+
+
+shinyApp(ui = ui, server = server)
+
+```
+
+You can find a variety of resources for adding things into these sections [here](http://shiny.rstudio.com/tutorial/lesson2/)
+
+##Using actual data
+
+So once you're familiar with how you can build the layout of your app, and how you can insert text and images, you probably want to move on to actually displaying data. 
+
+For the rest of this tutoial, I will be pulling data from the petition to have a second EU referendum. This data is available from the petitions.gov.uk website, and comes in JSON format. While the TfL firewall blocks us from reading a JSON file, it does not block us from just extracting the text, and we can then read to JSON from within the R session that way. 
+
+```{r, eval=FALSE}
+#get data 
+library(jsonlite)
+l = readLines("https://petition.parliament.uk/petitions/131215.json", encoding="UTF-8", warn=FALSE)
+data1 = fromJSON(l)
+signByCountry <- as.data.frame(data1$data$attributes$signatures_by_country) 
+```
+
+So once again let's create a ui file with header, side panel, and main panel, but this time in the main panel, we put a place holder for a plot. We do this by using `plotOutput("name of plot")`. You can specify plot dimensions, and a whole range of other arguments, which you can read about [here](http://shiny.rstudio.com/reference/shiny/latest/plotOutput.html). 
+
+We will need ggplot library for the plot:
+```{r, eval=FALSE}
+library(ggplot2)
+```
+
+And then the ui and server parts:
+```{r, eval=FALSE}
+#here's the ui file
+ui <- fluidPage(
+  headerPanel('This is a title'), 
+  sidebarPanel(
+    
+  ), 
+  mainPanel(
+    #put here that a plot will be placed here called countriesPlot
+    plotOutput("coutriesPlot", height = 10000)
+  )
+)
+
+server <- function(input, output) {
+  #create the plot here called countriesPlot
+  output$coutriesPlot <- renderPlot({
+                                  signByCountry <- transform(signByCountry,  
+                                                         name = reorder(name, signature_count)) 
+                                  c <- ggplot(signByCountry, 
+                                              aes(x = factor(name), y = signature_count)) 
+                                  c + geom_bar(stat="identity") + coord_flip() +  
+                                     xlab("Name of country") + 
+                                     ylab("Number of signatures from country") 
+
+  })
+}
+
+shinyApp(ui = ui, server = server)
+
+
+```
+
+So this is nice, but it's still not very interactive yet. There are many ways to build interactivity into your shiny app, and it depends on what you want the user to be able to do. Do you want them to be able to input data? Or just interrograte the data that you already have?
+
+Let's build an app where you can interrogate the data. 
+
+```{r, eval=FALSE}
+#here's the ui file
+ui <- fluidPage(
+  headerPanel('How many people signed the petition?'), 
+  sidebarPanel(
+    uiOutput('countrySelector',selected = "United Kingdom") 
+    
+  ), 
+  mainPanel(
+    #put here that a plot will be placed here called countriesPlot
+    textOutput("text1")
+  )
+)
+#andhere's the server file
+server <- function(input, output) {
+  #create a list of options to select
+  countryChoices <- sort(unique(as.character(signByCountry$name)))
+  
+  #create the drop down menu with name country selector to put in placeholder in UI
+  output$countrySelector <- renderUI({
+	                          	selectInput("countrySelect", label = "Select country",
+					                    choices = as.list(countryChoices), selected = "United Kingdom")
+	})
+  
+  output$text1 <- renderText({
+    df <- signByCountry[which(signByCountry$name==input$countrySelect),]
+    paste0("There are ", df$signature_count, " signatures from ", input$countrySelect)
+  })
+}
+
+shinyApp(ui = ui, server = server)
+
+
+```
+
+So that's exciting, but let's start looking at some interactive graphs, and maybe let's return to data that is useful for us. So let's first grab some AccStats data for 2015 again using the TfL API:
+
+```{r, eval=FALSE}
+
+#you will need to register with the TfL API, and get an app id and an app key, and enter them here: 
+my_app_id <- "..."
+my_app_key <- "..."
+
+l = readLines(paste0("https://api.tfl.gov.uk/AccidentStats/2015?app_id=", my_app_id,"&app_key=",my_app_key), encoding="UTF-8", warn=FALSE)
+
+d = fromJSON(l)
+
+accidents <- data.frame(lapply(as.data.frame(d), as.character), stringsAsFactors=FALSE)
+
+#also make sure data is in date format
+accidents$date2 <- as.Date(accidents$date, "%Y-%m-%d")
+
+```
+
+NOTE: if you're going to be using this code, please do generate your own `app_id` and `app_key` 
+
+OK now with this data we can create an app for looking at the number of accidents with different severity, and adjust the date range (within the year 2015) as we like: 
+
+```{r, eval=FALSE}
+
+library(dplyr)
+
+ui <- fluidPage(
+  titlePanel("Accidents in 2015"),
+
+  sidebarLayout(
+    sidebarPanel( 
+      #date selector goes here 
+      dateRangeInput("Date range", inputId = "date_range",
+        start = "2015-01-01",
+        end = "2015-12-31",
+        format = "yyyy-mm-dd")
+      ),
+    mainPanel(
+      #plot output goes here
+      plotOutput("ksiPlot")
+    )
+  )
+)
+
+server <- function(input, output) {
+  #filter data based on dates
+  dateFiltered <- reactive({accidents %>% filter(date2 %in% seq(input$date_range[1],     input$date_range[2], by = "day"))
+  })
+  #reactive plot
+  output$ksiPlot <- renderPlot({
+                                  data <- dateFiltered() 
+                                  c <- ggplot(data,aes(x = factor(severity))) 
+                                  c + geom_bar() +  
+                                     xlab("Severity of incident") + 
+                                     ylab("Number of incidents") 
+
+  })
+  
+  
+}
+
+
+shinyApp(ui = ui, server = server)
+
+```
+
+So you can see that the values on the plot change as you change the date range. Exciting!
+
+##Leaflet integration
+
+Now one final thing, you can also incorporate a leaflet map into your shiny app, to make it even more interactive. If you would like to find out more about leaflet, there are some great tutorials online, and also I've done a session on it for the RUM group [here](https://github.com/RUMgroup/leaflet_tutorial)
+
+So let's take the same accidents data, and we want to be able to filter on date again, but let's plot the incidents on a map.
+
+First you need to load up the leaflet library: 
+```{r, eval=FALSE}
+
+library(leaflet)
+
+```
+
+And then instead of plot output in your UI you will need a leaflet output, and in your server you will need your leaflet map code, and to bind it to your output, you will need to follow that bit of code up with 
+
+```{r, eval=FALSE}
+
+
+ui <- fluidPage(
+  titlePanel("Accidents in 2015"),
+
+  sidebarLayout(
+    sidebarPanel( 
+      #date selector goes here 
+      dateRangeInput("Date range", inputId = "date_range",
+        start = "2015-01-01",
+        end = "2015-12-31",
+        format = "yyyy-mm-dd"), 
+      uiOutput('severitySelector',selected = "Fatal")
+      ),
+    mainPanel(
+      #leaflet output goes here
+      leafletOutput("map", height = 800)
+
+    )
+  )
+)
+
+server <- function(input, output) {
+  
+  severityChoices <- sort(unique(as.character(accidents$severity)))
+  
+  #create the drop down menu with name country selector to put in placeholder in UI
+  output$severitySelector <- renderUI({
+	                          	selectInput("severitySelect", label = "Select severity",
+					                    choices = as.list(severityChoices), selected = "Fatal")
+  })
+  #filter data based on dates
+  dateFiltered <- reactive({
+    thing <- accidents %>% filter(date2 %in% seq(input$date_range[1],     input$date_range[2], by = "day") & severity %in% input$severitySelect)
+   
+  })
+  #reactive map
+  output$map <- renderLeaflet({
+    leaflet(accidents) %>%  
+      addProviderTiles("CartoDB.Positron") %>%
+      fitBounds(~min(lon), ~min(lat), ~max(lon), ~max(lat)) %>%
+      addLegend(position = "bottomleft", colors = c("#b10026", "#fd8d3c", "#ffeda0"),
+        labels = c("Fatal", "Serious", "Slight"), opacity = 1, title = "Severity")
+    })
+  
+  observe({
+    pal <- colorFactor(c("#b10026", "#fd8d3c", "#ffeda0"), domain = c("Fatal", "Serious", "Slight"), ordered = TRUE)
+    leafletProxy("map", data = dateFiltered()) %>% clearMarkerClusters() %>%
+      addCircleMarkers(~lon, ~lat,
+        color = "#636363", stroke = TRUE, weight = 1,
+        fillColor = ~pal(severity), fillOpacity = 0.8,
+        radius = 5,
+        popup = ~location, 
+        clusterOptions = markerClusterOptions())
+  })
+  
+  
+}
+
+
+shinyApp(ui = ui, server = server)
+
+```
+
+OK that's all folks.

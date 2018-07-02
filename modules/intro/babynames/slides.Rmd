@@ -1,0 +1,434 @@
+---
+title: | 
+    | Getting Started in R
+    | an introduction to data analysis and visualisation
+subtitle: "babynames"
+author: "Réka Solymosi, Henry Partridge & Sam Langton"
+date: "2 July 2018"
+output:
+  xaringan::moon_reader:
+    css: ["default", "my-theme.css"]
+    lib_dir: libs
+    nature:
+      highlightStyle: github
+      highlightLines: true
+      countIncrementalSlides: false
+editor_options: 
+  chunk_output_type: inline
+---
+
+```{r setup, include=FALSE}
+options(htmltools.dir.version = FALSE)
+```
+
+### `babynames`
+Names of boys and girls born each year in the U.S. since 1880
+```{r}
+library(babynames)
+babynames
+```
+
+---
+class: center, middle
+<img src="img/baby_plot.png" width="500px" />
+
+---
+
+## The R code
+```{r, eval=FALSE}
+library(tidyverse) ; library(babynames)
+
+babynames %>%
+  filter(name == "Mabel") %>%
+  ggplot(data = ., aes(x = year, y = n)) +
+  geom_line(aes(color = sex), size = 2) +
+  scale_color_manual(values = c("#66c2a5", "#ff7f00"),
+                     labels = c("Female", "Male")) +
+  labs(title = "Babies named Mabel between 1880 and 2015",
+       x = "Year", 
+       y = "Frequency",
+       caption = "Source: Social Security Administration",
+       color = "") +
+  theme_minimal()  +
+  theme(legend.position = "top")
+ggsave("baby_plot.png", scale=1, dpi=300)
+```
+
+---
+class: center, middle, inverse
+# Break it down
+---
+
+### Load the R packages
+<br>
+.pull-left[
+```r
+*library(tidyverse) ; library(babynames) 
+
+babynames %>%
+  filter(name == "Mabel") %>%
+  ggplot(data = ., aes(x = year, y = n)) +
+  geom_line(aes(color = sex), size = 2) +
+  scale_color_manual(values = c("#66c2a5", "#ff7f00"),
+                     labels = c("Female", "Male")) +
+  labs(title = "Babies named Mabel between 1880 and 2015",
+       x = "Year", 
+       y = "Frequency",
+       caption = "Source: Social Security Administration",
+       color = "") +
+  theme_minimal()  +
+  theme(legend.position = "top")
+ggsave("baby_plot.png", scale=1, dpi=300)
+```
+]
+
+.pull-right[
+```{r, echo=FALSE}
+library(tidyverse) ; library(babynames)
+```
+]
+
+---
+### Access the `babynames` data
+<br>
+.pull-left[
+```r
+library(tidyverse) ; library(babynames)
+
+*babynames %>%
+  filter(name == "Mabel") %>%
+  ggplot(data = ., aes(x = year, y = n)) +
+  geom_line(aes(color = sex), size = 2) +
+  scale_color_manual(values = c("#66c2a5", "#ff7f00"),
+                     labels = c("Female", "Male")) +
+  labs(title = "Babies named Mabel between 1880 and 2015",
+       x = "Year", 
+       y = "Frequency",
+       caption = "Source: Social Security Administration",
+       color = "") +
+  theme_minimal()  +
+  theme(legend.position = "top")
+ggsave("baby_plot.png", scale=1, dpi=300)
+```
+]
+
+.pull-right[
+```{r, echo=FALSE}
+# library(tidyverse) ; library(babynames) 
+
+babynames
+```
+]
+---
+### Subset the data
+<br>
+.pull-left[
+```r
+library(tidyverse) ; library(babynames)
+
+babynames %>%
+* filter(name == "Mabel") %>%
+  ggplot(data = ., aes(x = year, y = n)) +
+  geom_line(aes(color = sex), size = 2) +
+  scale_color_manual(values = c("#66c2a5", "#ff7f00"),
+                     labels = c("Female", "Male")) +
+  labs(title = "Babies named Mabel between 1880 and 2015",
+       x = "Year", 
+       y = "Frequency",
+       caption = "Source: Social Security Administration",
+       color = "") +
+  theme_minimal()  +
+  theme(legend.position = "top")
+ggsave("baby_plot.png", scale=1, dpi=300)
+```
+]
+
+.pull-right[
+```{r, echo=FALSE}
+# library(tidyverse) ; library(babynames) 
+
+babynames %>%
+  filter(name == "Mabel")
+```
+]
+
+---
+### Initialise a `ggplot()` object, inherit the filtered data, and map variables to the x and y axes
+.pull-left[
+```r
+library(tidyverse) ; library(babynames
+
+babynames %>%
+  filter(name == "Mabel") %>%
+* ggplot(data = ., aes(x = year, y = n)) +
+  geom_line(aes(color = sex), size = 2) +
+  scale_color_manual(values = c("#66c2a5", "#ff7f00"),
+                     labels = c("Female", "Male")) +
+  labs(title = "Babies named Mabel between 1880 and 2015",
+       x = "Year", 
+       y = "Frequency",
+       caption = "Source: Social Security Administration",
+       color = "") +
+  theme_minimal()  +
+  theme(legend.position = "top")
+ggsave("baby_plot.png", scale=1, dpi=300)
+```
+]
+
+.pull-right[
+```{r, echo=FALSE}
+# library(tidyverse) ; library(babynames)
+
+babynames %>%
+  filter(name == "Mabel") %>%
+  ggplot(data = ., aes(x = year, y = n))
+```
+]
+
+---
+### Use `geom_line()` to connect the observations, map the `sex` variable to colour and set the line thickness
+.pull-left[
+```r
+library(tidyverse) ; library(babynames) 
+
+babynames %>%
+  filter(name == "Mabel") %>%
+  ggplot(data = ., aes(x = year, y = n)) +
+* geom_line(aes(color = sex), size = 2) +
+  scale_color_manual(values = c("#66c2a5", "#ff7f00"),
+                     labels = c("Female", "Male")) +
+  labs(title = "Babies named Mabel between 1880 and 2015",
+       x = "Year", 
+       y = "Frequency",
+       caption = "Source: Social Security Administration",
+       color = "") +
+  theme_minimal()  +
+  theme(legend.position = "top")
+ggsave("baby_plot.png", scale=1, dpi=300)
+```
+]
+
+.pull-right[
+```{r, echo=FALSE}
+# library(tidyverse) ; library(babynames) 
+
+babynames %>%
+  filter(name == "Mabel") %>%
+  ggplot(data = ., aes(x = year, y = n)) +
+  geom_line(aes(color = sex), size = 2)
+```
+]
+
+---
+### Specify which colours the `sex` variable is mapped to
+<br>
+.pull-left[
+```r
+library(tidyverse) ; library(babynames) 
+
+babynames %>%
+  filter(name == "Mabel") %>%
+  ggplot(data = ., aes(x = year, y = n)) +
+  geom_line(aes(color = sex), size = 2) +
+* scale_color_manual(values = c("#66c2a5", "#ff7f00"),
+*                    labels = c("Female", "Male")) +
+  labs(title = "Babies named Mabel between 1880 and 2015",
+       x = "Year", 
+       y = "Frequency",
+       caption = "Source: Social Security Administration",
+       color = "") +
+  theme_minimal()  +
+  theme(legend.position = "top")
+ggsave("baby_plot.png", scale=1, dpi=300)
+```
+]
+
+.pull-right[
+```{r, echo=FALSE}
+# library(tidyverse) ; library(babynames) 
+
+babynames %>%
+  filter(name == "Mabel") %>%
+  ggplot(data = ., aes(x = year, y = n)) +
+  geom_line(aes(color = sex), size = 2) +
+  scale_color_manual(values = c("#66c2a5", "#ff7f00"),
+                     labels = c("Female", "Male"))
+```
+]
+
+---
+### Add a title, label the axes, include a caption, and drop the legend title
+<br>
+.pull-left[
+```r
+library(tidyverse) ; library(babynames) 
+
+babynames %>%
+  filter(name == "Mabel") %>%
+  ggplot(data = ., aes(x = year, y = n)) +
+  geom_line(aes(color = sex), size = 2) +
+  scale_color_manual(values = c("#66c2a5", "#ff7f00"),
+                     labels = c("Female", "Male")) +
+* labs(title = "Babies named Mabel between 1880 and 2015",
+*      x = "Year", 
+*      y = "Frequency",
+*      caption = "Source: Social Security Administration",
+*      color = "") +
+  theme_minimal()  +
+  theme(legend.position = "top")
+ggsave("baby_plot.png", scale=1, dpi=300)
+```
+]
+
+.pull-right[
+```{r, echo=FALSE}
+# library(tidyverse) ; library(babynames)
+
+babynames %>%
+  filter(name == "Mabel") %>%
+  ggplot(data = ., aes(x = year, y = n)) +
+  geom_line(aes(color = sex), size = 2) +
+  scale_color_manual(values = c("#66c2a5", "#ff7f00"),
+                     labels = c("Female", "Male")) +
+  labs(title = "Babies named Mabel between 1880 and 2015",
+       x = "Year", 
+       y = "Frequency",
+       caption = "Source: Social Security Administration",
+       color = "")
+```
+]
+
+---
+### Use a `ggplot2` theme to format the chart
+<br>
+.pull-left[
+```r
+library(tidyverse) ; library(babynames) 
+
+babynames %>%
+  filter(name == "Mabel") %>%
+  ggplot(data = ., aes(x = year, y = n)) +
+  geom_line(aes(color = sex), size = 2) +
+  scale_color_manual(values = c("#66c2a5", "#ff7f00"),
+                     labels = c("Female", "Male")) +
+  labs(title = "Babies named Mabel between 1880 and 2015",
+       x = "Year", 
+       y = "Frequency",
+       caption = "Source: Social Security Administration",
+       color = "") +
+* theme_minimal()  +
+  theme(legend.position = "top")
+ggsave("baby_plot.png", scale=1, dpi=300)
+```
+]
+
+.pull-right[
+```{r, echo=FALSE}
+# library(tidyverse) ; library(babynames) 
+
+babynames %>%
+  filter(name == "Mabel") %>%
+  ggplot(data = ., aes(x = year, y = n)) +
+  geom_line(aes(color = sex), size = 2) +
+  scale_color_manual(values = c("#66c2a5", "#ff7f00"),
+                     labels = c("Female", "Male")) +
+  labs(title = "Babies named Mabel between 1880 and 2015",
+       x = "Year", 
+       y = "Frequency",
+       caption = "Source: Social Security Administration",
+       color = "") +
+  theme_minimal() 
+```
+]
+
+---
+### Move the legend to the top of the plot
+<br>
+.pull-left[
+```r
+library(tidyverse) ; library(babynames) 
+
+babynames %>%
+  filter(name == "Mabel") %>%
+  ggplot(data = ., aes(x = year, y = n)) +
+  geom_line(aes(color = sex), size = 2) +
+  scale_color_manual(values = c("#66c2a5", "#ff7f00"),
+                     labels = c("Female", "Male")) +
+  labs(title = "Babies named Mabel between 1880 and 2015",
+       x = "Year", 
+       y = "Frequency",
+       caption = "Source: Social Security Administration",
+       color = "") +
+  theme_minimal()  +
+* theme(legend.position = "top")
+ggsave("baby_plot.png", scale=1, dpi=300)
+```
+]
+
+.pull-right[
+```{r, echo=FALSE}
+# library(tidyverse) ; library(babynames) 
+
+babynames %>%
+  filter(name == "Mabel") %>%
+  ggplot(data = ., aes(x = year, y = n)) +
+  geom_line(aes(color = sex), size = 2) +
+  scale_color_manual(values = c("#66c2a5", "#ff7f00"),
+                     labels = c("Female", "Male")) +
+  labs(title = "Babies named Mabel between 1880 and 2015",
+       x = "Year", 
+       y = "Frequency",
+       caption = "Source: Social Security Administration",
+       color = "") +
+  theme_minimal()  +
+  theme(legend.position = "top")
+```
+]
+
+---
+### Save the plot as a png at a high resolution
+<br>
+.pull-left[
+```r
+library(tidyverse) ; library(babynames) 
+
+babynames %>%
+  filter(name == "Mabel") %>%
+  ggplot(data = ., aes(x = year, y = n)) +
+  geom_line(aes(color = sex), size = 2) +
+  scale_color_manual(values = c("#66c2a5", "#ff7f00"),
+                     labels = c("Female", "Male")) +
+  labs(title = "Babies named Mabel between 1880 and 2015",
+       x = "Year", 
+       y = "Frequency",
+       caption = "Source: Social Security Administration",
+       color = "") +
+  theme_minimal()  +
+  theme(legend.position = "top")
+*ggsave("baby_plot.png", scale=1, dpi=300)
+```
+]
+
+.pull-right[
+```{r, echo=FALSE}
+# library(tidyverse) ; library(babynames) 
+
+babynames %>%
+  filter(name == "Mabel") %>%
+  ggplot(data = ., aes(x = year, y = n)) +
+  geom_line(aes(color = sex), size = 2) +
+  scale_color_manual(values = c("#66c2a5", "#ff7f00"),
+                     labels = c("Female", "Male")) +
+  labs(title = "Babies named Mabel between 1880 and 2015",
+       x = "Year", 
+       y = "Frequency",
+       caption = "Source: Social Security Administration",
+       color = "") +
+  theme_minimal()  +
+  theme(legend.position = "top")
+```
+]
+
+---
+class: center, middle, inverse
+# Your turn

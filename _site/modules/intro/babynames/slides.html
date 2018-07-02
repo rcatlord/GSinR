@@ -1,0 +1,456 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <title></title>
+    <meta charset="utf-8">
+    <meta name="author" content="Réka Solymosi, Henry Partridge &amp; Sam Langton" />
+    <link href="libs/remark-css/default.css" rel="stylesheet" />
+    <link rel="stylesheet" href="my-theme.css" type="text/css" />
+  </head>
+  <body>
+    <textarea id="source">
+class: center, middle, inverse, title-slide
+
+# <div style="white-space: pre-line;">Getting Started in R
+an introduction to data analysis and visualisation</div>
+## babynames
+### Réka Solymosi, Henry Partridge &amp; Sam Langton
+### 2 July 2018
+
+---
+
+
+
+
+### `babynames`
+Names of boys and girls born each year in the U.S. since 1880
+
+```r
+library(babynames)
+```
+
+```
+## Warning: package 'babynames' was built under R version 3.4.4
+```
+
+```r
+babynames
+```
+
+```
+## # A tibble: 1,858,689 x 5
+##     year sex   name          n   prop
+##    &lt;dbl&gt; &lt;chr&gt; &lt;chr&gt;     &lt;int&gt;  &lt;dbl&gt;
+##  1  1880 F     Mary       7065 0.0724
+##  2  1880 F     Anna       2604 0.0267
+##  3  1880 F     Emma       2003 0.0205
+##  4  1880 F     Elizabeth  1939 0.0199
+##  5  1880 F     Minnie     1746 0.0179
+##  6  1880 F     Margaret   1578 0.0162
+##  7  1880 F     Ida        1472 0.0151
+##  8  1880 F     Alice      1414 0.0145
+##  9  1880 F     Bertha     1320 0.0135
+## 10  1880 F     Sarah      1288 0.0132
+## # ... with 1,858,679 more rows
+```
+
+---
+class: center, middle
+&lt;img src="img/baby_plot.png" width="500px" /&gt;
+
+---
+
+## The R code
+
+```r
+library(tidyverse) ; library(babynames)
+
+babynames %&gt;%
+  filter(name == "Mabel") %&gt;%
+  ggplot(data = ., aes(x = year, y = n)) +
+  geom_line(aes(color = sex), size = 2) +
+  scale_color_manual(values = c("#66c2a5", "#ff7f00"),
+                     labels = c("Female", "Male")) +
+  labs(title = "Babies named Mabel between 1880 and 2015",
+       x = "Year", 
+       y = "Frequency",
+       caption = "Source: Social Security Administration",
+       color = "") +
+  theme_minimal()  +
+  theme(legend.position = "top")
+ggsave("baby_plot.png", scale=1, dpi=300)
+```
+
+---
+class: center, middle, inverse
+# Break it down
+---
+
+### Load the R packages
+&lt;br&gt;
+.pull-left[
+```r
+*library(tidyverse) ; library(babynames) 
+
+babynames %&gt;%
+  filter(name == "Mabel") %&gt;%
+  ggplot(data = ., aes(x = year, y = n)) +
+  geom_line(aes(color = sex), size = 2) +
+  scale_color_manual(values = c("#66c2a5", "#ff7f00"),
+                     labels = c("Female", "Male")) +
+  labs(title = "Babies named Mabel between 1880 and 2015",
+       x = "Year", 
+       y = "Frequency",
+       caption = "Source: Social Security Administration",
+       color = "") +
+  theme_minimal()  +
+  theme(legend.position = "top")
+ggsave("baby_plot.png", scale=1, dpi=300)
+```
+]
+
+.pull-right[
+
+```
+## Warning: package 'tidyverse' was built under R version 3.4.4
+```
+
+```
+## -- Attaching packages --------------------- tidyverse 1.2.1 --
+```
+
+```
+## v ggplot2 2.2.1.9000     v purrr   0.2.4     
+## v tibble  1.4.2          v dplyr   0.7.4     
+## v tidyr   0.8.0          v stringr 1.2.0     
+## v readr   1.1.1          v forcats 0.2.0
+```
+
+```
+## -- Conflicts ------------------------ tidyverse_conflicts() --
+## x dplyr::filter() masks stats::filter()
+## x dplyr::lag()    masks stats::lag()
+```
+]
+
+---
+### Access the `babynames` data
+&lt;br&gt;
+.pull-left[
+```r
+library(tidyverse) ; library(babynames)
+
+*babynames %&gt;%
+  filter(name == "Mabel") %&gt;%
+  ggplot(data = ., aes(x = year, y = n)) +
+  geom_line(aes(color = sex), size = 2) +
+  scale_color_manual(values = c("#66c2a5", "#ff7f00"),
+                     labels = c("Female", "Male")) +
+  labs(title = "Babies named Mabel between 1880 and 2015",
+       x = "Year", 
+       y = "Frequency",
+       caption = "Source: Social Security Administration",
+       color = "") +
+  theme_minimal()  +
+  theme(legend.position = "top")
+ggsave("baby_plot.png", scale=1, dpi=300)
+```
+]
+
+.pull-right[
+
+```
+## # A tibble: 1,858,689 x 5
+##     year sex   name          n   prop
+##    &lt;dbl&gt; &lt;chr&gt; &lt;chr&gt;     &lt;int&gt;  &lt;dbl&gt;
+##  1  1880 F     Mary       7065 0.0724
+##  2  1880 F     Anna       2604 0.0267
+##  3  1880 F     Emma       2003 0.0205
+##  4  1880 F     Elizabeth  1939 0.0199
+##  5  1880 F     Minnie     1746 0.0179
+##  6  1880 F     Margaret   1578 0.0162
+##  7  1880 F     Ida        1472 0.0151
+##  8  1880 F     Alice      1414 0.0145
+##  9  1880 F     Bertha     1320 0.0135
+## 10  1880 F     Sarah      1288 0.0132
+## # ... with 1,858,679 more rows
+```
+]
+---
+### Subset the data
+&lt;br&gt;
+.pull-left[
+```r
+library(tidyverse) ; library(babynames)
+
+babynames %&gt;%
+* filter(name == "Mabel") %&gt;%
+  ggplot(data = ., aes(x = year, y = n)) +
+  geom_line(aes(color = sex), size = 2) +
+  scale_color_manual(values = c("#66c2a5", "#ff7f00"),
+                     labels = c("Female", "Male")) +
+  labs(title = "Babies named Mabel between 1880 and 2015",
+       x = "Year", 
+       y = "Frequency",
+       caption = "Source: Social Security Administration",
+       color = "") +
+  theme_minimal()  +
+  theme(legend.position = "top")
+ggsave("baby_plot.png", scale=1, dpi=300)
+```
+]
+
+.pull-right[
+
+```
+## # A tibble: 185 x 5
+##     year sex   name      n      prop
+##    &lt;dbl&gt; &lt;chr&gt; &lt;chr&gt; &lt;int&gt;     &lt;dbl&gt;
+##  1  1880 F     Mabel   808 0.00828  
+##  2  1881 F     Mabel   893 0.00903  
+##  3  1882 F     Mabel   997 0.00862  
+##  4  1883 F     Mabel  1086 0.00905  
+##  5  1883 M     Mabel     6 0.0000533
+##  6  1884 F     Mabel  1270 0.00923  
+##  7  1885 F     Mabel  1349 0.00950  
+##  8  1885 M     Mabel     7 0.0000604
+##  9  1886 F     Mabel  1422 0.00925  
+## 10  1886 M     Mabel     6 0.0000504
+## # ... with 175 more rows
+```
+]
+
+---
+### Initialise a `ggplot()` object, inherit the filtered data, and map variables to the x and y axes
+.pull-left[
+```r
+library(tidyverse) ; library(babynames
+
+babynames %&gt;%
+  filter(name == "Mabel") %&gt;%
+* ggplot(data = ., aes(x = year, y = n)) +
+  geom_line(aes(color = sex), size = 2) +
+  scale_color_manual(values = c("#66c2a5", "#ff7f00"),
+                     labels = c("Female", "Male")) +
+  labs(title = "Babies named Mabel between 1880 and 2015",
+       x = "Year", 
+       y = "Frequency",
+       caption = "Source: Social Security Administration",
+       color = "") +
+  theme_minimal()  +
+  theme(legend.position = "top")
+ggsave("baby_plot.png", scale=1, dpi=300)
+```
+]
+
+.pull-right[
+![](slides_files/figure-html/unnamed-chunk-6-1.png)&lt;!-- --&gt;
+]
+
+---
+### Use `geom_line()` to connect the observations, map the `sex` variable to colour and set the line thickness
+.pull-left[
+```r
+library(tidyverse) ; library(babynames) 
+
+babynames %&gt;%
+  filter(name == "Mabel") %&gt;%
+  ggplot(data = ., aes(x = year, y = n)) +
+* geom_line(aes(color = sex), size = 2) +
+  scale_color_manual(values = c("#66c2a5", "#ff7f00"),
+                     labels = c("Female", "Male")) +
+  labs(title = "Babies named Mabel between 1880 and 2015",
+       x = "Year", 
+       y = "Frequency",
+       caption = "Source: Social Security Administration",
+       color = "") +
+  theme_minimal()  +
+  theme(legend.position = "top")
+ggsave("baby_plot.png", scale=1, dpi=300)
+```
+]
+
+.pull-right[
+![](slides_files/figure-html/unnamed-chunk-7-1.png)&lt;!-- --&gt;
+]
+
+---
+### Specify which colours the `sex` variable is mapped to
+&lt;br&gt;
+.pull-left[
+```r
+library(tidyverse) ; library(babynames) 
+
+babynames %&gt;%
+  filter(name == "Mabel") %&gt;%
+  ggplot(data = ., aes(x = year, y = n)) +
+  geom_line(aes(color = sex), size = 2) +
+* scale_color_manual(values = c("#66c2a5", "#ff7f00"),
+*                    labels = c("Female", "Male")) +
+  labs(title = "Babies named Mabel between 1880 and 2015",
+       x = "Year", 
+       y = "Frequency",
+       caption = "Source: Social Security Administration",
+       color = "") +
+  theme_minimal()  +
+  theme(legend.position = "top")
+ggsave("baby_plot.png", scale=1, dpi=300)
+```
+]
+
+.pull-right[
+![](slides_files/figure-html/unnamed-chunk-8-1.png)&lt;!-- --&gt;
+]
+
+---
+### Add a title, label the axes, include a caption, and drop the legend title
+&lt;br&gt;
+.pull-left[
+```r
+library(tidyverse) ; library(babynames) 
+
+babynames %&gt;%
+  filter(name == "Mabel") %&gt;%
+  ggplot(data = ., aes(x = year, y = n)) +
+  geom_line(aes(color = sex), size = 2) +
+  scale_color_manual(values = c("#66c2a5", "#ff7f00"),
+                     labels = c("Female", "Male")) +
+* labs(title = "Babies named Mabel between 1880 and 2015",
+*      x = "Year", 
+*      y = "Frequency",
+*      caption = "Source: Social Security Administration",
+*      color = "") +
+  theme_minimal()  +
+  theme(legend.position = "top")
+ggsave("baby_plot.png", scale=1, dpi=300)
+```
+]
+
+.pull-right[
+![](slides_files/figure-html/unnamed-chunk-9-1.png)&lt;!-- --&gt;
+]
+
+---
+### Use a `ggplot2` theme to format the chart
+&lt;br&gt;
+.pull-left[
+```r
+library(tidyverse) ; library(babynames) 
+
+babynames %&gt;%
+  filter(name == "Mabel") %&gt;%
+  ggplot(data = ., aes(x = year, y = n)) +
+  geom_line(aes(color = sex), size = 2) +
+  scale_color_manual(values = c("#66c2a5", "#ff7f00"),
+                     labels = c("Female", "Male")) +
+  labs(title = "Babies named Mabel between 1880 and 2015",
+       x = "Year", 
+       y = "Frequency",
+       caption = "Source: Social Security Administration",
+       color = "") +
+* theme_minimal()  +
+  theme(legend.position = "top")
+ggsave("baby_plot.png", scale=1, dpi=300)
+```
+]
+
+.pull-right[
+![](slides_files/figure-html/unnamed-chunk-10-1.png)&lt;!-- --&gt;
+]
+
+---
+### Move the legend to the top of the plot
+&lt;br&gt;
+.pull-left[
+```r
+library(tidyverse) ; library(babynames) 
+
+babynames %&gt;%
+  filter(name == "Mabel") %&gt;%
+  ggplot(data = ., aes(x = year, y = n)) +
+  geom_line(aes(color = sex), size = 2) +
+  scale_color_manual(values = c("#66c2a5", "#ff7f00"),
+                     labels = c("Female", "Male")) +
+  labs(title = "Babies named Mabel between 1880 and 2015",
+       x = "Year", 
+       y = "Frequency",
+       caption = "Source: Social Security Administration",
+       color = "") +
+  theme_minimal()  +
+* theme(legend.position = "top")
+ggsave("baby_plot.png", scale=1, dpi=300)
+```
+]
+
+.pull-right[
+![](slides_files/figure-html/unnamed-chunk-11-1.png)&lt;!-- --&gt;
+]
+
+---
+### Save the plot as a png at a high resolution
+&lt;br&gt;
+.pull-left[
+```r
+library(tidyverse) ; library(babynames) 
+
+babynames %&gt;%
+  filter(name == "Mabel") %&gt;%
+  ggplot(data = ., aes(x = year, y = n)) +
+  geom_line(aes(color = sex), size = 2) +
+  scale_color_manual(values = c("#66c2a5", "#ff7f00"),
+                     labels = c("Female", "Male")) +
+  labs(title = "Babies named Mabel between 1880 and 2015",
+       x = "Year", 
+       y = "Frequency",
+       caption = "Source: Social Security Administration",
+       color = "") +
+  theme_minimal()  +
+  theme(legend.position = "top")
+*ggsave("baby_plot.png", scale=1, dpi=300)
+```
+]
+
+.pull-right[
+![](slides_files/figure-html/unnamed-chunk-12-1.png)&lt;!-- --&gt;
+]
+
+---
+class: center, middle, inverse
+# Your turn
+    </textarea>
+<script src="https://remarkjs.com/downloads/remark-latest.min.js"></script>
+<script>var slideshow = remark.create({
+"highlightStyle": "github",
+"highlightLines": true,
+"countIncrementalSlides": false
+});
+if (window.HTMLWidgets) slideshow.on('afterShowSlide', function (slide) {
+  window.dispatchEvent(new Event('resize'));
+});
+(function() {
+  var d = document, s = d.createElement("style"), r = d.querySelector(".remark-slide-scaler");
+  if (!r) return;
+  s.type = "text/css"; s.innerHTML = "@page {size: " + r.style.width + " " + r.style.height +"; }";
+  d.head.appendChild(s);
+})();</script>
+
+<script type="text/x-mathjax-config">
+MathJax.Hub.Config({
+  tex2jax: {
+    skipTags: ['script', 'noscript', 'style', 'textarea', 'pre']
+  }
+});
+</script>
+<!-- dynamically load mathjax for compatibility with self-contained -->
+<script>
+(function () {
+  var script = document.createElement('script');
+  script.type = 'text/javascript';
+  script.src  = 'https://cdn.bootcss.com/mathjax/2.7.1/MathJax.js?config=TeX-MML-AM_CHTML';
+  if (location.protocol !== 'file:' && /^https?:/.test(script.src))
+    script.src  = script.src.replace(/^https?:/, '');
+  document.getElementsByTagName('head')[0].appendChild(script);
+})();
+</script>
+  </body>
+</html>

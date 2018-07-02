@@ -1,0 +1,456 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <title></title>
+    <meta charset="utf-8">
+    <meta name="author" content="Réka Solymosi, Henry Partridge &amp; Sam Langton" />
+    <link href="libs/remark-css/default.css" rel="stylesheet" />
+    <script src="libs/htmlwidgets/htmlwidgets.js"></script>
+    <script src="libs/jquery/jquery.min.js"></script>
+    <script src="libs/datatables-binding/datatables.js"></script>
+    <link href="libs/dt-core/css/jquery.dataTables.min.css" rel="stylesheet" />
+    <link href="libs/dt-core/css/jquery.dataTables.extra.css" rel="stylesheet" />
+    <script src="libs/dt-core/js/jquery.dataTables.min.js"></script>
+    <link href="libs/leaflet/leaflet.css" rel="stylesheet" />
+    <script src="libs/leaflet/leaflet.js"></script>
+    <link href="libs/leafletfix/leafletfix.css" rel="stylesheet" />
+    <script src="libs/Proj4Leaflet/proj4-compressed.js"></script>
+    <script src="libs/Proj4Leaflet/proj4leaflet.js"></script>
+    <link href="libs/rstudio_leaflet/rstudio_leaflet.css" rel="stylesheet" />
+    <script src="libs/leaflet-binding/leaflet.js"></script>
+    <link rel="stylesheet" href="my-theme.css" type="text/css" />
+  </head>
+  <body>
+    <textarea id="source">
+class: center, middle, inverse, title-slide
+
+# <div style="white-space: pre-line;">Getting Started in R
+an introduction to data analysis and visualisation</div>
+## Basics
+### Réka Solymosi, Henry Partridge &amp; Sam Langton
+### 3 July 2018
+
+---
+
+
+
+
+class: inverse, center, middle
+
+# R
+
+---
+
+### What is R?
+
+--
+
+- [R](https://www.r-project.org/) is a programming language for exploring, visualising and analysing data.   
+
+--
+
+- Created by Ross Ihaka and Robert Gentleman (University of Auckland)
+
+--
+
+- Released in 1995
+
+--
+
+- Implements the S programming language created at Bell Labs
+
+--
+
+- Companies like Google, Facebook and the Financial Times use it
+
+---
+
+### Why use R?
+
+--
+
+- *Cutting edge analytics*: over 10,000 user-contributed packages available on finance, genomics, animal tracking, crime analysis, and much more
+
+--
+
+- *Powerful graphics and data visualisations*: used by the New York Times and FiveThirtyEight 
+
+--
+
+- *Open source*: free and customisable
+
+--
+
+- *Reproducibility*: code can be shared and the results repeated   
+
+--
+
+- *Transparency*: explicitly documents all the steps of your analyses   
+
+--
+
+- *Automation*: analyses can be run and re-run with new and existing datasets  
+
+--
+
+- *Support network*: worldwide community of developers and users
+
+---
+
+### Why wouldn't you use it?
+
+- Anxiety about 'hard' skills
+- "I am just not good at that  
+  kind of thing"
+- "I have to be good at maths"  
+- Experts putting you off
+
+&lt;div style= "float:right;position: relative; top: -150px;"&gt;
+
+&lt;img src="img/not-r.png" width="400px" /&gt;
+
+&lt;/div&gt;
+
+
+---
+
+### Are there any disadvantages?
+
+--
+
+Learning R can be a steep learning curve and the transition from a graphical user interface like Excel or SPSS to one that is command driven can be unsettling.
+
+&lt;div align="center"&gt;
+&lt;img src="img/learning_curve.jpg" height=250&gt;
+&lt;/div&gt;
+
+--
+&lt;br&gt;
+However, you’ll soon find that working with a command line is much more efficient than pointing and clicking. After all, you can replicate, automate and share your R scripts.
+
+---
+class: inverse, center, middle
+
+# Example outputs using R
+
+---
+
+### Charts
+
+```r
+library(ggplot2) 
+p &lt;- ggplot(mpg, aes(x = displ, y = hwy)) +  geom_point() +
+  geom_smooth(method = "loess", se = FALSE) +
+  labs(x = "Engine size", y = "Miles per gallon", 
+       title = "Fuel efficiency decreases with engine size") +
+  theme_minimal()
+p
+```
+
+&lt;img src="slides_files/figure-html/unnamed-chunk-2-1.png" width="700px" style="display: block; margin: auto;" /&gt;
+
+---
+
+### Tables
+
+```r
+library(DT)
+DT::datatable(
+  head(USArrests, 10),
+  fillContainer = FALSE, options = list(pageLength = 5)
+)
+```
+
+<div id="htmlwidget-7fbf6abae1781c28480e" style="width:100%;height:auto;" class="datatables html-widget"></div>
+<script type="application/json" data-for="htmlwidget-7fbf6abae1781c28480e">{"x":{"filter":"none","fillContainer":false,"data":[["Alabama","Alaska","Arizona","Arkansas","California","Colorado","Connecticut","Delaware","Florida","Georgia"],[13.2,10,8.1,8.8,9,7.9,3.3,5.9,15.4,17.4],[236,263,294,190,276,204,110,238,335,211],[58,48,80,50,91,78,77,72,80,60],[21.2,44.5,31,19.5,40.6,38.7,11.1,15.8,31.9,25.8]],"container":"<table class=\"display\">\n  <thead>\n    <tr>\n      <th> <\/th>\n      <th>Murder<\/th>\n      <th>Assault<\/th>\n      <th>UrbanPop<\/th>\n      <th>Rape<\/th>\n    <\/tr>\n  <\/thead>\n<\/table>","options":{"pageLength":5,"columnDefs":[{"className":"dt-right","targets":[1,2,3,4]},{"orderable":false,"targets":0}],"order":[],"autoWidth":false,"orderClasses":false,"lengthMenu":[5,10,25,50,100]}},"evals":[],"jsHooks":[]}</script>
+
+---
+
+### Maps
+
+
+```r
+library(leaflet)
+leaflet() %&gt;% addTiles() %&gt;% 
+  addMarkers(-2.236518, 53.466478, 
+             popup = "University of Manchester")
+```
+
+<div id="htmlwidget-cb62d09bb2bcecee7426" style="width:100%;height:360px;" class="leaflet html-widget"></div>
+<script type="application/json" data-for="htmlwidget-cb62d09bb2bcecee7426">{"x":{"options":{"crs":{"crsClass":"L.CRS.EPSG3857","code":null,"proj4def":null,"projectedBounds":null,"options":{}}},"calls":[{"method":"addTiles","args":["//{s}.tile.openstreetmap.org/{z}/{x}/{y}.png",null,null,{"minZoom":0,"maxZoom":18,"tileSize":256,"subdomains":"abc","errorTileUrl":"","tms":false,"noWrap":false,"zoomOffset":0,"zoomReverse":false,"opacity":1,"zIndex":1,"detectRetina":false,"attribution":"&copy; <a href=\"http://openstreetmap.org\">OpenStreetMap<\/a> contributors, <a href=\"http://creativecommons.org/licenses/by-sa/2.0/\">CC-BY-SA<\/a>"}]},{"method":"addMarkers","args":[53.466478,-2.236518,null,null,null,{"interactive":true,"draggable":false,"keyboard":true,"title":"","alt":"","zIndexOffset":0,"opacity":1,"riseOnHover":false,"riseOffset":250},"University of Manchester",null,null,null,null,{"interactive":false,"permanent":false,"direction":"auto","opacity":1,"offset":[0,0],"textsize":"10px","textOnly":false,"className":"","sticky":true},null]}],"limits":{"lat":[53.466478,53.466478],"lng":[-2.236518,-2.236518]}},"evals":[],"jsHooks":[]}</script>
+
+---
+class: inverse, center, middle
+# R and RStudio
+
+---
+### R and RStudio
+It is possible to just use [R](http://www.r-project.org) but there are several reasons why you will prefer to code within the [RStudio](https://www.rstudio.com/products/rstudio/download3/) environment:
+
+- syntax highlighting
+- code completion
+- [rmarkdown](http://rmarkdown.rstudio.com) integration
+- four-pane workspace for managing R windows
+
+---
+
+### RStudio's panes
+
+&lt;img src="img/panes.png" width="1200px" /&gt;
+
+---
+class: inverse, center, middle
+# Setting up
+
+---
+### The working directory
+The working directory is where everything created in your R session is stored. The function `getwd()` returns the filepath to the current working directory.
+
+
+```r
+getwd()
+```
+
+To change the working directory you have two options:
+
+1. Use the dropdown menus: *Session -&gt; Set Working Directory -&gt; Choose Directory*
+2. Use the command `setwd()` in the console
+
+For example, to change the working directory on a computer running macOS you might enter:
+
+
+```r
+setwd("/Users/your_name/Documents/GSinR")
+```
+
+On a computer running Windows it would look more like:
+
+
+```r
+setwd("C:/Users/your_name/Documents/GSinR")
+```
+
+---
+### Installing and loading packages
+
+Packages are collections of R functions and data. There are [over 10,000 user-contributed packages](https://cran.r-project.org/web/packages/available_packages_by_name.html) available to install from CRAN. 
+
+Just type `install.packages()` in the console with the name of the package in inverted commas:
+
+
+```r
+install.packages("tidyverse")
+```
+
+Once installed you can load the package using the `library()` function like this:
+
+
+```r
+library(tidyverse)
+```
+
+---
+### Finding help
+You can find help within R using the `?` function. For example, if you want to learn more about a function just place a ? before the function name. 
+
+For example, if you wanted to read up on the `getwd()` function you'd enter:
+
+
+```r
+?getwd
+```
+
+You can also use the `help()` function:
+
+
+```r
+help(getwd)
+```
+
+---
+class: inverse, center, middle
+# R basics
+
+---
+### Arithmetic
+R provides arithmetic operators operators such as
+
+
+```r
+2 + 2 # addition
+```
+
+```
+## [1] 4
+```
+
+```r
+9 - 7 # subtraction
+```
+
+```
+## [1] 2
+```
+
+```r
+8 * 12 # multiplication
+```
+
+```
+## [1] 96
+```
+
+```r
+9 / 3 # division
+```
+
+```
+## [1] 3
+```
+
+```r
+10 ^ 2 # exponentiation
+```
+
+```
+## [1] 100
+```
+
+---
+### Objects and functions
+
+*Objects* are information (e.g. values, model coefficients, plots etc) stored in R.
+
+
+```r
+x &lt;- c(11, 19, 13, 16, 12, 12, 18, 14, 20, NA)
+x
+```
+
+```
+##  [1] 11 19 13 16 12 12 18 14 20 NA
+```
+
+*Functions* are collections of R commands that do a specific task. Many functions have arguments which provide extra information to the function.
+
+
+```r
+mean(x, na.rm = TRUE)
+```
+
+```
+## [1] 15
+```
+
+---
+### Creating variables
+The assignment operator (`&lt;-`) is used to assign the value of an expression to a variable. The *object* is being 'given' the whatever the *value* is.
+
+For example, the object 'population' is created by using the `c()` or concatenate function to combine values. 
+
+```r
+pop &lt;- c(9896000, 2488200, 2434100, 980800, 845000)
+pop
+```
+
+```
+## [1] 9896000 2488200 2434100  980800  845000
+```
+
+---
+### Data Types
+The object 'pop' is a vector, a one-dimensional array with each element separated by a comma. Each element in the vector is a numeric value.
+
+```r
+class(pop)
+```
+
+```
+## [1] "numeric"
+```
+
+R support other data types: integer, character, logical, factor, and complex.
+
+Each element in the vector 'city' is a string of one or more characters,
+
+```r
+# character
+city &lt;- c("London", "Birmingham", "Manchester", "Glasgow", "Newcastle")
+city
+```
+
+```
+## [1] "London"     "Birmingham" "Manchester" "Glasgow"    "Newcastle"
+```
+
+whereas the values in 'million_plus' are logical.
+
+```r
+# logical
+million_plus &lt;- c(TRUE, TRUE, TRUE, FALSE, FALSE)
+million_plus
+```
+
+```
+## [1]  TRUE  TRUE  TRUE FALSE FALSE
+```
+
+---
+### Creating data frames
+Like vectors, data frames are another data structure used in R. Similar to spreadsheets a data frame stores variables in columns and observations in rows. Unlinke matrices, data frames can store variables of different types (e.g. numeric, character).
+
+
+```r
+city_pop &lt;- data.frame(city, population = pop, million_plus)
+city_pop
+```
+
+```
+##         city population million_plus
+## 1     London    9896000         TRUE
+## 2 Birmingham    2488200         TRUE
+## 3 Manchester    2434100         TRUE
+## 4    Glasgow     980800        FALSE
+## 5  Newcastle     845000        FALSE
+```
+
+&lt;br&gt;
+&lt;br&gt;
+Data source: &lt;http://www.centreforcities.org/data-tool/&gt;
+    </textarea>
+<script src="https://remarkjs.com/downloads/remark-latest.min.js"></script>
+<script>var slideshow = remark.create({
+"highlightStyle": "github",
+"highlightLines": true,
+"countIncrementalSlides": false
+});
+if (window.HTMLWidgets) slideshow.on('afterShowSlide', function (slide) {
+  window.dispatchEvent(new Event('resize'));
+});
+(function() {
+  var d = document, s = d.createElement("style"), r = d.querySelector(".remark-slide-scaler");
+  if (!r) return;
+  s.type = "text/css"; s.innerHTML = "@page {size: " + r.style.width + " " + r.style.height +"; }";
+  d.head.appendChild(s);
+})();</script>
+
+<script type="text/x-mathjax-config">
+MathJax.Hub.Config({
+  tex2jax: {
+    skipTags: ['script', 'noscript', 'style', 'textarea', 'pre']
+  }
+});
+</script>
+<!-- dynamically load mathjax for compatibility with self-contained -->
+<script>
+(function () {
+  var script = document.createElement('script');
+  script.type = 'text/javascript';
+  script.src  = 'https://cdn.bootcss.com/mathjax/2.7.1/MathJax.js?config=TeX-MML-AM_CHTML';
+  if (location.protocol !== 'file:' && /^https?:/.test(script.src))
+    script.src  = script.src.replace(/^https?:/, '');
+  document.getElementsByTagName('head')[0].appendChild(script);
+})();
+</script>
+  </body>
+</html>

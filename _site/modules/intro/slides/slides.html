@@ -1,0 +1,421 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <title></title>
+    <meta charset="utf-8">
+    <meta name="author" content="Réka Solymosi, Henry Partridge &amp; Sam Langton" />
+    <link href="libs/remark-css/default.css" rel="stylesheet" />
+    <link rel="stylesheet" href="my-theme.css" type="text/css" />
+  </head>
+  <body>
+    <textarea id="source">
+class: center, middle, inverse, title-slide
+
+# <div style="white-space: pre-line;">Getting Started in R
+an introduction to data analysis and visualisation</div>
+## Welcome!
+### Réka Solymosi, Henry Partridge &amp; Sam Langton
+### 2 July 2018
+
+---
+
+
+
+
+class: inverse, center, middle
+# Welcome!
+
+---
+## About us
+
+&lt;img src="https://pbs.twimg.com/profile_images/1010470338113822720/OjfxRmB0_400x400.jpg" width="100px" /&gt;
+
+@rcatlord
+
+
+&lt;img src="https://avatars1.githubusercontent.com/u/7291547?v=3&amp;s=400" width="100px" /&gt;
+
+@r_solymosi
+
+&lt;img src="https://avatars0.githubusercontent.com/u/36928709?s=400&amp;v=4" width="100px" /&gt;
+
+@sh_langton
+
+---
+## About you
+
+---
+## About the course
+
+**Schedule**
+
+|         | Slot   | Module                                                | 
+|:--------|:-------|:------------------------------------------------------|
+| **1**   | Mon pm | Intro                                   | 
+| **2.1** | Tue am | Basics                                   | 
+| **2.2** | Tue pm | Import data                          | 
+| **3.1** | Wed am | Tidy data                           | 
+| **3.2** | Wed pm | Transform data                    | 
+| **4.1** | Thu am | Visualise data                     |
+| **4.2** | Thu pm | Model data                   |
+| **5**   | Fri am | Reporting data |
+
+&lt;br&gt;
+
+---
+## About the course
+
+By the end of the week you will be able to:
+
+- be able to read and write basic R code
+- read your data into R Studio
+- tidy (prep) your data for analysis
+- filter and subset data
+- summarise and create new variables
+- visualise your data
+- model your data
+- presenting results in a report
+
+---
+## Why R?
+
+ - growing popularity
+ - reproducable
+ - learn to code
+ - diverse
+ - open source
+ - community driven
+
+ 
+ 
+---
+## Growing popularity
+
+&lt;img src="https://i0.wp.com/r4stats.com/wp-content/uploads/2017/02/Fig-1a-IndeedJobs-2017.png?w=650" height="450px" /&gt;
+  
+source: http://r4stats.com/articles/popularity/
+
+
+---
+## Growing popularity
+
+&lt;img src="https://i1.wp.com/r4stats.com/wp-content/uploads/2017/02/Fig-1c-R-v-SAS-2017-02-18.png?w=733" width="500px" /&gt;
+
+Data science job trends for SAS (orange) and R (blue).
+  
+  source: http://r4stats.com/articles/popularity/
+
+
+---
+## Growing popularity
+
+&lt;img src="https://i2.wp.com/r4stats.com/wp-content/uploads/2012/04/Fig_2a_ScholarlyImpact2015.png?w=650" height="450px" /&gt;
+
+
+source: http://r4stats.com/articles/popularity/
+
+---
+## Reproducible
+
+
+&lt;img src="img/goldacre_tweet.png" width="600px" /&gt;
+
+---
+## Reproducible
+
+&lt;img src="img/goldacre_tweet_2.png" width="600px" /&gt;
+
+---
+## Reproducible: the point
+
+- People are very opinionated about it
+- Replication and transparency is a key debate in research
+- The need for replication is blind to research discipline
+- One day we might not have a choice in the matter
+- Either way, it will make your life a lot easier!
+
+---
+## Diverse: Inferential stats
+
+
+```r
+library(stats)
+```
+
+
+```r
+mean()
+sd()
+chisq.test()
+t.test()
+aov()
+glm()
+```
+
+
+---
+## Diverse: Plots
+
+
+```r
+plot(cars$speed, cars$dist)
+```
+
+&lt;img src="slides_files/figure-html/unnamed-chunk-11-1.png" width="450px" /&gt;
+
+---
+## Diverse: Plots
+
+```r
+library(ggplot2)
+```
+
+&lt;img src="slides_files/figure-html/unnamed-chunk-13-1.png" width="500px" /&gt;
+
+
+---
+## Diverse: Plots
+
+
+```r
+library(waffle)
+```
+
+&lt;img src="slides_files/figure-html/unnamed-chunk-15-1.png" height="450px" /&gt;
+
+
+
+
+---
+## Diverse: Maps
+
+
+```r
+library(ggplot2) ; library(sf)
+```
+
+&lt;img src="img/original_plot.png" width="450px" /&gt;
+
+---
+## Diverse: Stylised Maps
+
+```r
+library(ggplot2) ; library(sf) # + open code
+```
+
+&lt;img src="img/hexo_plot.png" width="450px" /&gt;
+
+---
+## Diverse: Sequence analysis
+
+
+```r
+library(TraMineR)
+```
+
+&lt;img src="img/traminer.png" width="1821" /&gt;
+
+---
+## Diverse: Spatial autocorrelation
+
+
+```r
+library(spdep)
+```
+
+
+&lt;img src="img/spdep.png" width="700px" /&gt;
+
+---
+## Diverse: Aoristic analysis
+
+
+```r
+library(aoristic)
+```
+
+&lt;img src="img/aoristic.png" width="700px" /&gt;
+
+
+---
+## Diverse: Social network analyis
+
+
+```r
+library(igraph)
+```
+
+&lt;img src="http://www.rdatamining.com/_/rsrc/1336980493578/examples/social-network-analysis/sna-terms-1.png" height="450px" /&gt;
+
+---
+## Diverse: Text mining
+
+
+```r
+library(tidytext) ; library(geniusR)
+```
+
+&lt;img src="img/smiths-studio-albums.png" width="480px" /&gt;
+
+---
+
+## Diverse: Text analysis
+
+
+```r
+library(tidytext) ; library(geniusR)
+```
+
+![](https://i2.wp.com/www.johnmackintosh.com/img/2018-01-28-album-word-correlations-original.png?w=456&amp;ssl=1)&lt;!-- --&gt;
+
+[Source: John MacKintosh on R bloggers](https://www.r-bloggers.com/hardwired-for-tidy-text/)
+
+---
+
+## Diverse: Text analysis
+
+
+```r
+library(tidytext) 
+```
+
+&lt;img src="img/lotr_text.png" width="550px" /&gt;
+
+[Source: Jakub Glinka on R bloggers](https://www.r-bloggers.com/sentiment-analysis-of-the-lord-of-the-rings-with-tidytext/)
+
+---
+
+## Diverse: interactive maps
+
+
+```r
+library(tmap)
+```
+
+![](img/ME_gif.gif)&lt;!-- --&gt;
+
+---
+
+## Diverse: Shiny apps to visualise voting
+
+&lt;img src="img/brexit.gif" width="700px" /&gt;
+
+---
+
+## Open tools
+
+&lt;img src="img/open_tools.png" width="700px" /&gt;
+
+---
+
+## Open source
+
+&lt;img src="https://media.giphy.com/media/A06UFEx8jxEwU/giphy.gif" width="600px" /&gt;
+
+
+---
+## Open source
+
+
+&lt;img src="img/ggplot_coord_flip.png" width="600px" /&gt;
+
+---
+## Community driven
+
+&lt;img src="img/r_cult.png" width="600px" /&gt;
+
+---
+## Community driven
+
+&lt;img src="img/r_help.png" width="600px" /&gt;
+
+---
+## Community driven
+
+&lt;img src="img/manchester_r.png" width="1325" /&gt;
+
+---
+
+## Community driven
+
+&lt;img src="https://avatars1.githubusercontent.com/u/11410476?v=3&amp;s=200" width="150px" /&gt;&lt;img src="img/r_ladies.png" width="150px" /&gt;&lt;img src="https://d21ii91i3y6o6h.cloudfront.net/gallery_images/from_proof/12936/large/1464301097/number-rcatladies.png" width="150px" /&gt;&lt;img src="https://pbs.twimg.com/media/CyW_of8XAAAbKul.jpg" width="150px" /&gt;
+
+---
+## Community driven
+
+&lt;img src="img/rpubs.png" width="600px" /&gt;
+
+---
+## Community driven
+
+&lt;img src="img/accidental_aRt.png" width="600px" /&gt;
+
+---
+## Community driven
+
+&lt;img src="img/google_how_to.gif" width="600px" /&gt;
+
+
+---
+## Community driven
+
+Top resources: 
+ - Stack Overflow
+ - Datacamp 
+ - RPubs
+ - R4DS
+
+---
+## Community driven
+
+&lt;img src="img/twitter_profiles.png" width="700px" /&gt;
+ 
+---
+## Join the community
+
+&lt;img src="https://media.giphy.com/media/l3UcwPQnD2yQ62vWE/giphy.gif" width="600px" /&gt;
+
+---
+## After coffee
+
+- get to know R Studio 
+- learn about packages
+- open, edit and run an R script
+- save the output
+    </textarea>
+<script src="https://remarkjs.com/downloads/remark-latest.min.js"></script>
+<script>var slideshow = remark.create({
+"highlightStyle": "github",
+"highlightLines": true,
+"countIncrementalSlides": false
+});
+if (window.HTMLWidgets) slideshow.on('afterShowSlide', function (slide) {
+  window.dispatchEvent(new Event('resize'));
+});
+(function() {
+  var d = document, s = d.createElement("style"), r = d.querySelector(".remark-slide-scaler");
+  if (!r) return;
+  s.type = "text/css"; s.innerHTML = "@page {size: " + r.style.width + " " + r.style.height +"; }";
+  d.head.appendChild(s);
+})();</script>
+
+<script type="text/x-mathjax-config">
+MathJax.Hub.Config({
+  tex2jax: {
+    skipTags: ['script', 'noscript', 'style', 'textarea', 'pre']
+  }
+});
+</script>
+<!-- dynamically load mathjax for compatibility with self-contained -->
+<script>
+(function () {
+  var script = document.createElement('script');
+  script.type = 'text/javascript';
+  script.src  = 'https://cdn.bootcss.com/mathjax/2.7.1/MathJax.js?config=TeX-MML-AM_CHTML';
+  if (location.protocol !== 'file:' && /^https?:/.test(script.src))
+    script.src  = script.src.replace(/^https?:/, '');
+  document.getElementsByTagName('head')[0].appendChild(script);
+})();
+</script>
+  </body>
+</html>

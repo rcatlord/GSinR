@@ -1,0 +1,36 @@
+---
+title: ""
+---
+
+<br><br>
+
+## Getting Started in R: 
+### an introduction to data analysis and visualisation        
+
+<br>
+
+This is the website for "Getting Started in R: an introduction to data analysis and visualisation", a [methods@manchester](http://www.methods.manchester.ac.uk) Summer School course running between 2-6 July 2018. Further details about the course can be found [here](http://www.methods.manchester.ac.uk/connect/events/summer-school/courses/).   
+
+<br>
+
+**Setting up**     
+Set up instructions are provided [here](setup.html).     
+
+**Course materials**      
+Slides and tutorials will be uploaded to the site as the course progresses. We will be referring to [R for Data Science](http://r4ds.had.co.nz) (Grolemund & Wickham 2017) throughout the course.
+
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>

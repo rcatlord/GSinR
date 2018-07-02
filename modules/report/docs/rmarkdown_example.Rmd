@@ -1,0 +1,32 @@
+---
+title: "Gapminder demo"
+output: html_document
+---
+
+```{r, include = FALSE}
+knitr::opts_chunk$set(echo = FALSE)
+```
+
+
+```{r, message = FALSE, warning = FALSE}
+library(tidyverse) ; library(forcats); library(gapminder)
+```
+
+The plot below displays the relationship between income and life expectancy in `r gapminder %>% filter(year == 2007) %>% n_distinct()` countries during 2007 using the [`gapminder`](https://cran.r-project.org/web/packages/gapminder/) data package.
+
+```{r}
+gapminder %>% 
+  filter(year == 2007) %>%
+  mutate(continent, continent = fct_recode(continent, "Asia & Oceania" = "Asia", "Asia & Oceania" = "Oceania")) %>% 
+  arrange(country, year) %>% 
+  ggplot(aes(x = gdpPercap, y = lifeExp, size = pop, fill = continent)) +
+  geom_point(colour = "black", shape = 21, alpha = 0.8) +
+  scale_x_log10(breaks = c(500,1000,2000,5000,10000,20000,50000), labels = scales::comma)  +
+  scale_y_continuous(breaks = seq(0, 80, 10), limits = c(35, 85)) +
+  scale_size(breaks = c(3000000,10000000,100000000,1000000000),
+             labels=c("3 or less","10","100","1000 millions"),
+             range = c(1, 20)) +
+  scale_fill_manual(values = c("Africa" = "#2c7fb8", "Americas" = "#41ab5d", "Asia & Oceania" = "#ef3b2c", "Europe" = "#fdb462")) +
+  labs(x = "GDP per capita ($)", y = "Life expectancy (years)", caption = "Source: gapminder.org", size = "Population", fill = "Continent") +
+  theme_minimal()
+```

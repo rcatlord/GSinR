@@ -1,0 +1,64 @@
+---
+title: "Mini-project"
+author: "Réka Solymosi and Henry Partridge"
+date: "6 July 2018"
+output: html_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+### Aim
+To create a one-page report that summarises the relationship between certain socio-demographic variables and EU referendum voting patterns. You can find an example report [here](example_report.html).
+
+### Workflow:
+
+1. [Import](#import): download and read data
+2. [Tidy](#tidy): clean data for analysis in R
+3. [Transform](#transform): create new variables and merge different data sets
+4. [Visualise](#visualise): create a set of scatterplots
+5. [Report](#report): put together a summary document of your findings
+
+### Import
+1. Open a new R script.
+2. Load the `tidyverse` package
+3. Download and read EU referendum results by Local Authority from the Electoral Commission <https://www.electoralcommission.org.uk/find-information-by-subject/elections-and-referendums/past-elections-and-referendums/eu-referendum/electorate-and-count-information>.
+4. Read the `variables.csv` file which contains socio-demographic data and a census code for each Local Authority area. The data derive from the [2011 Census](https://www.ons.gov.uk/census/2011census) via the [UK Data Service](http://infuse.ukdataservice.ac.uk) and the [Annual Survey of Hours and Earnings (2016)](https://www.nomisweb.co.uk/census/2011/workplace_population) by Local Authority area.
+
+There are 7 different variables:
+
+- `degree`: % residents with higher education
+- `pay`: median gross annual pay (full time)
+- `percent_aged_18_30`: % residents aged 18-30 years
+- `median_age`: Median age of residents
+- `non_uk`: % residents not born in the UK
+- `no_passport`: % of residents without a passport
+- `ABC1`: % residents in professional occupations
+
+### Tidy
+1. Subset the `referendum` data frame to only include the following columns:
+   - `Area_Code`
+   - `Area` 
+   - `Electorate`
+   - `Pct_Remain`
+   - `Pct_Leave`
+2. Filter the `referendum` data frame to exclude "Northern Ireland" and "Gibraltar". We have no socio-demographic data for these areas.
+
+### Transform
+1. Create a new variable in the `referendum` data frame called `Result` which records the outcome of the vote in each Local Authority area. Tip: use an `ifelse()` statement.
+2. Transform `Area_Code` in the `variables` data frame into a factor.
+3. Transform `degree` and `percent_aged_18_30` in the `variables` data frame into percentages.
+4. Create a new data frame by merging the `variables` data frame with the `referendum` data frame.
+
+### Visualise
+1. Create a scatterplot using the [`ggplot2`](http://ggplot2.tidyverse.org) package showing the relationship between the share of the Leave vote with the percentage of residents having a degree. 
+2. Create a scatterplot showing the relationship between the share of the Leave vote and a different socio-demographic indicator. What is the strength of the relationship?
+3. Use the [`plotly`](https://plot.ly/ggplot2/) R package to make your scatterplot interactive.
+
+### Report
+1. Create a new R Markdown document.
+2. Paste all of your code into separate code chunks.
+3. Interpret your results in Markdown.
+4. `knit` your R Markdown document to HTML.
+5. *Optional*: Publish your report on [rpubs.com](https://rpubs.com)

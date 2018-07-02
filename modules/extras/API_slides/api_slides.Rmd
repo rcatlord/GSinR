@@ -1,0 +1,76 @@
+---
+title: | 
+    | Getting Started in R
+    | an introduction to data analysis and visualisation
+subtitle: "Reading in Data from API"
+author: "Réka Solymosi, Henry Partridge & Sam Langton"
+output:
+  xaringan::moon_reader:
+    css: ["default", "my-theme.css"]
+    lib_dir: libs
+    nature:
+      highlightStyle: github
+      highlightLines: true
+      countIncrementalSlides: false
+editor_options: 
+  chunk_output_type: console
+---
+
+```{r setup, include=FALSE}
+options(htmltools.dir.version = FALSE)
+```
+
+class: inverse, center, middle
+
+# API
+
+---
+### What are APIs?
+
+###A set of functions and procedures that allow the creation of applications which access the features or data of an operating system, application, or other service.
+
+---
+### What are APIs?
+
+###You’ve probably heard of companies packaging APIs as products. For example, Weather Underground sells access to its weather data API.
+
+---
+### Example: Twitter API
+
+```{r, out.height="400px", echo=FALSE}
+knitr::include_graphics("https://static-content.springer.com/image/art%3A10.1186%2Fs40163-015-0023-8/MediaObjects/40163_2015_23_Fig3_HTML.gif")
+```
+
+[Spatio-temporal crime hotspots and the ambient population](https://link.springer.com/article/10.1186/s40163-015-0023-8)
+
+---
+### Example: Twitter API
+
+```{r, out.height=  "400px", echo=FALSE}
+knitr::include_graphics("https://img.washingtonpost.com/wp-apps/imrs.php?src=https://img.washingtonpost.com/news/the-intersect/wp-content/uploads/sites/32/2016/09/alt-right-radicalization.png&w=1484")
+```
+
+[These charts show exactly how racist and radical the alt-right has gotten this year](https://www.washingtonpost.com/news/the-intersect/wp/2016/09/26/these-charts-show-exactly-how-racist-and-radical-the-alt-right-has-gotten-this-year/?utm_term=.a7139c409e4b)
+
+---
+### Authentication
+
+###To access the API you need credentials
+
+[dev.twitter.com](https://dev.twitter.com/)
+
+---
+### Script to get data
+
+###To access the API you need a script to get data
+
+```{r, eval=FALSE}
+library(twitteR)
+
+twitter_result <- searchTwitter(search_word, n=number_of_tweets, geocode= paste(loc_of_tweets, search_radius, sep=","))
+```
+
+---
+### Let's try!
+
+![](https://media.giphy.com/media/3o6ZsUdQYvPAyT1hxm/giphy.gif)

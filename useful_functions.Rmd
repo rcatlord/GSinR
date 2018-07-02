@@ -1,0 +1,62 @@
+# Test doesn't do anything
+# Same here
+
+---
+title: ''
+output: html_document
+---
+
+<br> <br>
+
+### A menu of functions
+
+<br>
+
+| Function | Package | Workflow | Description | 
+|:---|:---|:---|:---|
+| `getwd()` | {base} | Basics | get your working directory |
+| `setwd()` | {base} | Basics | set your working directory |
+| `install.packages()` | {base} | Basics | install R package(s) |
+| `library()` | {base} | Basics | load an R package |
+| `help()` | {base} | Basics | get help on a function |
+| `c()` | {base} | Basics | typically used to combines values into a vector |
+| `data.frame()` | {base} | Basics |  create a data frame |
+| `head()` | {base} | Basics | print the first 6 rows |
+| `tail()` | {base} | Basics | print the last 6 rows |
+| `read_csv()` | [{readr}](http://readr.tidyverse.org) | Import | read a .csv file|
+| `read_excel()` | [{readxl}](http://readxl.tidyverse.org) | Import | read a .xls or .xlsx file |
+| `read_sav()` | [{haven}](http://haven.tidyverse.org) | Import | read a .sav file |
+| `read_dta()` | [{haven}](http://haven.tidyverse.org) | Import | read a .dta file |
+| `read_html()` | [{rvest}](https://cran.r-project.org/web/packages/rvest/index.html) | Import | download and parse an html web page |
+| `html_nodes()` | [{rvest}](https://cran.r-project.org/web/packages/rvest/index.html) | Import | find html nodes that match a CSS selector |
+| `html_text()` | [{rvest}](https://cran.r-project.org/web/packages/rvest/index.html) | Import | extract text from html nodes |
+| `gather()` | [{tidyr}](http://tidyr.tidyverse.org) | Tidy | convert dataframe from wide to long format |
+| `spread()` | [{tidyr}](http://tidyr.tidyverse.org) | Tidy | convert dataframe from long to wide format |
+| `separate()` | [{tidyr}](http://tidyr.tidyverse.org) | Tidy | split variable into separate variables |
+| `unite()` | [{tidyr}](http://tidyr.tidyverse.org) | Tidy | combine variables into a single variable |
+| `unnest_tokens()` | [{tidytext}](https://cran.r-project.org/web/packages/tidytext/index.html) | Tidy | unnests values in text column into a word column |
+| `get_sentiments()` | [{tidytext}](https://cran.r-project.org/web/packages/tidytext/index.html) | Tidy | retrieves sentiment lexicons |
+| `select()` | [{dplyr}](http://dplyr.tidyverse.org) | Transform | pick variables |
+| `pull()` | [{dplyr}](http://dplyr.tidyverse.org) | Transform | pick variable and return a vector of values |
+| `slice()` | [{dplyr}](http://dplyr.tidyverse.org) | Transform | pick observations |
+| `filter()` | [{dplyr}](http://dplyr.tidyverse.org) | Transform | subset observations |
+| `arrange()` | [{dplyr}](http://dplyr.tidyverse.org) | Transform | reorder observations |
+| `mutate()` | [{dplyr}](http://dplyr.tidyverse.org) | Transform | add new variables |
+| `mean()` | {base} | Transform | calculate arithmetic mean |
+| `median()` | {base} | Transform | calculate the median |
+| `group_by()` | [{dplyr}](http://dplyr.tidyverse.org) | Transform | group observations with same values |
+| `count()` | [{dplyr}](http://dplyr.tidyverse.org) | Transform | calculate frequencies |
+| `summarise()` | [{dplyr}](http://dplyr.tidyverse.org) | Transform | return summary statistics |
+| `left_join()` | [{dplyr}](http://dplyr.tidyverse.org) | Transform | merge data frames together |
+| `right_join()` | [{dplyr}](http://dplyr.tidyverse.org) | Transform | merge data frames together |
+| `hour()` | [{lubridate}](http://lubridate.tidyverse.org) | Transform | extract hour |
+| `month()` | [{lubridate}](http://lubridate.tidyverse.org) | Transform | extract month |
+| `wday()` | [{lubridate}](http://lubridate.tidyverse.org) | Transform | extract week day|
+| `ggplot()` | [{ggplot2}](http://ggplot2.tidyverse.org) | Visualise | call a ggplot object |
+| `geom_point()` | [{ggplot2}](http://ggplot2.tidyverse.org) | Visualise | plot observations as points|
+| `geom_line() ` | [{ggplot2}](http://ggplot2.tidyverse.org) | Visualise | connect observation with a line |
+| `facet_wrap()` | [{ggplot2}](http://ggplot2.tidyverse.org) | Visualise | facet your output by variable |
+| `coord_flip()` | [{ggplot2}](http://ggplot2.tidyverse.org) | Visualise | flip the plot |
+| `scale_colour_brewer()` | [{RColorBrewer}](http://ggplot2.tidyverse.org/reference/scale_brewer.html) | Visualise | use palettes from [colorbrewer2.org](http://colorbrewer2.org/) |
+| `ggplotly()` | [{plotly}](https://plot.ly/r/) | Visualise | convert ggplot2 to plotly |
+| `render()` | [{rmarkdown}](http://rmarkdown.rstudio.com) | Report | render an RMarkdown document |

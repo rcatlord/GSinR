@@ -1,0 +1,17 @@
+ /* reduce gap between title rows */ 
+.title-slide h1 {
+  line-height: 0.1em;
+}
+ /* change subtitle colour */ 
+.title-slide h2 {
+  color: #a1d99b; 
+  line-height: 3.0em;
+}
+ /* reduce gap between author rows*/ 
+.title-slide h3 {
+  line-height: 0.1em;
+}
+ /* hide the number from title slide */ 
+.title-slide .remark-slide-number {
+  display: none;
+}

@@ -1,0 +1,355 @@
+---
+title: "Import data into R"
+author: "Réka Solymosi, Henry Partridge & Sam Langton"
+date: "3 July 2018"
+output: html_document
+---
+
+
+Before we get started on manipulating our data in order to get some meaningful insight from it, we need to be able to get that data into our R environment. This workbook is designed to walk you through the methods for importing data from varions sources, to make sure that you are comfortable importing data from diverse origins. We end with some tips for trouble shooting, and a guideline for finding out how to import other sources of data, which we might not cover here. 
+
+If there is a particular data source/ type of data which you work with, which we do not cover in this course, then please speak to us, and we will work with you to make sure you can import your data in a way that lends itself to some smooth R manipulation 
+
+#Quick recap
+
+##The data frame
+
+
+The format in which R holds data is called a data frame. A data frame is a rectangular collection of variables (in the columns) and observations (in the rows) [Wickham & Grolemund, 2016](http://r4ds.had.co.nz/data-visualisation.html). In a dataframe, each column is a **variable**, and each row is an **observation**. 
+
+So for example, in this data set each row is a recorded crime in Greater Manchester.
+
+![Each column is a variable](https://raw.githubusercontent.com/rcatlord/GSinR_materials/master/images/rowIsObservation.png)
+
+And this column for example is the month variable. Each observation (response) will have a value for this variable (the month that it was recorded).
+
+![Each column is a variable](https://raw.githubusercontent.com/rcatlord/GSinR_materials/master/images/columnIsVariable.png)
+
+So that is essentially what a dataframe looks like. All the data analysis and visualisation we will cover in the course will require the data to be in this format. 
+
+Now the aim for importing data into R, is to turn our data into a data frame object, in R. So to create objects, remember we use the `<-` notation to assign a value to an object. So if we think back to pseudo code, to read in our data we need something like this: 
+
+
+```{r, eval=FALSE}
+name_for_dataframe <- afunction_to_read_in_data(source_from_which_to_read_data)
+```
+
+
+For the rest of this tutorial we will go thourgh importing data from various sources, into data frame objects.
+
+
+#Importing data from .csv files
+
+
+CSV stands for comma separated value, and it refers to a data set where columns are separated by commas, and rows by line breaks. You might have come across this data format before. It is very simple, and the method for reading these csv files into R are very straightforward, because these formats tend to be flat, and look like a dataframe would. 
+
+
+So for example, a .csv file would look something like this if opened in a text editor: 
+
+
+```{r, eval=FALSE}
+name, gender, height
+bob, male, 178
+bobbie, male, 154
+bobette, female, 164
+```
+
+
+and when read into a dataframe, it will look like this: 
+
+
+```{r, echo=FALSE}
+data.frame("name" = c("bob", "bobbie", "bobette"),
+                        "gender" = c("male", "male", "female"), 
+                        "height" = c(178, 154, 164))
+```
+
+
+You might recognise this as the dataframe we created manually. Perhaps for something with only 3 observations, this is a sustainable mode of creation. However you are most likely to be working with a data that contains lot more rows than that!
+
+
+So if you have a .csv file, you can use the `read.csv()` file to import it into your working directory. There are a variety of arguments you can pass to this function, and to see a full list you can use the help function (by typing question mark followed by the function name, so in this case `?read.csv()`). But usually you can leave many to the default, and specify only the file path where it should read from, and whether your file has headers or not. 
+
+
+To get the file path, there are a variety of tricks you can do. The simplest thing is just to save your file into your working directory. In this case, you only have to specify the file name, and R will know to look in your working directory. So if I have a file in my working directory called `myCsv.csv`, then I can make the path the file name, like so: 
+
+
+```{r, eval=FALSE}
+my_csv_path <- "myCsv.csv"
+```
+
+
+However this is not always the case, and sometimes you will want to read in files that you have saved in another folder, not in your working directory. In this case you have to specify the full file path. 
+
+
+If you know your file path that is fantastic, and you can just type that and assign it to the *my_path* variable as we did with just the file name above. So, for example, if I know that my file is in the data folder in the course-incubator folder in the Desktop folder in the Reka folder in the Users folder, then I can just type this out like so (remembering that this is a Mac laptop):
+
+
+```{r}
+my_csv_path <- "/Users/reka/Desktop/course-incubator/data/myCsv.csv"
+```
+
+
+However, if you are like me, and nest everything in so many folders (see above...!) and do not remember where things are, there is a handy function that lets you just navigate to the file using good old pop-up window. This handy function in R is called `file.choose()`. This funtion opens up a popup window, which you can use to navigate to your file, and when you double click it, the value of the file path gets recorded: 
+
+
+```{r, eval=FALSE}
+my_csv_path <-  file.choose()
+```
+
+
+You can see that the value of this has now become the same as the one I entered manually: 
+
+
+```{r}
+my_csv_path
+```
+
+
+Now, however you got it, you have this variable called *my_path* which holds the path to your csv file. You can now use the `read.csv()` function to load your file, while giving it the parameter of the path, within the brackets. Remember that for R to remember this, you need to assign it to a variable. What I mean is, you need some name to call your dataframe by! So you can, for example, be very creative and read the csv file into a dataframe called my_dataframe, like so: 
+
+
+```{r, warning=FALSE, eval = FALSE}
+my_dataframe <- read.csv(file=my_csv_path)
+```
+
+
+Now you should see this appear in your global environment:
+
+
+![](https://raw.githubusercontent.com/rcatlord/GSinR_materials/master/images/my_dataframe_appears.png)
+
+
+And you can also check by printing out the first 6 lines of the dataframe using the `head()` function:
+
+
+```{r, eval = FALSE}
+head(my_dataframe)
+```
+
+
+(of course my sample data here only has 3 rows, so we get all of them)
+
+
+Now you have this data set all ready to work with! That was easy!
+
+
+One note I would want to make is that here we did not specify that we have headers in the data. The default for read.csv() is to assume that this is true. However for consistency I would recommend that you specify this each time, by setting the parameter `header` to equal `TRUE`:
+
+
+```{r, warning=FALSE, eval = FALSE}
+my_dataframe <- read.csv(file=my_csv_path, header = TRUE)
+```
+
+
+##Reading tables (tab separated)
+
+Just as very often you will see data in .csv format, you will also see a similar format, which is the .tab format. In fact, most data sets that you would download from the [UK data service website](https://www.ukdataservice.ac.uk/) would come in this format. 
+
+
+![](https://raw.githubusercontent.com/rcatlord/GSinR_materials/master/images/download_tab_data.png)
+
+
+So to demonstrate here, we use some data in available in .tab fromat about US crimes. You can download this data from this url: [http://www.statsci.org/data/general/uscrime.txt](http://www.statsci.org/data/general/uscrime.txt). Just right click somewhere on the page, and select "Save as...", and save in your working directory, or wherever you would like. 
+
+
+If you were to open a data set like this in a text editor, you would be able to see that it is actually not so different from a .csv file, except here, instead of commas separating the columns, we have tabs. So to read in data like this, we can use the `read.table()` function. 
+
+
+Again, like with `read.csv()` we will need the filename. You can use the same trick with `file.choose()` if you want, or whatever method you use to specify your path to your .tab file.
+
+
+```{r}
+
+my_tab_path <- "/Users/reka/Desktop/course-incubator/data/uscrime.txt"
+
+```
+
+
+However, in this case you also have to include in your parameters the separator. So in this case, to indicate tab we use backslash + t: `"\t"`. 
+
+
+```{r, warning=FALSE, eval = FALSE}
+my_dataframe_2 <- read.table(file=my_tab_path, sep = "\t", header = TRUE)
+```
+
+
+Note that we are including the `header = TRUE` parameter as well! Now if you have a look at my_dataframe_2, you can see what this data looks like as well:
+
+
+```{r, eval = FALSE}
+head(my_dataframe_2)
+```
+
+
+Now I want to show you something cool. So we got this data from the web. and we had to save it onto our PC/ laptop, and then load it into R. That seems like a bit of a hassle, right? What if we could read the data in directly from the url? Well we can! The file path can point to anywhere that has the data! So if you want, that can be online. As long as there's an internet connection, and R is able to reach the destination you direct it to, it will be happy to retrieve this data for you. So let's give this a go with the url path:
+
+
+```{r, warning=FALSE}
+my_url_tab_path <- "http://www.statsci.org/data/general/uscrime.txt"
+
+my_dataframe_3 <- read.table(file=my_url_tab_path, sep = "\t", header = TRUE)
+```
+
+
+And you end up with the same dataframe. You can test this by asking R whether they are the same thing: 
+
+
+```{r, eval = FALSE}
+identical(my_dataframe_2, my_dataframe_3)
+```
+
+
+Indeed they are. So this is great, you can skip that whole step of manually saving your data, you can just grab it directly from the web! Nice!
+
+
+###Other separators?
+
+
+If you're astute you may have noticed that `read.csv()` is essentially a way of reading a table where the separators are commas. If you are curious, you could give this a go, and try to use the `read.table()` function, and specifying the separator to be the comma:
+
+
+```{r, warning=FALSE, eval = FALSE}
+my_dataframe_4 <- read.table(file=my_csv_path, sep = ",", header = TRUE)
+```
+
+
+This is important to note, because it gives you a clue as to how to read in other data, separated by other delimiters. All you have to do is specify the separator in the `sep=` parameter. Normally looking at the file will determine the field separator to be used, but with whitespace separated files there may be a choice between the default sep = "" which uses any
+white space (spaces, tabs or newlines) as a separator, sep = " " and sep = "\t". Note that
+the choice of separator affects the input of quoted strings. If you have a tab-delimited file containing empty fields be sure to use sep = "\t". [R Core Team, 2000](https://cran.r-project.org/doc/manuals/r-release/R-data.pdf)
+
+
+
+##Reading files from SPSS
+
+
+Well here we are, you're a reformed SPSS user, and you don't want to lose all your data that you have in .sav files. Don't worry, R welcomes people converting from all types of formats. In this case, we will have to make use of a new package, to read it in. We talked about packages before, these are bits of code that someone else has written and packaged, to make available for use for the rest of us. So, lucky for us, someone has written a package for reading in files that are considered foreign to R. SPSS files (.sav files) are one such format. This package is called `foreign`. If this is the first time you have used this, and you don't have the package on your computer, you will need to use the `install.packages()` function: 
+
+
+```{r, eval=FALSE}
+install.packages(foreign)
+```
+
+
+If you already have the package installed, then you just need to load it with the `library()` function: 
+
+
+```{r}
+library(foreign)
+```
+
+
+Foreign also functions for reading and writing data stored by some versions of Epi Info, Minitab, S, SAS, SPSS, Stata, Systat and Weka and for reading and writing some dBase files. If you have files from these sources, you can consult the [package documentation](https://cran.r-project.org/web/packages/foreign/foreign.pdf) for some guidance on how to import them into R. Here we will stick to the example of files from SPSS. 
+
+
+So to read .sav files into R using the foreign package, we can use from it the `read.spss()` function. Again, what we need to specify is the path to the file, so R knows where to read it from, but also in this case we can make sure that the file is 'flattened' into a dataframe by setting the `to.data.frame` parameter to TRUE.
+
+
+So set the path: 
+
+
+```{r}
+my_spss_path = "/Users/reka/Desktop/course-incubator/data/csew1112.sav"
+```
+
+
+And to read the data:
+
+
+```{r, eval = FALSE}
+my_dataframe_5 <- read.spss(file = my_spss_path, to.data.frame = TRUE )
+```
+
+
+Now you can see that you have this .sav file, in a data frame. 
+
+
+#Excel
+
+
+The last common file type we'll cover here are files that come from Excel. No doubt you will work with data that has come form Excel. The common file extension for this is `.xlsx`. There are a few ways of reading in these data. For one, you could convert the workbook you need to a .csv file, by selecting "Save as..." and choosing comma separated value (csv) as one of the options. Then you can use the instructions for .csv to read in your data (with the `read.csv()` function). 
+
+
+You could also resort to good old copy and paste. You could select all the content which you want to import, and then just copy. This will attach everything you selected to the clipboard. To read in data from your clipboard you can use the following command: **(I think this only works on Windows machines though...!)**
+
+
+```{r, eval=FALSE}
+my_dataframe_6 <- read.table("clipboard")
+```
+
+
+But of course this isn't very good solution, instead, let's read in some data from excel correctly. For this we can use the `readxl` package. Once again, install if you don't already have it, and then just load it up:
+
+
+```{r}
+library(readxl)
+```
+
+
+And now we can use the function `read_excel()` from this package. As with previous functions, you have to specify the file path. 
+
+
+```{r}
+my_xlsx_path <- "/Users/reka/Desktop/course-incubator/data/myXlsx.xlsx"
+```
+
+
+But there's another important parameter, which is to specify which sheet to read the data from. Remember that a dataframe is 2 dimensional, it has rows and columns. So each sheet in an excel workbook will have to be imported separately, into an individual dataframe. So to import "Sheet1" from this excel workbook you would need to specify this like so: 
+
+
+```{r, eval = FALSE}
+my_data_frame_7 <- read_excel(my_xlsx_path, sheet = "Sheet1")
+```
+
+
+And this reads in Sheet 1 of this excel file!
+
+
+```{r, eval = FALSE}
+head(my_data_frame_7)
+```
+
+
+Now we've discussed reading data in from most traditional static file sources. We've even used `read.tables()` to get data directly from a website. But there are also ways to retreive data from active data sources. We will cover APIs and Web Scraping in the next section, for example. However there are many other possibilities. I'll quickly touch here on reading data from database connections. 
+
+
+#Getting data from database connections
+
+It's possible that your data will be stored in databases. We do not really cover how to set up a connection with databases in R, but I'll briefly touch on this. For example, in a previous role I set up my R session to [connect with an SQL Server](https://support.rstudio.com/hc/en-us/articles/214510788-Setting-up-R-to-connect-to-SQL-Server-). To do this I used the [RODBC package](https://cran.r-project.org/web/packages/RODBC/vignettes/RODBC.pdf). Firstly, you will also have to install the appropriate drivers for the appropriate databases. There should be lots of tutorials for doing this online. Then you can use the RODBC package to connect to the database, and retreive data. 
+
+I will just show the example below, which was used to connect to an SQL database:
+
+```{r, eval=FALSE}
+
+#load the package
+library(RODBC) 
+
+#enter username and password
+t_User <- "my_username"
+t_password <- "my_password"
+
+#use the odbcConnect() function to open a connection object, which here we name 'ch'
+ch <- odbcConnect("name_of_database", uid=t_User, pwd=t_password, believeNRows=FALSE)
+
+#then use the sqlQuery function to pass an SQL query to the database to retreive data into a dataframe
+my_dataframe_8 <- sqlQuery(ch, " SELECT ROW_1, ROW_2, ROW_3 FROM TABLE_1 WHERE ROW_4='some_value';")
+
+#finally close the connection object
+close(ch)
+
+```
+
+
+Anyway I just put this in here in case this is something that you will need to set up to retreive data form a database to do your analysis on. It's not a comprehensive guide, but is meant to illustrate that this is also an option. 
+
+
+
+#Refsources
+
+
+- [Foreign package](https://cran.r-project.org/web/packages/foreign/foreign.pdf)
+- [Leetaru et al., 2013](http://journals.uic.edu/ojs/index.php/fm/article/view/4366/3654?__hstc=26280290.34ab7bf88e972fdd7a7debc8575bac5a.1420416000189.1420416000190.1420416000191.1&__hssc=26280290.1.1420416000192&__hsfp=2439899863). 
+- [Kamath et al., 2013](http://dl.acm.org/citation.cfm?id=2488447).
+- [R Core Team, "R Data Import/Export." (2000).](https://cran.r-project.org/doc/manuals/r-release/R-data.pdf)
+- [Wickham, Hadley, and Garrett Grolemund. "R for data science." (2016).](http://r4ds.had.co.nz/data-visualisation.html)
+

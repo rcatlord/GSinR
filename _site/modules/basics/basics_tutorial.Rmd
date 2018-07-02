@@ -1,0 +1,984 @@
+---
+title: "Basics in R"
+author: "Réka Solymosi, Henry Partridge & Sam Langton"
+date: "3 July 2018"
+output:
+  html_document: default
+  
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo=TRUE, cache=TRUE, prompt=FALSE, tidy=TRUE, comment=NA, message=TRUE, warning=FALSE)
+
+# load necessary packages
+```
+
+***
+
+
+<!--##Install R & R Studio
+If you have not already, then please download and install R and R Studio onto your machines. You should be using your own laptops for this course, because that way you get used to working in an environment which you will continue to use after this Masters. However, sessions will be held in computer clusters in case you do not have access to a laptop (or something goes wrong...).
+
+- click [here](https://www.youtube.com/watch?v=eD07NznguA4) for instructions using Windows or
+- [here](https://www.youtube.com/watch?v=cX532N_XLIs&list=PLqzoL9-eJTNDw71zWePXyHx3_cm_fMP8S) for instructions using a Mac. 
+-->
+
+
+Yesterday we talked about R code somewhat in the abstract. We had a look at some code, how to interpret it, make sense of it, and then change it for our purposes. Today we will take a more structured approach and consider how you begin to build up your workflow using R for data analysis. 
+
+R is more than a programming language. It is an interactive environment for doing statistics. I find it more helpful to think of R as **having** a programming language than **being** a programming language. The R language is the scripting language for the R environment, just as VBA is the scripting language for Microsoft Excel. Some of the more unusual features of the R language begin to make sense when viewed from this perspective. See [Cook](https://www.johndcook.com/blog/r_language_for_programmers/#introduction)
+
+Let's begin by looking at the R studio environment once more, which is what we will be using in this course, and what you will likely be using in your work outside this course as well. 
+
+<!--(If you think you are likely to be using te R console, you can also set up the R console to look somewhat like R Studio, you can see how to [here]().  -->
+
+#The Basics
+
+
+This tutorial is meant to get you started with writing some R code. It should cover everything you need to know to get started, but it might give you the impression that you will be writing all your code form scratch. In reality, that will be the case maybe half of the time. Most of the time, you will probably be doing what we were doing with the babynames script yesterday - you will be taking some code from somewhere (maybe a script you wrote earlier, maybe someone else's), and adapting it to your needs. We discussed yesterday about the wealth of online support available to R users. This will often lead you to bits of code already written, that you can take and adapt to your needs, combining with other bits of code you may have. That is not "cheating", that is coding!
+
+
+However for you to be able to effectively apply bits of code to achieve your goal, you have to have a solid understanding in two things: 
+
+- You need to be able to formulate clearly **what** you need to do to achieve your aims. It help to even write this aim down, and state step-by-step what needs to be done to get there. 
+- You need to understand what each bit of the code does, and how you can change it to adapt it for your aims
+
+
+The first point we hopefully began to address with the "pseudo code" exercise. Once you can visualise your input, your output, and all the steps you need to take in between, you will have a step-by-step guide to achieving your goal. You can then search for appropriate code to achieve each step. 
+
+
+Regarding the second point, understanding the R syntax and environment will help you identify the correct bits of code, and instruct you on how to apply what you find to achieve your purposes. The aim for this morning is to give you enough of a grounding in the basics of the R syntax, that you will be comfortable doing this. 
+
+
+By the end of this lesson you should be able to:
+
+- use the R Studio environment comfortably
+- set up a working directory
+- recognise numbers, objects, lists (or vectors), functions, and comments in code
+- be familiar with data frames and their structure
+- know different data types and how to convert between them
+- understand what packages are and how to install and load them
+
+
+So let's get started!
+
+
+#Getting to know R Studio
+
+We got into this yesterday, but just to have a look through systematically, let's have a look at R studio IDE. 
+
+When you open R studio, you see there are 4 windows:
+
+- The R script and data view 
+- Console view
+- Workspace view
+- Plot, files, packages, and help view
+
+We'll go through what each of these windows can be used for now.
+
+##The R script and data view 
+
+This window is where you write your code and where you can view your data
+
+![R Script and Data View](https://raw.githubusercontent.com/rcatlord/GSinR_materials/master/images/rscriptdataveiw.png)
+
+It might not automatically open up when you first open R studio, because you might not have any scripts to open there. 
+
+
+In order to open a new script, you can click on the new item icon on the top lefthand corner (it's the icon depicting a white paper with a green plus sign on the top left of it): 
+
+
+
+![ ](https://raw.githubusercontent.com/rcatlord/GSinR_materials/master/images/new_thing_icon.png)
+
+
+
+And then select "New R Script":
+
+
+![ ](https://raw.githubusercontent.com/rcatlord/GSinR_materials/master/images/new_r_script.png)
+
+
+This will open up a new blank script for you to write your code in. Let's give it a go: 
+
+Copy and paste the following code into your newly created script; 
+
+
+```{r}
+myDf <- data.frame(a = c(1, 2, 3, 4, 5), b = c(5, 4, 3, 2, 1))
+```
+
+
+To run this, you have to highlight it, and click on the "Run" icon on the top right corner: 
+
+
+![](https://raw.githubusercontent.com/rcatlord/GSinR_materials/master/images/run_script.gif)
+
+
+(You can also use a keyboard shortcut of `CTRL` + `Enter` once the bit of code is highlighted, instead of clicking run)
+
+
+Now you have just created a dataframe with two columns, one called "a" and one called "b". We will get more into what that means later, but for now, you can just used your script window to execute some R code. 
+
+
+You can also use the script view to show you your data. For example, if we wanted to see the dataframe we just created, we can do this using the `View()` function. We'll get onto functions and dataframes in a bit, but just give this a go! Copy the code below into the r script, and run it: 
+
+
+```{r, eval=FALSE}
+View(myDf)
+```
+
+
+Now a window will appear showing you the dataframe which you created earlier. To toggle between windows here, use the tabs. 
+
+
+##Console view
+
+
+Below the R script and data view there is the console view. 
+
+
+![Console View](https://raw.githubusercontent.com/rcatlord/GSinR_materials/master/images/consoleview.png)
+
+
+You might have noticed that anything you ***run*** from the R script window above appears here. Outputs might also appear here. For example, in the previous code, we specified that we want to 
+`View` the dataframe called MyDf. However, if we just wrote MyDf in the R script view and ran that, the output would be visible in the console view. Try it by running the code below:
+
+
+```{r}
+myDf
+```
+
+
+You should see the output in the console view. The **output** of a bit of code is the result it should return. In this case, we call the name of our data frame object, so it returns its value, so all its rows and columns. 
+
+
+Besides the output, the consolve view is also where you will see your **errors**. Errors are messages that you receive that tell you why a particular bit of code is not working, or not doing what you want it to be doing. 
+
+To see an error, try running the below code
+
+```{r, error=TRUE}
+name
+```
+
+
+The above error should appear in your console view. You can see that it is telling you that it cannot find an object called 'name'. This is because we did not create one. To create this object we would have to assign some value to it using the `<-` notation (more on this later). 
+
+
+So if we wanted name to be my name, we'd write:
+
+
+```{r}
+name <- "Reka"
+```
+
+
+Now if we copypasta this, this time there should be no error, and the consolve view will instead display what the value of the name object is: 
+
+
+```{r}
+name
+```
+
+
+Error messages in R are pretty good at telling you exactly what went wrong. For example, try this code: 
+
+
+```{r, error=TRUE}
+NAME
+```
+
+
+R is case-sensitive, and so while name exists, NAME doesn't. And the error message tells us exactly this, that it cannot find any object called 'NAME'. Handy tip though: if in doubt, copy and paste your error into google. There is exensive help available online, and if you do this, you will understand what the error message says, and be able to take steps to fix it. We'll return to this issue when talking about R syntax. 
+
+
+##Workspace view
+
+This section shows you what is in your workspace. It can be handy to check on your objects for example. 
+
+![Workspace View](https://raw.githubusercontent.com/rcatlord/GSinR_materials/master/images/workspaceView.png)
+
+
+It should have a list of all of the objects that are in your environment. We will talk about what objects are in a moment, but let's just take a minute to consider 'environment' in R. Environment refers to the universe of the R session you are running. When you open up a new session, you have an empty environment. Then you begin to work, you import some data, you create some new variables, you import functions or write your own, these all become your environment. This little window on the top right hand corner helps you keep track of what is in there. For example, you might have 5 different data sets in there at once, which you want to merge into one super data set. Or you are creating new variables inside a _for loop_, and you want to make sure that they are all appearing there, and also that they're not empty! Because not only does environment view tell you what's there, it also tells you some information about them. 
+
+
+For example, in your Environment view, you should see the object "myDf". Next to it, it should say `5 obs of 2 variables`. This means that you have 2 columns (variables) and 5 rows (where each row is an observation). You might also have the 'name' object in there. Essentially, the environment is a handy guide to everything that you've created in your session. To watch it change, create a new variable called "NAME":
+
+
+```{r}
+NAME <- "REKAAA"
+```
+
+
+Now this will appear in your workspace view as well. If you have something in there that you no longer need, you can get rid of it with the `rm()` function ('rm' stands for *R*e*M*ove). So try this: 
+
+
+```{r}
+rm(NAME)
+```
+
+
+You will see that the NAME object is no longer in your evnironment taking up space. 
+
+There is also a history tab there, which shows you the code that you have executed. So if you ever want to retrace your steps, you can use this to do so. If you click on it now, you will see all the commands you just ran. Personally I rarely use this, but if you're executing large batches of code then it must be useful (and potentially in other scenarios). There are so many approaches to using R, and R Studio, you will find your own system that works for you!  
+
+
+##Plot (and others) view
+
+And finally on the bottom right you have your plot/ files/ packages/ help/ viewier view. 
+
+![Plot++ View](https://raw.githubusercontent.com/rcatlord/GSinR_materials/master/images/plotView.png)
+
+
+While this bit of window has a lot of functions, the ones you are mostly likely to most commonly use are are plots, help, and potentially packages. 
+
+###Plots
+
+
+The most common use of this view is for when you plot something, your plot appears here. You will have experienced this yesterday, with the babynames graph. 
+
+
+To demonstrate this again, just try plotting the two columns of the "myDf" dataframe against each other. To do this, we use the `plot()` function. (As you might be noticing, the syntax will be pretty straight forward, where we basically tell R what to do using words...!)
+
+
+```{r}
+plot(myDf$a, myDf$b)
+```
+
+
+The above plot should appear in your plot view. Yay!
+
+
+You can save this using the `Export` button on the top of the plot view. You can choose to save it as an image, or a png (or if you are in a hurry and are plugging the graph into a powerpoint, you can use the copy to clipboard option...!)
+
+
+![](https://raw.githubusercontent.com/rcatlord/GSinR_materials/master/images/export_plot.png)
+
+
+
+The other common use of this window is to display the help documentation. R is very helpful, in that if you don't know how to use a prticular function, or you just want to learn more about it, all the information is built-in and very easy to call. All you need to do is type `?` in front of the thing you want to know about. 
+
+So for example, if we wanted to know more about the plot function, we would type `?plot()`.
+
+The plot view will automatically switch tabs to the 'help' tab, and display all the information you need there:
+
+
+![](https://raw.githubusercontent.com/rcatlord/GSinR_materials/master/images/plot_help.gif)
+
+
+Finally you can click on the packages tab to see what packages are already in your environment, and you can add or detach packages using this tab as well, if you don't want to do it using the `install.packages()` and `library()` commands. As we continue we will be using these, but it's always helpful to know that you can install and load your packages using the packages tab here as well:
+
+
+![](https://raw.githubusercontent.com/rcatlord/GSinR_materials/master/images/packages.png)
+
+
+##Recap
+
+Okay, you are now be pretty familiar with the R Studio development environment. You should now be able to: 
+
+- open a new script window
+- type code and execute it
+- view your outputs
+- see what's in your environment
+- remove something from your environment
+- know where to view and export plots
+- know how to find help documentation
+- know where to manually check, install, and load up packages
+
+
+
+#Setting up your working environment
+
+There is a myth about the scientist and the messy workspace, typically illustrated with Albert Einstein: 
+
+![](C:/Users/Sam/Desktop/gsinr/GSinR/modules/basics/img/einstein.jpg)
+
+  
+    
+However many of us need order to be able to work properly. An organised workspace is also prominent, as we can see with these famous work spaces: 
+
+
+```{r, out.width = "250px", echo=FALSE}
+knitr::include_graphics("https://s-media-cache-ak0.pinimg.com/236x/67/75/9f/67759f0b23e8e39bb53bca497edc7b75.jpg") 
+knitr::include_graphics("https://s-media-cache-ak0.pinimg.com/236x/f7/cd/d5/f7cdd5ddf82968c2df75a21184d8f456.jpg") 
+```
+    
+```{r, out.width = "250px", echo=FALSE}
+knitr::include_graphics("http://farm8.static.flickr.com/7631/16842204112_b4b5d11683.jpg") 
+knitr::include_graphics("https://secure.i.telegraph.co.uk/multimedia/archive/03249/Charles_Dickens_de_3249721b.jpg")
+```
+
+
+(Galileo, Marie Curie, Alan Turing, Charles Dickens)
+
+
+When working in R, you have to consider your workspace. It helps immensely to keep our code and notes organised. You will likely have a project folder, where you save your data, your graphs, your analysis outputs, etc. Here we can show how to designate a folder where R will save things such as outputs and scipts, and also where it will read data in from. 
+
+##Create a folder to work in
+
+
+Create a folder to save your data and our outputs in. In R, this is known as a **working directory**. So firstly, before we begin to do any work, we should create our **working directory**. This is simply a folder where you will save all our data, and also where you will be reading data in from. You can create a new folder, where you will save everything for this project, or you can choose an existing folder. It's advised that you create a folder, and also give it some name you remember, that will be meaningful. Generally try to avoid spaces and special characters in folder (and file) names. It's not necessarily a good idea to just dump everything into 'Desktop' either, as you want to be able to find things later, and maybe keep things tidy. 
+
+
+Anyway, once you have a folder identified, you will need to know the *path* to this folder. That is the route that you will be using in your code to read/write files from/to the right directory. Often you will get errors, about certain things "not found" due to incorrect file paths. So it's important that we find the correct path. I now have to tell R about the path to this folder. You can do this a few ways, here I'll show two:
+
+
+###The pointy and clicky: 
+
+
+You can simply set your working directiory using the graphical user interface of R Studio:
+
+Click on Session > Set working directory > Choose directory...
+
+![Set working directory](https://raw.githubusercontent.com/rcatlord/GSinR_materials/master/images/setwd.png)
+
+Then navigate to the folder you want to use, open it, and click on 'Open'.
+
+This will have set your working directory to that folder where you just selected
+
+
+###Set the filepath with code:
+
+The function to use to set working directory is `setwd()`. Inside the brackets you need to write the path to your folder, in quotation marks. So for me this is: 
+
+
+```{r, eval=FALSE}
+setwd("/Users/reka/Desktop/course-incubator")
+```
+
+
+If I copy that into the R script and run it, then my working directory will be set to this folder, called "course-incubator" on my Desktop. 
+
+
+So for you to be able to use this method, you need to find the filepath to your folder. How do you find this? There are multiple ways of finding the correct path for both macs and PCs, I will give an example for a mac and one for a PC here.
+
+On a mac you can find the path to a specific file or folder by first opening Terminal, then opening Finder and navigating to the folder or file in Finder. Once you have found it, just drag and drop the folder or file it into the Terminal window. This will print out the path to your file or folder. You can then copy this, and paste it into the `setwd()` function. 
+
+
+![Find mac file path](https://raw.githubusercontent.com/rcatlord/GSinR_materials/master/images/find_file_path.gif)
+
+
+
+
+On a PC, you can find a path to a file or folder by navitgating to it using *Windows Explorer* and once there, copying the file path from the top bar. This is illustrated by the red circle below:
+
+
+![Find pc file path](https://raw.githubusercontent.com/rcatlord/GSinR_materials/master/images/windows_file_path.png)
+
+
+NOTE: When you copy this file path from the PC version, you will have to change the direction of the dashes. So you will have to replace all backslash (`\`) with forwardslash (`/`). 
+
+For example: 
+`C:\Users\mesike\Desktop\dokumentumok`
+should become
+`C:/Users/mesike/Desktop/dokumentumok`
+
+Whichever way you choose, once you have done this you can save all data in this folder, and read them in from here. Also any outputs like plots and code get saved here as well.  
+
+
+##Recap
+
+This brief section should have equipped you with the skills to: 
+
+- create and set a working directory
+
+Give this a go now. Create a folder, and set it as your working directory. Once you have done this, check that you were successful by using the `getwd()` function. You just have to run this function, without passing anything inside the brackets, and it should let you know the path to your current working directory. It will print this, like all outputs, in the console! And with this, we've covered one more skill, to:
+
+- find out your current working directory.
+
+
+
+#Getting started with code
+
+So now that we have our environment all set up, let's get started with some code. Unlike other programs for data analysis you may have used in the past (Excel, SPSS), you need to interact with R by means of writing down instructions and asking R to evaluate those instructions. So to understand these, and be able to draft your own instructions, it's important to understand the building blocks of these instructions. 
+
+
+In this section, we'll introduce how R deals with: 
+
+- Objects
+- Numbers
+- Vectors (and lists)
+- Data frames
+
+
+##Objects
+
+
+We use R for manipulating data. And data in R is stored as **objects**. R is an *object-oriented language*. **Everything that exists in R is an object**. This is a key point to understand.
+
+
+Because everything is an object, each object belongs to a certain class, and inherits the characteristics of this class. For example, if an object is a number, then it inherits the ability to perform mathematical computations on it, such as take the average. This will all become more clear as we use it more, and will return to this when talking about data types. 
+
+
+<!--If you are used to other programs such as Excel or SPSS the first mental barrier you need to cross in order to understand R is that (unlike in those programs), data in R can come in many shapes. Excel or SPSS files come in a tabular spreadsheet form, with rows typically representing cases and columns representing characteristics or attributes of those cases (what we also call variables). Typically, you can only work with one of these data tables at the time. R can work with this sort of spreadsheet data structure. However, it can also work with data that comes in many other shapes. What is more it can work with several of these objects simultaneously. This is part of what makes R so flexible and special.-->
+
+We can create objects in R by asking R to put things inside of named objects. For that we use the **assignment operator**. In R the `<-` symbol is the assignment operator (you could also use the `=` sign as an assignment operator and some people do, but [Google style guide](https://google.github.io/styleguide/Rguide.xml) recomments you use `<-`). If you are interested, here is a [quick guide on the difference between assignment operators in R](https://renkun.me/blog/2014/01/28/difference-between-assignment-operators-in-r.html)
+
+
+This assignment operator is what assigns value to a symbol. So, for example, if we type the following expression: 
+
+
+```{r}
+name <- "Reka"
+```
+
+
+we are creating an object, called `name`, and giving it the value "Reka". 
+
+
+Or, if we want to create an object that we name "x", and we want it to represent the value of 5, we write:
+
+```{r}
+x <- 5
+```
+
+
+We are simply telling R to create a *numeric object*, called `x`, with one element (5) or of length 1. It is numeric because we are putting a number inside this object. It may help you at this stage to think of objects as boxes, things where you store stuff and the assignment operator as the tool you use to tell R what goes inside.
+
+
+You can see the content of the object `x` either by auto-printing by typing the following:
+
+
+```{r}
+x
+```
+
+Or by typing:
+```{r}
+print(x)
+```
+
+
+Remember earlier when we were using the 'name' object, and tried to call it with 'NAME'? When writing expressions in R is very important you understand that **R is case sensitive**. This could drive you nuts if you are not careful. More often than not if you write an expression asking R to do something and R returns an error message, chances are that you have used lower case when upper case was needed (or vice-versa). So anyway, remember the error we got? We can replicate this by typing a capital X: 
+
+
+```{r, error = TRUE}
+X
+```
+
+
+You will get the following message: `"Error in print(X) : object 'X' not found"`. R is telling us that `X` does not exist. There isn't an object `X` (upper case), but there is an object `x` (lower case). When you get an error message or implausible results, you want to look back at your code to figure out what is the problem. This process is called **debugging**. There are some systematic ways to write code that facilitate debugging, but we won't get into that here. R is very good with automatic error handling at the levels we'll be using it at. Very often the solution will simply involve correcting the spelling.
+
+
+So essentially the take away message here is: **everything in R is an object**. Now I mentioned classes above, and will again with data types, but just keep in mind that depending on what class your object belongs to, it inherits different characteristics. So a number object will be different than a character object. The next sections describe this.  
+
+
+
+##Numbers
+
+Number are special, because R will always treat numbers as numbers. This sounds straighforward, but actually it is important to note, because, as discussed earlier, we can name our variables anything. EXCEPT they cannot be numbers. Numbers are **protected** by R. 1 will always mean 1. 
+
+
+If you want, give it a try. Try to create a variable called 12 and assign it the value "twelve". As discussed above, we can assign something a meaning by using the `<-` characters.
+
+
+```{r, error=TRUE, eval=FALSE}
+12 <- "twelve"
+```
+
+You get an error!
+
+
+12 remains 12. This means that with numbers, you can use R as a calculator. Give it a go:
+
+<!--At the R prompt in the main console we can type **expressions**. R expressions could be as simple as asking R to evaluate how much is 3+5.-->
+
+```{r}
+3 + 5
+```
+
+
+or
+
+
+```{r}
+7 * 4
+```
+
+
+
+Once you run this code, the R engine will evaluate this expression and do something with it. In this case, it will tell you that the result of adding 3 and 5 is 8. But of course we don't want to just use R as a calculator. But at least you know, that here numbers are numbers. 
+
+
+##Characters
+
+Text data is usually referred to as characters or strings. 
+
+You can create strings with either single quotes or double quotes. Unlike many other languages, there is no difference in behaviour. [R4DS](http://r4ds.had.co.nz/strings.html#other-types-of-pattern) recommends always using ", unless you want to create a string that contains multiple ".
+
+
+```{r}
+string1 <- "This is a string"
+string2 <- "If I want to include a 'quote' inside a string, I use single quotes"
+```
+
+
+If you forget to close a quote, you’ll see +, the continuation character:
+
+```{r, eval=FALSE}
+> "This is a string without a closing quote
++ 
++ 
++ HELP I'M STUCK
+
+```
+
+
+If this happen to you, press Escape and try again! Or, you can try and finish things off (in this case, by running simply: "). If you are not sure what happened, press Escape and try again.
+
+
+When you have a character object you can perform character-specific operations on it. Just like how you can do maths with numbers. 
+
+
+So for example, you can change it to upper case, with the function `toupper()` (get it... to upper!): 
+
+```{r}
+toupper(string1)
+```
+
+
+Now while only numbers can be numeric variables, both numbers and characters can be categorical variables. For example, you can think of the result of a likert-scale survey where people rate their agreement with a statement from 1 to 5. There are categorical variabes form a specific type of object called **factors**.
+
+
+##Factors
+
+
+In R, categorical (ordered, also called ordinal, or unordered, also called nominal) data are typically encoded as **factors** .  A factor is simply an integer vector that can contain only predefined values, and is used to store categorical data. Factors are treated specially by many data analytic and visualisation functions. This makes sense because they are essentially different from quantitative variables.
+
+Although you can use numbers to represent categories, *using factors with labels is better than using integers to represent categories*. This is because factors are self-describing (having a variable that has values "Male" and "Female" is better than a variable that has values "1" and "2", for example). When R reads data in other formats (e.g., comma separated), by default it will automatically convert all character variables into factors. If you'd rather keep these variables as simple character vectors you need to explicitly ask R to do so. We will cover how in the import section. 
+
+
+Factors can be created with the `factor()` function, concatenates a series of elements. But other than that, you create a factor the same way you would create a list of characters, but you just wrap this in the `factor()` function. When you do this, you change the class of the object, which means you can do different things with it. We can ask R to print the class of an object with the `class()` object. 
+
+So we createa a list of characters like this: 
+
+
+```{r}
+the_smiths <- c("Morrisey", "Marr", "Rourke", "Joyce")
+```
+
+
+And we can look at the class: 
+
+
+```{r}
+class(the_smiths)
+```
+
+
+But if we wrap this in the `factor()` function: 
+
+
+```{r}
+the_smiths_f <- factor(c("Morrisey", "Marr", "Rourke", "Joyce"))
+```
+
+
+We see that the class of the `the_smiths` object is now factor:
+
+
+```{r}
+class(the_smiths_f)
+```
+
+
+Because it is now a factor, we can perform factor-specific actions on it. Remember it now inherits characteristics of a factor. So one example is, we can show its levels.  
+
+
+
+```{r}
+levels(the_smiths_f)
+```
+
+
+If we tried this on the list of characters, we will get no response, as a character does not have a levels attribute. Go ahead, try: 
+
+
+```{r}
+levels(the_smiths)
+```
+
+
+
+#Vectors (and lists)
+
+
+Most commonly, when you use variables in R, you create **vectors**. What is a vector? An atomic vector is simply a set of elements *of the same class* (typically: character, numeric, integer, or logical -as in True/False). It is the basic data structure in R. Typically you will use the `c()` function (c stands for concatenate) to create vectors.
+
+
+For example, we created the string vector of the smiths above with:
+
+
+```{r}
+
+the_smiths <- c("Morrisey", "Marr", "Rourke", "Joyce")
+
+```
+
+
+You could also create a list of numbers, the same exact way: 
+
+```{r}
+
+list_of_numbers <- c(1, 2, 3, 4, 5, 6, 7)
+```
+
+
+So when would you use this? Well most of the time, you would have this list as an input for a function. For example, imagine that you had to perform a repetitive task for multipe items, or multiple values. You could just cycle through this list to achieve this: 
+
+
+```{r}
+
+for(member in the_smiths){
+  print(paste0("My favourite musician is ", member))
+}
+
+
+```
+
+Don't worry if the above code looks a bit mad right now... Things will become clearer!
+
+You can also carry out operation on every item in the vector by simply performing to the operation to the vector object. For example, if we wanted to add 1 to all elements of our numeric vector we can do: 
+
+
+```{r}
+
+list_of_numbers + 1
+
+```
+
+
+If you mix in a vector elements that are of a different class (for example numerical and character), R will **coerce** to the minimum common denominator, so that every element in the vector is of the same class. So, for example, if you input a number and a character, it will coerce the vector to be a character vector. See the example below and notice the use of the `class()` function to identify the class of an object. 
+
+
+```{r}
+
+mixed_vector <- c(1, 2, "some text", "some more text")
+class(mixed_vector) 
+
+```
+
+
+Now I've been using the term list and vector interchangeably. They are not the same thing though. There are some [small differences](https://stackoverflow.com/questions/8594814/what-are-the-differences-between-r-vector-and-r-list-data-types) but it's not super vital that we discuss this here. Instead let's move on the most commonly used object in R, the data frame. 
+
+
+#Data frames
+
+
+One of the most common objects you will work with in this course are **data frames**. Data frames can be created with the `data.frame()` function. Data frames are multiple vectors of possibly different classes (e.g., numeric, factors), but of the same length (e.g., all vectors, or variables, have the same number of rows). This is what other data analysis programmes call 'data sets', the tabular spreadsheets I was referring to earlier.
+
+The format in which R holds data is called a data frame. A data frame is a rectangular collection of variables (in the columns) and observations (in the rows) [Wickham & Grolemund, 2016](http://r4ds.had.co.nz/data-visualisation.html). In a dataframe, each column is a **variable**, and each row is an **observation**. 
+
+So for example, in this data set each row is a recorded crime (but in other cases, it might be a person that was interviewed, a neighbourhood, a country... anything that you would consider your 'unit of analysis' which you have data for).
+
+![Each row is one observation](https://raw.githubusercontent.com/rcatlord/GSinR_materials/master/images/rowIsObservation.png)
+
+This column, for example, is the month variable. Each observation (crime) will have a value for this variable (the month that it was recorded).
+
+![Each column is a variable](https://raw.githubusercontent.com/rcatlord/GSinR_materials/master/images/columnIsVariable.png)
+
+So that is essentially what a dataframe looks like. All the data analysis and visualisation we will cover in the course will require the data to be in this format. The majority of today will be spent overviewing the various ways we can make sure our data is in this form. 
+
+
+##DIY dataframe in R
+
+In the most basic instance, you can create your own dataframe by hand, within R. You can specify the names of the columns (variable names) and pass them a list of values. So for example below, we are creating a new object called `exampleDf` using the `data.frame()` function. We have to pass each variable name to this function, followed by an equals sign and a list of the values. Each new element in the list will be the next row. Here, we create a dataframe with 3 columns: name, gender,  and height, and we pass 3 observations to each one. So our first row (observation) is about someone with name bob, gender male, and height 178cm: 
+
+
+```{r}
+exampleDf <- data.frame("name" = c("bob", "bobbie", "bobette"),
+                        "gender" = c("male", "male", "female"), 
+                        "height" = c(178, 154, 164))
+```
+
+
+You can then view the contents of this exampleDf just by printing its name: 
+
+
+```{r}
+exampleDf
+```
+
+
+When you read in your data, you will be reading it into a data frame object. You will be able to call your data frame by referring to it by the name that you give it. In this case we named our dataframe `exampleDf`. If you want to refer to specific variables within your dataframes (so specific columns), then the syntax is: `dataframe` + `$` + `variable name`. So to call the gender variable I would type: 
+
+
+```{r}
+exampleDf$gender
+```
+
+
+You can think of a dataframe as a collection of these variables. As with any data set, a dataframe can contain variables of different data types. We discuss these in the next section, about **data types**.
+
+
+##Data types
+
+
+The columns of the data frame will fall into different data **types**, depending on what sort of data they are made up of. In this example dataframe of tweets, we see two types:
+
+- factors (fctr), which R uses to represent categorical variables with fixed possible values.
+- and doubles (dbl), or real numbers.
+
+
+There are five other common types of variables that aren’t used in this dataset but we’ll encounter:
+
+- integers (int). which are whole numbers
+- logical vectors (lgl) that contain only TRUE or FALSE.
+- character vectors (chr), also known as strings.
+- date-times (dttm) which are made up of a date and a time.
+- and date, which stands for dates.
+
+If we want to double check what data type one of our variables is, we might want to use the `typeof()` function, or the `class()` function. 
+
+
+```{r}
+typeof(exampleDf$name)
+```
+
+
+or
+
+
+```{r}
+class(exampleDf$name)
+```
+
+
+You may notice these give you two different results. That is because they are looking at different things. But these are both important!
+
+
+The function `typeof()` determines the R internal type of an object. The values it can return include logical, integer, double, character, list, and a few more. To see them all, access the help documentation for the function by using `?`. 
+
+
+The function `class()` on the other hand has to do with the object oriented programming nature of R. This is what we've been refering to where the R objects belong to certain classes. And based on what class they belong to, they inherit certain traits. So an object of type character can belong to the factors class, in which case it will inherit characteristics like having values that can be put in a specific order. But, it can also belong to the class datetime, in which case it inherits other characteristics, to do with dates and times. 
+
+
+Why is this important to know? Well in terms of what class the object belongs to, as mentioned already a few times, it determines what characteristics it inherits, and that determines what you can do with it. If we ignore R for a second, and consider your knowledge of data analysis - you know that you can do different things with a categorical variable than a numeric variable. Similarly in R, depening on what the variable is, we can carry out different operations with it. For example, if an object is a date, then you can extract values from it. For example if `20170618` is a number, then you can divide it by 2, but if it's a date then you can extract from it a day of the week to learn it's a Sunday. Often, you might want to translate a variable from one type to another. The next section covers just this. 
+
+
+##Converting between data types
+
+Often, some data types are not quite what we think they are. As we saw above, the type for our `name` variable is integer. If we want to transform this into an object of factor class, we need it to be a character string first. Luckily it is very easy to translate between types in R. To turn something into a character, we can simply use the `as.character()` function. On the other hand, if we want to turn a character value into a number, we can use the `as.numeric()` function. Note that for something to be turned into a number, it needs to look like a number. What I mean by that is that something like this would work: 
+
+
+```{r}
+as.numeric("5")
+```
+
+
+but something like this would not: 
+
+
+```{r}
+as.numeric("five")
+```
+
+
+With the as.numeric function, anything that doesn't look like a number will be converted to NA. If you have a mix of things that look like numbers and things that don't, the `as.numeric()` function will still convert everything that looks like a number, but the ones that do not, it turns to NA. For example: 
+
+
+```{r}
+listOfNums <- c("1", "2", "three", "4", "five")
+as.numeric(listOfNums)
+```
+
+
+Now you know how to convert between data types as well. One thing we still need to mention, is that you've been doing this using **functions**. Let's discuss these now.
+
+
+##Functions
+
+
+R uses functions to perform operations. **Everything you do in R is the result of running a function**. You can think of functions as preprogrammed routines that ask R to do a particular thing. Here we can use the `print()` function to see what it is inside this object. 
+
+
+```{r}
+print(x)
+```
+
+
+A function is a bit of code that does something with the objects you pass it. These are called **arguments**. Basically the thing that you pass into the function is its argument. You pass arguments into functions by placing them in the brackets `()`. We won't be writing functions in this course, but just to illustrate, I'll put a basic one here. I call it `doubleThisNumber()`, and I say that it will receive one argument in a bracket (call it x), and when it does, it will take x and times it by two. The result from that is what it will return. 
+
+
+```{r}
+doubleThisNumber <- function(x){
+  x*2 
+}
+```
+
+
+Now I can pass any number (or object that is numeric) to this function and it will take that, double it, and return it. 
+
+
+```{r}
+doubleThisNumber(4)
+```
+
+
+Generally, functions are more useful than this. Another function we saw earlier was `View()` which let us view a dataframe, and `plot()` which created a basic x,y plot for us. We'll be using loads of functions. Think of them as a mechanism for taking your object, and doing something with them. To do so, you need to (1) find the name of the function for your task, (2) pass the function to your object by enclosing the object into brackets following the function name.
+
+
+You can often pass parameters (additional options or conditions) into functions, as well as the argument (the object you want it to run the function on). For example, there is a function called `sort()`. You can create a list in R, and use the `sort()` function to put it in a particular order. 
+
+
+To demonstrate: 
+
+
+Step 1 create list: 
+
+
+```{r}
+listOfSomeNumbers <- c(2, 5, 23, 1, 7, 56, 109, 33, 21)
+```
+
+
+Step 2 sort list: 
+
+
+```{r}
+sort(listOfSomeNumbers)
+```
+
+
+But what if I want to sort it from largest to smallest (in decreasing order)?
+
+
+Well, the sort function allows you to specify this, by passing it the parameter `decreasing = TRUE`.
+
+
+```{r}
+sort(listOfSomeNumbers, decreasing = TRUE)
+```
+
+To find out what parameters you can pass into a function besides the object, you can use the help function. As discussed earlier, to call the help on a function, you just put a question mark in front of it: `?sort()`.
+
+
+And the details will appear in your help/ plot window of R Studio. 
+
+
+By now you must have also noticed the common structure of **functions** in R. You can think of functions as executable commands that R will evaluate. As we've seen, functions have a name followed by a bracket, and you can pass *arguments* to the function by including them within the brackets. In the previous example we were using a function called *sort* and we passed the argument `listOfSomeNumbers`. 
+
+
+A function in R can take any number of arguments. You can obtain help about functions in R (and the specific arguments they can take) by using the ? as mentioned earlier, or the`help()` function. This will give you access to the help files as a html file. These help files may look cryptic at first, but the more you use R the easier it gets to understand how they work. Don't underestimate the examples at the end of these files. As a beginner they may not mean much to you, but when you get more fluency with R, executing those examples will help you in terms of understanding what the functions do.
+
+
+##Comments
+
+We've spoken a bit about comments in your code. As discussed, you should save bits of code that you write, and compile them into your own personal R cookbook. However, once you have lots of bits of code, and some time has elapsed, you might forget what some bits of codes do. 
+
+Similarly, if you want to share your code with someone, comments make it a lot easier for them to understand what you've done.
+
+To create a comment you use the hashtag/number sign (`#`) followed by some text. Whenever the R engine sees the hashtag sign it knows that what follows is not code to be executed. You can use this sign to include *annotations* when you are coding. These annotations are a helpful reminder to yourself (and others reading your code) of **what** the code is doing and (even more important) **why** you are doing it. 
+
+It is good practice to use annotations. You can use these annotations in your code to explain your reasoning and to create "scannable" headings in your code. That way after you save your script you will be able to share it with others or return to it at a later point and understand what you were doing when you first created it. See [here](http://www.screenr.com/1VN8) for further details on annotations.
+
+So for example, if I wanted someone to be able to use my function I wrote earlier, I could write: 
+
+```{r}
+
+#this function will return the double of any number passed to it.
+#To call the function type doubleThisNumber(), and inside the brackets enter a number
+doubleThisNumber <- function(x){
+  x*2 
+}
+
+```
+
+
+You need one `#` per line, and anything after that is a comment that is not executed by R. You can use spaces after (it's not like a hashtag on twitter). You do need a `#` for every line you have comments on.
+
+
+#Some notes on naming objects
+
+
+You may have noticed the various names we use to designate objects (`list_of_numbers`, `the_smiths`, etc.). You can use almost any names you want for your objects. Objects in R can have names of any length, consisting of letters, numbers, underscores ("_") or the period (".") and should begin with a letter. In addition, when naming objects: 
+
+- Some names are forbidden. These include words such as FALSE and TRUE, logical operators, and programming words like Inf, for, else, break, function, and words for special entities like NA and NaN.
+- You want to use names that do not correspond to a specific function. We have seen, for example, that there is a function called `print()`, you don't want to call an object "print" to avoid conflicts. To avoid this, use nouns instead of verbs for naming your variables and data.
+- You don't want them to be too long (or you will regret it every time you need to use that object in your analysis: you will be more likely to make mistakes and your fingers will bleed from typing).
+- You want to make them as intuitive to interpret as possible.
+- You want to follow consistent naming conventions. [R users are terrible about this](http://journal.r-project.org/archive/2012-2/RJournal_2012-2_Baaaath.pdf). But we could make it better if we all aim to follow similar conventions. In these handouts you will see that I follow the `underscore_separated` convention. See [here](http://robinlovelace.net/r/2014/07/15/naming-conventions-r.html) for details.
+
+
+A final word in code presentation and **coding conventions** before we carry on. Code is a form of communication and it is important that you write it in a way that others will find clear to read. As Hadley Wickham  has noted: "Good coding style is like using correct punctuation when writing: you can manage without it, but it sure makes things easier to read." Apart from using the `#` sign to make annotations, there are other basic conventions you should also follow:
+
+- Every comma should be followed by a space
+- Every mathematical operator (+, -, =, *, /, etc.) should be surrounded by spaces
+- Parentheses do not need spaces
+- Lines should be at most 80 characters. If you have to break up a line, indent the following
+piece.
+
+
+You may want to look at the [style guide](http://google-styleguide.googlecode.com/svn/trunk/Rguide.xml) used by Google programmers using R for further details.
+
+##Recap
+
+So now you should be familiar with the following concepts in R: 
+
+- Objects
+- Classes
+- Factors
+- Data frames
+- Data types
+- Functions
+- Comments
+
+While potentially a lot right now, this will all fall into place when we begin to apply everything you've learned here to manipulating your data in R
+
+
+
+#Packages
+
+We also discussed the use of packages. Packages are bundles of code that someone else has written, and uploaded to a central repository (called CRAN) so that anyone can download and use them. These packages have lots and lots of functions in them, which we can use. Packages also sometimes contain data sets. You can also install packages from people's github pages. [Github](https://github.com/) is an online repository for versioning and sharing code. People can upload their R packages there, and it is possible for us users to install from these repositories directly. Most of the time we will be using packages from CRAN. 
+
+Different packages are used for different things. During this course we will be using a series of packages collectively called the 'tidyverse', which facilitate easy data cleaning and manipulation. But there are packages for everything! There is a package for [aoristic analysis](https://cran.r-project.org/web/packages/aoristic/index.html), for [social network analysis](http://igraph.org/r/), for [spatial analysis](https://cran.r-project.org/web/packages/sf/index.html) and many many many more. This is where the true power of R lies. Anything you want to do, there is a package for it, with functions that were specifically written to make this analysis as easy as possible for you. Once you understand the basic setup and structure of R, which you will after this week, you can make use these packages to help with your everyday analysis. 
+
+##Installing packages
+
+Packages need to be **installed** only once, but they need to be **loaded** every time you use them. 
+
+To download the package you use the `install.packages()` function. So for example, to download the [gapminder](https://cran.r-project.org/web/packages/gapminder/index.html) package, we use:
+
+```{r, eval=FALSE}
+install.packages("gapminder")
+```
+
+You only ever have to do this once on your computer. If you quit R and then start it up again a week later, the package should still be there. 
+
+Loading it, on the other hand, you have to do every time you start a new R session. This just means that if you close R Studio today, and open it back up in a week, and you want to run a function that comes from a package, you need to load that package into your current session first. 
+
+You do this by using the `library()` function. So to load gapminder into your session, you need to run:
+
+```{r, eval=FALSE}
+library(gapminder)
+```
+
+To see what packages you currently have loaded in your session, you use the `search()` function (you do not need to pass it any objects in this case)
+
+```{r}
+search()
+```
+
+
+To find out more about packages see [here](http://www.statmethods.net/interface/packages.html).
+
+##Recap
+
+You now should know what packages are, and be able to: 
+
+- install new packages
+- load packages into your R environment
+
+
+---
+
+For some fun tips, read through this twitter thread in response to the question: [What's something you wish someone told you as you were first learning R?](https://twitter.com/sctyner/status/874402803661328385)
+
+---
+
+Resources
+
+- [Wickham, Hadley, and Garrett Grolemund. "R for data science." (2016).](http://r4ds.had.co.nz/data-visualisation.html)
+- [John D Cook](https://www.johndcook.com/blog/r_language_for_programmers/#introduction)
+- [Juanjo Medina, R-for-Criminologists](https://jjmedinaariza.github.io/R-for-Criminologists/)
+>>>>>>> Stashed changes

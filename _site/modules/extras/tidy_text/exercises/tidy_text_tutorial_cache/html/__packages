@@ -1,0 +1,15 @@
+base
+tidyverse
+ggplot2
+tibble
+tidyr
+readr
+purrr
+dplyr
+xml2
+rvest
+tidytext
+wordcloud2
+bindrcpp
+stringr
+forcats

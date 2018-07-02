@@ -1,0 +1,400 @@
+---
+title: | 
+    | Getting Started in R
+    | an introduction to data analysis and visualisation
+subtitle: "Import"
+author: "Réka Solymosi, Henry Partridge & Sam Langton"
+date: "2 July 2018"
+output:
+  xaringan::moon_reader:
+    css: ["default", "my-theme.css"]
+    lib_dir: libs
+    nature:
+      highlightStyle: github
+      highlightLines: true
+      countIncrementalSlides: false
+editor_options: 
+  chunk_output_type: console
+---
+
+```{r setup, include=FALSE}
+options(htmltools.dir.version = FALSE)
+library(tidyverse) 
+```
+
+class: inverse, center, middle
+
+# Import
+
+---
+### Sources of data
+
+- Files stored on your computer
+- Web link
+- Database
+- Web page
+- Application Programming Interface (API)
+
+---
+### Data formats
+
+.pull-left[
+#### Rectangular
+- CSV (.csv)
+- Excel files (.xls, .xlsx)
+- SPSS, Stata, and SAS files (.sav, .dta, .sas)
+]
+
+.pull-right[
+#### Hierarchical
+- eXtensible Markup Language (.xml)
+- JavaScript Object Notation (.json)
+- Geographic JavaScript Object Notation (.geojson)
+]
+
+---
+### Reading in data
+
+.pull-left[
+#### Rectangular
+#### .csv
+
+```r
+library(readr)
+read_csv()
+```
+
+#### .xls, .xlsx
+
+```r
+library(readxl)
+read_excel()
+```
+
+#### .sav, .dta, .sas
+
+```r
+library(haven)
+read_sav()
+read_dta()
+read_sas()
+```
+]
+
+.pull-right[
+#### Hierarchical
+#### .xml
+```r
+library(xml2)
+read_xml()
+```
+
+#### .json
+```r
+library(jsonlite)
+read_json()
+```
+
+#### .geojson
+```r
+library(sf)
+st_read()
+```
+]
+
+---
+class: inverse, middle, center
+
+# Parse
+
+---
+### Parsing data
+The process of ...
+
+1. converting a text file into a matrix of rows and columns and,
+2. coercing columns to different data type(s)
+
+---
+#### .csv, .xls, .xlsx
+
+```{r comment = '#', tidy = FALSE}
+library(readr)
+read_csv(
+"country,continent,year,lifeExp,pop,gdpPercap\
+Italy,Europe,2007,80.546,58147733,28569.7197\
+Nigeria,Africa,2007,46.859,135031164,2013.977305"
+)
+```
+
+---
+#### .xml
+.pull-left[
+```{r comment = '#', tidy = FALSE}
+library(xml2)
+xml <- 
+'<?xml version="1.0" encoding="UTF-8"?>
+<root>
+  <row>
+    <country>Iceland</country>
+    <continent>Europe</continent>
+    <year>2007</year>
+    <lifeExp>81.757</lifeExp>
+    <pop>301931</pop>
+    <gdpPercap>36180.78919</gdpPercap>
+  </row>
+  <row>
+    <country>Italy</country>
+    <continent>Europe</continent>
+    <year>2007</year>
+    <lifeExp>80.546</lifeExp>
+    <pop>58147733</pop>
+    <gdpPercap>28569.7197</gdpPercap>
+  </row>
+</root>'
+```
+]
+.pull-right[
+```{r comment = '#', tidy = FALSE}
+xml_obj <- read_xml(xml) #<<
+country <- xml_text(xml_find_all(xml_obj, "//country")) #<<
+continent <- xml_text(xml_find_all(xml_obj, "//continent")) #<<
+year <- xml_text(xml_find_all(xml_obj, "//year")) #<<
+lifeExp <- xml_text(xml_find_all(xml_obj, "//lifeExp")) #<<
+pop <- xml_text(xml_find_all(xml_obj, "//pop")) #<<
+gdpPercap <- xml_text(xml_find_all(xml_obj, "//gdpPercap")) #<<
+data.frame(country, continent, year, lifeExp, pop, gdpPercap) #<<
+```
+]
+
+---
+#### .json
+
+```{r comment = '#', tidy = FALSE, message = FALSE}
+library(jsonlite)
+json <- 
+'[
+  {
+    "country": "Italy",
+    "continent": "Europe",
+    "year": 2007,
+    "lifeExp": 80.546,
+    "pop": 58147733,
+    "gdpPercap": 28569.7197
+  },
+  {
+    "country": "Nigeria",
+    "continent": "Africa",
+    "year": 2007,
+    "lifeExp": 46.859,
+    "pop": 135031164,
+    "gdpPercap": 2013.977305
+  }
+]'
+fromJSON(json) #<<
+```
+
+---
+#### .geojson
+.pull-left[
+```{r comment = '#', tidy = FALSE, message = FALSE, fig.height = 4, dev = 'png'}
+library(sf)
+italy <- st_read("https://code.highcharts.com/mapdata/countries/it/it-all.geo.json", quiet = TRUE) #<<
+as.data.frame(italy)[1:5, 14:15]
+plot(st_geometry(italy))
+```
+]
+
+.pull-right[
+```{r comment = '#', tidy = FALSE, message = FALSE, fig.height = 4, dev = 'png'}
+nigeria <- st_read("https://code.highcharts.com/mapdata/countries/ng/ng-all.geo.json", quiet = TRUE) #<<
+as.data.frame(nigeria)[1:5, 14:15]
+plot(st_geometry(nigeria))
+```
+]
+
+---
+### Coercing columns to different data type
+
+- `logical` variables can store TRUE or FALSE
+- `integer` variables can only store whole numbers
+- `double` variables can store decimal numbers
+- `character` variables can store strings of characters
+- `date` variables can store a date - time
+- `factor` variables can store a fixed and known set of possible values
+
+---
+#### .csv, .xls, .xlsx
+
+```{r comment = '#', tidy = FALSE}
+library(readr)
+df <- read_csv(
+"country,continent,year,lifeExp,pop,gdpPercap\
+Italy,Europe,2007,80.546,58147733,28569.7197\
+Nigeria,Africa,2007,46.859,135031164,2013.977305",
+col_types = cols( #<<
+  country = col_character(), #<<
+  continent = col_character(), #<<
+  year = col_integer(), #<<
+  lifeExp = col_double(), #<<
+  pop = col_integer(), #<<
+  gdpPercap = col_double() #<<
+  ) #<<
+)
+glimpse(df)
+```
+
+---
+### Defining dates and times
+- Coerce variables as dates when you need to create a plot, extract information or conduct time series analysis.
+
+.pull-left[
+```{r comment = '#', tidy = FALSE}
+parse_date("03-07-18", "%d-%m-%y")
+parse_date("03-07-18", "%m-%d-%y")
+parse_date("03-07-18", "%y-%m-%d")
+# as.Date(x, "%d-%m-%y")
+```
+]
+
+.pull-right[
+| Symbol | Description | Example  |
+|:--- |:---- |:---- |
+|%d| day as a number | 02 |
+|%a| abbreviated day | Tue |
+|%A| day | Tuesday |
+|%m| month as a number | 07 |
+|%b| abbreviated month | Jul |
+|%B| month | July |
+|%y| 2-digit year | 18 |
+|%Y| 4-digit year |  2018 |
+]
+
+---
+### Defining factors
+- Coerce variables to factors when you need a specific ordering of string values, e.g. in a model or a plot.
+
+```{r comment = '#', tidy = FALSE}
+parse_factor(df$country, levels = c("Italy", "Nigeria"))
+
+df$country <- factor(df$country, 
+                     levels = unique(df$country),
+                     ordered = FALSE)
+```
+
+---
+class: inverse, middle, center
+
+# Delving into factors
+
+---
+### Inspecting factors
+```{r comment = '#', tidy = FALSE}
+library(gapminder)
+class(gapminder$continent)
+levels(gapminder$continent)
+```
+
+---
+### Dropping unused factor levels
+```{r comment = '#', tidy = FALSE}
+g7 <- gapminder %>% 
+  filter(country %in% c("Canada", "France", "Germany", "Italy", "Japan", "United Kingdom", "United States"))
+levels(g7$country)[1:20]
+g7$country <- droplevels(g7$country)
+levels(g7$country)
+```
+
+---
+### Recoding factors
+```{r comment = '#', tidy = FALSE}
+library(forcats)
+g7$country <- g7$country %>%
+  fct_recode("UK" = "United Kingdom", "USA" = "United States") 
+levels(g7$country)
+```
+
+---
+### Reordering factors
+
+```{r comment = '#', tidy = FALSE, fig.height = 4, dev = 'png'}
+g7_2007 <- g7 %>% filter(year == 2007)
+levels(g7_2007$country)
+
+ggplot(g7_2007, aes(x = gdpPercap, y = country)) +
+  geom_point() +
+  labs(x = "GDP per capita", y = NULL) +
+  theme_minimal()
+```
+
+---
+### Reordering factors
+```{r comment = '#', tidy = FALSE, fig.height = 4, dev = 'png'}
+fct_reorder(g7_2007$country, g7_2007$gdpPercap, .desc = TRUE) %>% 
+  levels()
+
+ggplot(g7_2007, aes(x = gdpPercap, y = fct_reorder(country, gdpPercap))) +
+  geom_point() +
+  labs(x = "GDP per capita", y = NULL) +
+  theme_minimal()
+```
+
+---
+class: inverse, middle, center
+
+# Export
+
+---
+### Writing out data
+
+.pull-left[
+#### Rectangular
+#### .csv
+
+```r
+library(readr)
+write_csv()
+```
+
+#### .xls, .xlsx
+
+```r
+library(readxl)
+write_excel()
+```
+
+#### .sav, .dta, .sas
+
+```r
+library(haven)
+write_sav()
+write_dta()
+write_sas()
+```
+]
+
+.pull-right[
+#### Hierarchical
+#### .xml
+```r
+library(xml2)
+write_xml()
+```
+
+#### .json
+```r
+library(jsonlite)
+write_json()
+```
+
+#### .geojson
+```r
+library(sf)
+st_write()
+```
+]
+
+---
+### Please note
+
+- R stores factors as integer codes 1, 2, 3 etc. not character strings. So ensure that you set your factor levels.
+- Column type information is lost when you export to a CSV. Recommend exporting to .Rds, the native R data format using `write_rds()`

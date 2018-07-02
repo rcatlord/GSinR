@@ -1,0 +1,236 @@
+---
+title: ''
+output:
+  html_notebook:
+    code_folding: show
+    highlight: textmate
+    theme: simplex
+  html_document:
+    df_print: paged
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo=TRUE, cache=TRUE, prompt=FALSE, tidy=TRUE, comment=NA, message=FALSE, warning=FALSE)
+
+library(tidyverse) ; library(rvest) ; library(tidytext) ; library(wordcloud2)
+```
+
+
+## Web scraping and tidy text
+
+<br>
+
+***
+
+### Key functions
+- `tidytext::unnest_tokens()` unnests values in text column into a word column
+- `tidytext::get_sentiments()` retrieve sentiment lexicons
+
+***
+
+### Set up
+You need to have the following R packages installed and loaded:
+
+- [`tidyverse`](https://cran.r-project.org/web/packages/tidypart/index.html)
+- [`rvest`](https://cran.r-project.org/web/packages/rvest/index.html)
+- [`tidytext`](https://cran.r-project.org/web/packages/tidytext/index.html)
+- [`wordcloud2`](https://cran.r-project.org/web/packages/wordcloud2/index.html)    
+
+### Scrape text from a web page
+The example text derives from the commencement speech given by [David Foster Wallace](https://en.wikipedia.org/wiki/David_Foster_Wallace) at Kenyon College, Ohio on 21 May 2005.      
+
+#### Download and parse the html web page
+```{r, eval=FALSE}
+web_page <- read_html("https://www.theguardian.com/books/2008/sep/20/fiction")
+```
+
+#### Use the [SelectorGadget](http://selectorgadget.com) to identify CSS selectors in the web page
+SelectorGadget is a javascript bookmarklet that you use in your web browser to identify CSS selectors in a web page. Read the `vignette("selectorgadget")` for more information about using SelectorGadget.     
+<br>
+
+#### Find the html nodes that match the CSS selector
+```{r, eval=FALSE}
+web_nodes <- html_nodes(web_page, ".js-article__body p")
+```
+
+#### Extract the text from the html nodes
+```{r, eval=FALSE}
+web_text <- html_text(web_nodes)
+```
+
+**Or using `%>%`**
+```{r}
+web_text <- read_html("https://www.theguardian.com/books/2008/sep/20/fiction") %>% 
+  html_nodes(".js-article__body p") %>% 
+  html_text()
+```
+
+***
+### **Exercise**
+Extract the text of [J. K. Rowling's](https://en.wikipedia.org/wiki/J._K._Rowling) commencement speech at Harvard University on 5 June 2008 from the following web page: [http://news.harvard.edu/gazette/story/2008/06/text-of-j-k-rowling-speech/](http://news.harvard.edu/gazette/story/2008/06/text-of-j-k-rowling-speech/)
+
+*Answer:*
+```{r, eval=FALSE}
+example_web_text <- read_html("http://news.harvard.edu/gazette/story/2008/06/text-of-j-k-rowling-speech/")  %>% 
+  html_nodes(".article-body p") %>% 
+  html_text()
+```
+***
+
+### Prepare the text for tidying
+#### Convert to a data frame
+```{r, eval=FALSE}
+text_df <- data_frame(text = web_text)
+```
+
+#### Trim the text
+```{r, eval=FALSE}
+text_df <- text_df %>% 
+  slice(1:(grep("this is water.\"", text)))
+```
+
+#### Remove any blank lines
+```{r, eval=FALSE}
+text_df <- text_df %>% 
+  filter(nzchar(text))
+```
+
+#### Add paragraph numbers
+```{r, eval=FALSE}
+text_df <- text_df %>% 
+  mutate(paragraph = row_number())
+```
+
+**Or using `%>%`**
+```{r}
+text_df <- web_text %>% 
+  data_frame(text = .) %>% 
+  slice(1:(grep("this is water.\"", text))) %>% 
+  mutate(paragraph = row_number())
+```
+
+***
+### **Exercise**
+1. Convert `example_web_text` to a data frame using `data_frame`()
+2. Remove the first line and line 5 ("Sign up for daily emails with the latest Harvard news.") using `slice()`. (Hint: you can use a vector in `slice()`)
+3. Add a paragraph number
+
+*Answer:*
+```{r, eval=FALSE}
+example_text_df <- example_web_text %>% 
+  data_frame(text = .) %>% 
+  slice(c(2:14, 16:n())) %>%
+  mutate(paragraph = row_number())
+```
+
+***
+
+### Tidy the text using [`tidytext`](https://cran.r-project.org/web/packages/tidytext/index.html)
+#### Unnest values in text column into a word column
+```{r}
+words <- text_df %>% 
+  unnest_tokens(word, text)
+```
+
+#### Remove 'stop words'
+```{r}
+words <- words %>% 
+  anti_join(stop_words, by = "word")
+```
+
+### Analyse the text
+
+#### Most common words
+```{r}
+words %>% 
+  count(word, sort = TRUE)
+```
+
+***
+### **Exercise**
+1. Unnest the values in the text column of `example_text_df` into a word column
+2. Remove the 'stop words'
+3. List the top 10 most common words
+
+*Answer:*
+```{r, eval=FALSE}
+example_words <- example_text_df %>% 
+  unnest_tokens(word, text) %>% 
+  anti_join(stop_words, by = "word")
+example_words %>% 
+  count(word, sort = TRUE)
+```
+
+***
+
+#### Bigrams
+```{r}
+bigram <- text_df %>%
+  unnest_tokens(word, text, token = "ngrams", n = 2) %>% # tokenise into word pairs
+  separate(word, c("word1", "word2"), sep = " ") %>% 
+  filter(!word1 %in% stop_words$word, # remove 'stop words'
+         !word2 %in% stop_words$word) %>%
+  unite(word, word1, word2, sep = " ")
+```
+
+**Frequency of bigrams**
+```{r}
+bigram %>%
+  count(word, sort=TRUE) %>%
+  top_n(10) %>%
+  mutate(word = reorder(word, n)) %>%
+  ggplot(aes(word, n)) +
+  geom_col(fill = "grey", alpha = 0.8) +
+  coord_flip() +
+  scale_y_continuous(expand = c(0,0)) +
+  labs(x = NULL, y = "Number of mentions",
+       title = "2-word combinations in Foster Wallace's commencement speech") +
+  theme_minimal()
+```
+
+#### Sentiment analysis
+
+**Frequency of positive words**
+```{r}
+words %>%
+  inner_join(get_sentiments("bing"), by = "word") %>%
+  filter(sentiment == "positive") %>%
+  count(word) %>%
+  wordcloud2(size = 0.7, fontFamily = "RobotoCondensed-Regular", 
+             color = rep(c('orange', 'skyblue'), length.out=nrow(.)))
+```
+
+<br>
+
+**Frequency of negative words**
+```{r}
+words %>%
+  inner_join(get_sentiments("bing"), by = "word") %>%
+  filter(sentiment == "negative") %>% 
+  count(word) %>% 
+  wordcloud2(size = 0.7, fontFamily = "RobotoCondensed-Regular", 
+             color = rep(c('black', 'grey'), length.out=nrow(.)))
+```
+<br>
+
+**Distribution of positive and negative words**
+```{r}
+words %>%
+  inner_join(get_sentiments("bing"), by = "word") %>%
+  count(word, sentiment, sort = TRUE) %>%
+  ungroup() %>% 
+  filter(n > 1) %>%
+  mutate(n = ifelse(sentiment == "negative", -n, n)) %>%
+  mutate(word = reorder(word, n)) %>%
+  ggplot(aes(word, n, fill = sentiment)) +
+  geom_col() +
+  labs(x = NULL, y = NULL, fill = "Sentiment") +
+  coord_flip() +
+  theme_minimal() +
+  theme(legend.position="bottom")
+```
+
+***
+
+### Resources
+- Silge, J. & Robinson, D. (2017). Text Mining with R: A Tidy Approach, O'Reilly Media. Available online via: [http://tidytextmining.com](http://tidytextmining.com)

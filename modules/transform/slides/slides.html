@@ -1,0 +1,366 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <title></title>
+    <meta charset="utf-8">
+    <meta name="author" content="Réka Solymosi, Henry Partridge &amp; Sam Langton" />
+    <link href="libs/remark-css/default.css" rel="stylesheet" />
+    <link rel="stylesheet" href="my-theme.css" type="text/css" />
+  </head>
+  <body>
+    <textarea id="source">
+class: center, middle, inverse, title-slide
+
+# <div style="white-space: pre-line;">Getting Started in R
+an introduction to data analysis and visualisation</div>
+## Transform
+### Réka Solymosi, Henry Partridge &amp; Sam Langton
+### 4 July 2018
+
+---
+
+
+
+
+class: inverse, center, middle
+
+![dplyr](img/dplyr.png)
+---
+class: inverse, center, middle
+# Subsetting, sorting and summarising data
+
+---
+### Data
+
+```r
+starwars
+```
+
+```
+## # A tibble: 87 x 13
+##    name     height  mass hair_color skin_color eye_color birth_year gender
+##    &lt;chr&gt;     &lt;int&gt; &lt;dbl&gt; &lt;chr&gt;      &lt;chr&gt;      &lt;chr&gt;          &lt;dbl&gt; &lt;chr&gt; 
+##  1 Luke Sk~    172  77.0 blond      fair       blue            19.0 male  
+##  2 C-3PO       167  75.0 &lt;NA&gt;       gold       yellow         112   &lt;NA&gt;  
+##  3 R2-D2        96  32.0 &lt;NA&gt;       white, bl~ red             33.0 &lt;NA&gt;  
+##  4 Darth V~    202 136   none       white      yellow          41.9 male  
+##  5 Leia Or~    150  49.0 brown      light      brown           19.0 female
+##  6 Owen La~    178 120   brown, gr~ light      blue            52.0 male  
+##  7 Beru Wh~    165  75.0 brown      light      blue            47.0 female
+##  8 R5-D4        97  32.0 &lt;NA&gt;       white, red red             NA   &lt;NA&gt;  
+##  9 Biggs D~    183  84.0 black      light      brown           24.0 male  
+## 10 Obi-Wan~    182  77.0 auburn, w~ fair       blue-gray       57.0 male  
+## # ... with 77 more rows, and 5 more variables: homeworld &lt;chr&gt;,
+## #   species &lt;chr&gt;, films &lt;list&gt;, vehicles &lt;list&gt;, starships &lt;list&gt;
+```
+
+---
+### `select()`
+
+```r
+# Pick columns
+select(starwars, name, species)
+```
+
+```
+## # A tibble: 87 x 2
+##    name               species
+##    &lt;chr&gt;              &lt;chr&gt;  
+##  1 Luke Skywalker     Human  
+##  2 C-3PO              Droid  
+##  3 R2-D2              Droid  
+##  4 Darth Vader        Human  
+##  5 Leia Organa        Human  
+##  6 Owen Lars          Human  
+##  7 Beru Whitesun lars Human  
+##  8 R5-D4              Droid  
+##  9 Biggs Darklighter  Human  
+## 10 Obi-Wan Kenobi     Human  
+## # ... with 77 more rows
+```
+
+
+```r
+# Pick a single column and return a vector
+pull(starwars, name)
+```
+
+---
+### `slice()`
+
+```r
+# Pick rows
+slice(starwars, c(1,3,5))
+```
+
+```
+## # A tibble: 3 x 13
+##   name      height  mass hair_color skin_color eye_color birth_year gender
+##   &lt;chr&gt;      &lt;int&gt; &lt;dbl&gt; &lt;chr&gt;      &lt;chr&gt;      &lt;chr&gt;          &lt;dbl&gt; &lt;chr&gt; 
+## 1 Luke Sky~    172  77.0 blond      fair       blue            19.0 male  
+## 2 R2-D2         96  32.0 &lt;NA&gt;       white, bl~ red             33.0 &lt;NA&gt;  
+## 3 Leia Org~    150  49.0 brown      light      brown           19.0 female
+## # ... with 5 more variables: homeworld &lt;chr&gt;, species &lt;chr&gt;, films &lt;list&gt;,
+## #   vehicles &lt;list&gt;, starships &lt;list&gt;
+```
+
+---
+### `filter()`
+
+```r
+# Subset rows
+filter(starwars, species == "Droid")
+```
+
+```
+## # A tibble: 5 x 13
+##   name  height  mass hair_color skin_color  eye_color birth_year gender
+##   &lt;chr&gt;  &lt;int&gt; &lt;dbl&gt; &lt;chr&gt;      &lt;chr&gt;       &lt;chr&gt;          &lt;dbl&gt; &lt;chr&gt; 
+## 1 C-3PO    167  75.0 &lt;NA&gt;       gold        yellow         112   &lt;NA&gt;  
+## 2 R2-D2     96  32.0 &lt;NA&gt;       white, blue red             33.0 &lt;NA&gt;  
+## 3 R5-D4     97  32.0 &lt;NA&gt;       white, red  red             NA   &lt;NA&gt;  
+## 4 IG-88    200 140   none       metal       red             15.0 none  
+## 5 BB8       NA  NA   none       none        black           NA   none  
+## # ... with 5 more variables: homeworld &lt;chr&gt;, species &lt;chr&gt;, films &lt;list&gt;,
+## #   vehicles &lt;list&gt;, starships &lt;list&gt;
+```
+
+---
+### `arrange()`
+
+```r
+# Reorder rows
+arrange(starwars, desc(mass))
+```
+
+```
+## # A tibble: 87 x 13
+##    name    height  mass hair_color  skin_color eye_color birth_year gender
+##    &lt;chr&gt;    &lt;int&gt; &lt;dbl&gt; &lt;chr&gt;       &lt;chr&gt;      &lt;chr&gt;          &lt;dbl&gt; &lt;chr&gt; 
+##  1 Jabba ~    175  1358 &lt;NA&gt;        green-tan~ orange         600   herma~
+##  2 Grievo~    216   159 none        brown, wh~ green, y~       NA   male  
+##  3 IG-88      200   140 none        metal      red             15.0 none  
+##  4 Darth ~    202   136 none        white      yellow          41.9 male  
+##  5 Tarfful    234   136 brown       brown      blue            NA   male  
+##  6 Owen L~    178   120 brown, grey light      blue            52.0 male  
+##  7 Bossk      190   113 none        green      red             53.0 male  
+##  8 Chewba~    228   112 brown       unknown    blue           200   male  
+##  9 Jek To~    180   110 brown       fair       blue            NA   male  
+## 10 Dexter~    198   102 none        brown      yellow          NA   male  
+## # ... with 77 more rows, and 5 more variables: homeworld &lt;chr&gt;,
+## #   species &lt;chr&gt;, films &lt;list&gt;, vehicles &lt;list&gt;, starships &lt;list&gt;
+```
+
+---
+class: inverse, center, middle
+
+![magrittr](img/magrittr.png)
+
+---
+### `%&gt;%` or the piping operator 
+
+- combines multiple operations
+- passes a value / expression result forward into the next function call / expression
+- makes R code more readable
+
+---
+### Inserting the `%&gt;%` operator
+Windows: Ctrl+Shift+M ; macOS: CmdShift+M)
+&lt;br&gt;
+
+```r
+# select()
+starwars %&gt;% select(name, species)
+```
+
+
+```r
+# pull()
+starwars %&gt;% pull(name)
+```
+
+
+```r
+# slice()
+starwars %&gt;% slice(c(1,3,5))
+```
+
+
+```r
+# filter()
+starwars %&gt;% filter(species == "Droid")
+```
+
+
+```r
+# arrange()
+starwars %&gt;% arrange(desc(mass))
+```
+
+---
+### `mutate()`
+
+```r
+# Add a column
+starwars %&gt;% 
+  mutate(bmi = mass / ((height / 100)  ^ 2)) %&gt;% 
+  select(name:mass, bmi)
+```
+
+```
+## # A tibble: 87 x 4
+##    name               height  mass   bmi
+##    &lt;chr&gt;               &lt;int&gt; &lt;dbl&gt; &lt;dbl&gt;
+##  1 Luke Skywalker        172  77.0  26.0
+##  2 C-3PO                 167  75.0  26.9
+##  3 R2-D2                  96  32.0  34.7
+##  4 Darth Vader           202 136    33.3
+##  5 Leia Organa           150  49.0  21.8
+##  6 Owen Lars             178 120    37.9
+##  7 Beru Whitesun lars    165  75.0  27.5
+##  8 R5-D4                  97  32.0  34.0
+##  9 Biggs Darklighter     183  84.0  25.1
+## 10 Obi-Wan Kenobi        182  77.0  23.2
+## # ... with 77 more rows
+```
+
+---
+### `group_by()` and `count()`
+
+```r
+# Group rows with same value and calculate frequency
+starwars %&gt;% 
+  group_by(species) %&gt;% 
+  count(species, sort = TRUE)
+```
+
+```
+## # A tibble: 38 x 2
+## # Groups:   species [38]
+##    species      n
+##    &lt;chr&gt;    &lt;int&gt;
+##  1 Human       35
+##  2 Droid        5
+##  3 &lt;NA&gt;         5
+##  4 Gungan       3
+##  5 Kaminoan     2
+##  6 Mirialan     2
+##  7 Twi'lek      2
+##  8 Wookiee      2
+##  9 Zabrak       2
+## 10 Aleena       1
+## # ... with 28 more rows
+```
+
+---
+### `summarise()`
+
+```r
+# Return summary statistics
+starwars %&gt;%
+  group_by(species) %&gt;%
+  summarise(n = n(),
+            mass = mean(mass, na.rm = TRUE)) %&gt;%
+  filter(n &gt; 1)
+```
+
+```
+## # A tibble: 9 x 3
+##   species      n  mass
+##   &lt;chr&gt;    &lt;int&gt; &lt;dbl&gt;
+## 1 Droid        5  69.8
+## 2 Gungan       3  74.0
+## 3 Human       35  82.8
+## 4 Kaminoan     2  88.0
+## 5 Mirialan     2  53.1
+## 6 Twi'lek      2  55.0
+## 7 Wookiee      2 124  
+## 8 Zabrak       2  80.0
+## 9 &lt;NA&gt;         5  48.0
+```
+
+---
+class: inverse, center, middle
+# Merging data
+
+---
+### Data
+
+```r
+band_members 
+```
+
+```
+## # A tibble: 3 x 2
+##   name  band   
+##   &lt;chr&gt; &lt;chr&gt;  
+## 1 Mick  Stones 
+## 2 John  Beatles
+## 3 Paul  Beatles
+```
+
+```r
+band_instruments
+```
+
+```
+## # A tibble: 3 x 2
+##   name  plays 
+##   &lt;chr&gt; &lt;chr&gt; 
+## 1 John  guitar
+## 2 Paul  bass  
+## 3 Keith guitar
+```
+
+---
+### `left_join()`
+
+```r
+band_members %&gt;% left_join(band_instruments, by = "name")
+```
+
+```
+## # A tibble: 3 x 3
+##   name  band    plays 
+##   &lt;chr&gt; &lt;chr&gt;   &lt;chr&gt; 
+## 1 Mick  Stones  &lt;NA&gt;  
+## 2 John  Beatles guitar
+## 3 Paul  Beatles bass
+```
+    </textarea>
+<script src="https://remarkjs.com/downloads/remark-latest.min.js"></script>
+<script>var slideshow = remark.create({
+"highlightStyle": "github",
+"highlightLines": true,
+"countIncrementalSlides": false
+});
+if (window.HTMLWidgets) slideshow.on('afterShowSlide', function (slide) {
+  window.dispatchEvent(new Event('resize'));
+});
+(function() {
+  var d = document, s = d.createElement("style"), r = d.querySelector(".remark-slide-scaler");
+  if (!r) return;
+  s.type = "text/css"; s.innerHTML = "@page {size: " + r.style.width + " " + r.style.height +"; }";
+  d.head.appendChild(s);
+})();</script>
+
+<script type="text/x-mathjax-config">
+MathJax.Hub.Config({
+  tex2jax: {
+    skipTags: ['script', 'noscript', 'style', 'textarea', 'pre']
+  }
+});
+</script>
+<!-- dynamically load mathjax for compatibility with self-contained -->
+<script>
+(function () {
+  var script = document.createElement('script');
+  script.type = 'text/javascript';
+  script.src  = 'https://cdn.bootcss.com/mathjax/2.7.1/MathJax.js?config=TeX-MML-AM_CHTML';
+  if (location.protocol !== 'file:' && /^https?:/.test(script.src))
+    script.src  = script.src.replace(/^https?:/, '');
+  document.getElementsByTagName('head')[0].appendChild(script);
+})();
+</script>
+  </body>
+</html>

@@ -1,0 +1,34 @@
+---
+title: ''
+output: html_document
+---
+
+<br> <br>
+
+### Here are the data visualisations that you created in "Getting Started in R: an introduction to data analysis and visualisation", a [methods@manchester](http://www.methods.manchester.ac.uk) Summer School course:
+
+<br>
+
+
+<img src="img/Scanned from a Xerox Multifunction Printer001.jpg" width="400px" />
+<img src="img/Scanned from a Xerox Multifunction Printer002.jpg" width="400px" />
+
+<br>
+
+<img src="img/Scanned from a Xerox Multifunction Printer003.jpg" width="400px" />
+<img src="img/Scanned from a Xerox Multifunction Printer004.jpg" width="400px" />
+
+<br>
+
+<img src="img/Scanned from a Xerox Multifunction Printer005.jpg" width="400px" />
+<img src="img/Scanned from a Xerox Multifunction Printer006.jpg" width="400px" />
+
+<br>
+
+<img src="img/Scanned from a Xerox Multifunction Printer007.jpg" width="400px" />
+<img src="img/Scanned from a Xerox Multifunction Printer008.jpg" width="400px" />
+
+<br>
+
+<img src="img/Scanned from a Xerox Multifunction Printer009.jpg" width="400px" />
+<img src="img/Scanned from a Xerox Multifunction Printer010.jpg" width="400px" />

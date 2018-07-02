@@ -1,0 +1,72 @@
+---
+title: | 
+    | Getting Started in R
+    | an introduction to data analysis and visualisation
+subtitle: "Pseudo code exercise"
+author: "Réka Solymosi, Henry Partridge & Sam Langton"
+date: "3 July 2018"
+output:
+  xaringan::moon_reader:
+    css: ["default", "my-theme.css"]
+    lib_dir: libs
+    nature:
+      highlightStyle: github
+      highlightLines: true
+      countIncrementalSlides: false
+editor_options: 
+  chunk_output_type: console
+---
+
+```{r setup, include=FALSE}
+options(htmltools.dir.version = FALSE)
+```
+
+class: inverse, center, middle
+
+# PSEUDO CODE
+
+---
+## Thinking in code
+
+- To be able to code in R we need to be able to consider the task we want to achieve step by step, according to its sequence
+
+- When executing a script, we assume that the computer will start at the beginning, and work through it line by line until the end
+
+- This is a basic assumption of algorithm design called SEQUENCE
+
+---
+## Pseudo code
+
+Example: making a cup of tea
+
+- Organise everything together
+- Plug in kettle
+- Put teabag in cup
+- Put water into kettle
+- Wait for kettle to boil
+- Pour boiled wated into cup
+- Remove tea bag
+- Add milk or sugar
+- Serve
+
+---
+###Pseudo code
+
+Philip's just turned four and he wants to know how old he will be in various years in the future such as 2090 or 3044. His parents can't keep up calculating this so they've begged you to help them out by writing a programme that can answer Philip's endless questions.
+
+Your task is to write a function that takes two parameters: the year of birth and the year to count years in relation to. As Philip is getting more curious, he may soon start giving you random years from the past and asking how many years it would have been until his birthday. 
+
+Provide output in this format: For dates in the future: "You are ... years old." For dates in the past: "You will be born in ... years." If the year of birth equals the year requested return: "You were born this very year!". Mind that you need to account for both "year" and "years", depending on the result.
+
+"..." are to be replaced by the number, followed and proceeded by a single space.
+
+---
+###Pseudo code
+
+- calculate num = question_year - year_of_birth
+- if num > 1: "You are num years old."
+- else if num = 0: "You were born this very year!"
+- else if num < -1: "You will be born in absolute value num years"
+- else if num = -1: "You will be born in 1 year"
+- else "You were born 1 year ago"
+

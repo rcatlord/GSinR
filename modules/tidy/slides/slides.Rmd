@@ -1,0 +1,102 @@
+---
+title: | 
+    | Getting Started in R
+    | an introduction to data analysis and visualisation
+subtitle: "Tidy"
+author: "Réka Solymosi, Henry Partridge & Sam Langton"
+date: "4 July 2018"
+output:
+  xaringan::moon_reader:
+    css: ["default", "my-theme.css"]
+    lib_dir: libs
+    nature:
+      highlightStyle: github
+      highlightLines: true
+      countIncrementalSlides: false
+editor_options: 
+  chunk_output_type: console
+---
+
+```{r setup, include=FALSE}
+options(htmltools.dir.version = FALSE)
+
+library(tidyverse) ; library(gapminder)
+```
+
+class: inverse, center, middle
+
+![tidyr](img/tidyr.png)
+
+---
+### Tidy data
+
+Tidy data are structured for use in R and satisfy three rules:
+
+1. Each variable must have its own column
+2. Each observation must have its own row
+3. Each value must have its own cell.
+
+(Grolemund and Wickham 2017:149)
+
+There are two of tidy data formats: wide and long.
+
+---
+
+###  Tidy data
+
+```{r, echo = FALSE}
+knitr::include_graphics('http://garrettgman.github.io/images/tidy-1.png')
+```
+
+[Source: Data Science with R, Garrett Grolemund](http://garrettgman.github.io/tidying/)
+
+---
+
+### Why tidy data?
+
+“Tidy datasets are all alike but every messy dataset is messy in its own way.”  
+  – Hadley Wickham
+
+---
+
+### Data
+```{r}
+wide <- data.frame(Date = c("01-01-2017","02-01-2017","03-01-2017"),
+                    Burglary = c(7,5,13),
+                    Drugs = c(1,3,9),
+                    Robbery = c(9,0,9),
+                    Shoplifting = c(4,5,1))
+wide
+```
+
+---
+### `gather()`
+For when your columns are values, not variables (wide to long)
+```{r, comment='#'}
+long <- gather(wide, category, count, -Date)
+long
+```
+
+---
+### `spread()`
+For when observations have multiple rows (long to wide)
+```{r, comment='#'}
+wide <- spread(long, category, count)
+wide
+```
+
+---
+### `separate()`
+Split columns
+```{r, comment='#'}
+split <- separate(wide, Date, c("Day", "Month", "Year"), sep = "-")
+split
+```
+
+---
+### `unite()`
+Join columns
+```{r, comment='#'}
+united <- unite(split, Date, c(Day, Month, Year), sep = "-")
+united
+```

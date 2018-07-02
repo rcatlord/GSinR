@@ -1,0 +1,49 @@
+---
+title: "Explaining EU referendum voting patterns"
+output: html_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+# load the R packages
+library(tidyverse) ; library(plotly)
+# read the EU referendum results
+referendum <- read.csv(url("http://www.electoralcommission.org.uk/__data/assets/file/0014/212135/EU-referendum-result-data.csv")) %>% 
+  select(Area_Code, Area, Electorate, Pct_Remain, Pct_Leave) %>% 
+  filter(Area != "Northern Ireland", Area != "Gibraltar") %>% 
+  mutate(Result = ifelse(Pct_Leave > 50, "Leave", "Remain")) 
+# read the socio-demographic data
+variables <- read_csv("variables.csv") %>% 
+  mutate(Area_Code = factor(Area_Code),
+         degree = degree*100, `percent_aged_18_30` = `percent_aged_18_30`*100)
+# merge the data frames
+df <- left_join(referendum, variables, by = "Area_Code")
+```
+
+This brief summary seeks to explore the relationship between certain socio-demographic variables and the voting patterns of the EU referendum held on 23 June 2016. A number of indicators have been examined including levels of higher education, age and median annual income. 
+
+The EU referendum results for each Local Authority derive from the [Electoral Commission](https://www.electoralcommission.org.uk/find-information-by-subject/elections-and-referendums/past-elections-and-referendums/eu-referendum/electorate-and-count-information) and socio-demographic data are drawn from the [2011 Census](https://www.ons.gov.uk/census/2011census) and the [Annual Survey of Hours and Earnings (2016)](https://www.nomisweb.co.uk/census/2011/workplace_population).
+
+#### Higher education
+
+There seems to be a very strong linear relationship between higher education and voting patterns in the EU referendum. Areas with high numbers of residents without degrees tended to vote Leave.
+
+```{r, echo=FALSE, message=FALSE, warning=FALSE, fig.height=6, fig.width = 12}
+# create a scatterplot using ggplot2 and plotly
+plot <- ggplot(data = df, aes(x = degree, y = Pct_Leave)) + 
+  geom_point(aes(fill = Result, size = Electorate,
+                 text = paste0(Area, "\n", "Vote Leave: ", round(Pct_Leave,1),
+                               "\n", "Degree educated: ", round(degree,1))), shape = 21, alpha = 0.6) +
+  geom_smooth(method = lm, se = FALSE, size = 1, linetype = "dotted", color = "black") +
+  scale_fill_manual(values=c("Remain" = "yellow", "Leave" = "#3690c0")) +
+  scale_x_continuous(limits = c(20, 60)) +
+  scale_y_continuous(limits = c(20, 70)) +
+  labs(title = "Relationship between higher education and voting patterns",
+       x = "% of residents with a degree", 
+       y = "Leave vote %",
+       fill = "") +
+  theme_minimal() + 
+  guides(size = FALSE)
+ggplotly(plot, tooltip = "text")
+
+```

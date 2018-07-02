@@ -1,0 +1,160 @@
+---
+title: "Import new data into R"
+author: "Réka Solymosi, Henry Partridge & Sam Langton"
+#date: "3 July 2018"
+output: html_document
+---
+
+In this section we cover two new interesting ways of reading data into R. We actually use R itself to collect the data for us in these cases, rather than just having it act as a platform to analyse already collected data. This is yet another feature that sets R apart from other statistical analysis software. So we will cover two approaches. The first approach will be about getting data through Application Programming Interfaces, or APIs. We will demonstrate this by making you collect some twitter data!
+
+Then we will also demonstrate some web scraping that you can carry out with R, to show how you can get data from websites into your environment, and also how to use tidy text to interpret these data. 
+
+
+#APIs
+
+One example is to get data from online sources using Application Programming Interfaces, or APIs. Many organisations release their data through APIs, for easy data query. For example [TfL have API](https://api.tfl.gov.uk/) to retreive their data, as do [TfGM](https://developer.tfgm.com/). But by far the most popular data sources accessible through an API is Twitter. Twitter data is made freely available through its API, which makes it one of the most popular open data sources for studies in social sciences [Leetaru et al., 2013](http://journals.uic.edu/ojs/index.php/fm/article/view/4366/3654?__hstc=26280290.34ab7bf88e972fdd7a7debc8575bac5a.1420416000189.1420416000190.1420416000191.1&__hssc=26280290.1.1420416000192&__hsfp=2439899863). Furthermore, there are lots of data constantly being generated; the Twitter service sees about 300 million Tweets per day [Kamath et al., 2013](http://dl.acm.org/citation.cfm?id=2488447). However, when attempting to map dynamic spatial or temporal fluctuation using tweets, the pool of usable data is somewhat reduced. Studies of the data normally find about 1 to 2 percent of tweets are geocoded (Kamath et al., 2013; Leetaru et al., 2013).
+
+
+Users send 400 million tweets every day.  Ranked as the 10th most popular site in the world by Alexa rank in January 2013, Twitter boasts 500 million registered users.
+
+
+The only way to access 100% of those tweets in real-time is through the Twitter “Firehose”. The other option for accessing tweets is using one of Twitter’s direct API offerings.
+
+
+Twitter’s Search API involves polling Twitter’s data through a search or username, giving you access to a data set that already exists from tweets that have occurred. Through the Search API users can request tweets that match some sort of “search” criteria. The criteria can be keywords, usernames, locations, named places, etc. A good way to think of the Twitter Search API is by thinking about how an individual user would do a search directly at Twitter (navigating to search.twitter.com and entering in keywords). Of course, we will do this is an automated way using R, which is replicable, easier, more reliable and much quicker!
+
+
+**How much data can you get with the Twitter Search API?**
+
+
+With the Twitter Search API, developers query (or poll) tweets that have occurred and are limited by Twitter’s rate limits. For an individual user, the maximum number of tweets you can receive is the last 3,200 tweets, regardless of the query criteria. With a specific keyword, you can typically only poll the last 5,000 tweets per keyword. You are further limited by the number of requests you can make in a certain time period. The Twitter request limits have changed over the years but are currently limited to 180 requests in a 15 minute period.
+
+
+Anyone can sign up to access the twitter API, and that is what we will do now, to demonstrate getting some tweets!
+
+
+##Signing up as a developer with Twitter
+
+
+First, you will need to create a Twitter account, if you don't already have one. 
+You will have to visit [twitter.com](twitter.com) and sign up. 
+
+
+Then you go to [apps.twitter.com/](https://apps.twitter.com/) and click on *Create New App*. 
+
+
+Fill out the details. You can name your app whatever you like. (under 'website' it lets you put a placeholder (since you don't have a site for your app yet). Just make sure it's an URL that doesn't already exist!). Fill out the form and then click on 'Create your Twitter application'
+
+
+```{r, out.width = "600px", echo=FALSE}
+knitr::include_graphics("https://raw.githubusercontent.com/rcatlord/GSinR_materials/master/images/twitterAppCreate.png")
+```
+
+
+Now you should have some credentials, which you will need for getting some data from Twitter. You can see your credentials by clicking on the **Keys and Access Tokens** tab, circled in red below: 
+
+
+```{r, out.width = "600px", echo=FALSE}
+knitr::include_graphics("https://raw.githubusercontent.com/rcatlord/GSinR_materials/master/images/keysAccess.png")
+```
+
+
+##Getting some tweets into R
+
+Now that you have access to the twitter API, we can use the `twitteR` package to get some tweets. So load the package (and also install if you don't already have it)
+
+```{r}
+library(twitteR)
+```
+
+
+Now create some variables that hold your developer key and access token that we created: 
+
+```{r, eval=FALSE}
+api_key <- "..."
+api_secret <- "..."
+access_token <- "..."
+access_token_secret <- "..."
+```
+
+```{r, echo=FALSE}
+api_key <- "tljtY9MFTplcXpmPUBVVs9Xg9"
+api_secret <- "ZQzgFs5NzC1EbAucrS4p2yCfG8b850Dn6YdZIetXcL7Fy6EnQl"
+access_token <- "28736594-qx3tbwFHIKRWC07fxs3NUX6pjXxB4Dbn8UEPdiFsy"
+access_token_secret <- "gveN3LcTivOc475juA6ZAldHYaNnsnwWVV1ZOdLkZPfpu"
+```
+
+
+Now, using these credentials we, set up an authorisation process using the `setup_twitter_oauth()` function: 
+
+
+```{r}
+setup_twitter_oauth(api_key,api_secret,access_token,access_token_secret)
+```
+
+
+Now we can use the `searchTwitter()` function to grab some tweets. There are quite a lot of parameters we can pass to this function. We can tell it what keyword to search, the number of tweets to return, and we can also specify a search radius if we want tweets within a particular region. 
+
+
+So for example, we can specify these here: 
+
+
+```{r}
+search_word <- "twin peaks"
+number_of_tweets <- 1000
+
+#pass a pair of coordinates (longitude, latitude) to specify location for search
+loc_of_tweets <- "51.507351,-0.127758"
+
+#and also the search radius (as in how wider around the coordinates we should search)
+search_radius <- "300km"
+```
+
+
+There are more parameters we could specify as well.  You can see these in the [twitteR package documentation](https://cran.r-project.org/web/packages/twitteR/twitteR.pdf). 
+
+
+But now that we have specified the above, let's build our query: 
+
+
+```{r}
+twitter_result <- searchTwitter(search_word, n=number_of_tweets, geocode= paste(loc_of_tweets, search_radius, sep=","))
+```
+
+
+Now this result still needs to be flattened out into a dataframe. We can achieve this by using some data manipulation that we will cover a bit later in the course. We will return to this so don't worry if it's not clear what this code is doing right now. 
+
+
+```{r}
+my_data_frame_9 <- do.call("rbind", lapply(twitter_result, as.data.frame))
+```
+
+
+But now, we should have a dataframe of tweets about Twin Peaks, made within 300km of London. Let's have a look:
+
+
+```{r}
+head(my_data_frame_9)
+```
+
+
+##We have data!
+
+
+Great, so hopefully this section has shown you how to import data from various sources into your R session. The next section will have a look at what we can do with these data, and learn about concepts like data types, and data wrangling. We will use our last data set of tweets to do this, so keep this in your workspace. On a final note, I will also show you how to save this data, as a csv, just in case you need to read it in a format that isn't only for R.
+
+
+###Export to csv
+
+
+You can of course export as other formats as well, but let's stick to csv here. To save your dataframe as a csv file you just have to use the function `write.csv()`, and pass it two parameters; the first one is the name of the dataframe you are saving, and the second is the name you want to give your file. So if we want to call our file *twinPeaksTweets.csv* then you would do the following: 
+
+
+```{r}
+my_file_name <- "twinPeaksTweets.csv"
+write.csv(my_data_frame_9, file=my_file_name)
+```
+
+
+Now if you check your working directory, you should have a file called twinPeaksTweets.csv there. Exciting! 
+

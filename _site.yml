@@ -1,0 +1,100 @@
+name: Getting Started in R
+output_dir: "."
+navbar:
+  title: GSinR
+  right:
+  - text: Intro
+    menu:
+    - text: slides
+      href: modules/intro/slides/slides.html
+    - text: babynames::slides
+      href: modules/intro/babynames/slides.html
+    - text: babynames::script
+      href: https://github.com/rcatlord/GSinR_materials/blob/master/1_intro/scripts/babynames.R
+  - text: Basics
+    menu:
+    - text: activity
+      href: modules/basics/pseudocode_slide.html
+    - text: slides
+      href: modules/basics/slides.html
+    - text: exercises
+      href: modules/basics/basics_tutorial.html
+  - text: Import
+    menu:
+    - text: slides
+      href: modules/import/slides/import_slides.html
+    - text: exercise - import data
+      href: modules/import/exercises/import_data.html
+  - text: Tidy
+    menu:
+    - text: slides
+      href: modules/tidy/slides/slides.html
+    - text: exercise
+      href: modules/tidy/exercises/guided_example_tidy.html
+  - text: Transform
+    menu:
+    - text: slides
+      href: modules/transform/slides/slides.html
+    - text: exercise
+      href: modules/transform/exercises/data_wrangling.html
+  - text: Visualise
+    menu:
+    - text: slides
+      href: modules/visualise/slides/viz_slides.html
+    - text: exercise
+      href: modules/visualise/exercises/visualise_data.html
+  - text: Model
+    menu:
+    - text: basic_stats
+      href: modules/model/basic_stats.html
+  - text: Report
+    menu:
+    - text: slides
+      href: modules/report/slides/slides.html
+  - text: Extras
+    menu:
+    - text: shiny::slides
+      href: modules/extras/shiny/slides/slides.html
+    - text: shiny::exercise
+      href: modules/extras/shiny/exercise/shinyTut.html
+    - text: data_time
+      href: modules/extras/date_time/exercises/date_time_data.html
+    - text: spatial analysis
+      href: https://cdn.rawgit.com/rcatlord/talks/7715ebb1/rumgroup/slides.html
+    - text: API::slides
+      href: modules/extras/API_slides/api_slides.html
+    - text: API::exercise
+      href: modules/extras/API_exercises/import_new_data.html
+    - text: webscrape::exercise
+      href: modules/extras/tidy_text/exercises/tidy_text_tutorial.nb.html
+  - text: Mini-project
+    menu:
+    - text: slides
+      href: modules/mini-project/slides/slides.html
+    - text: tasks
+      href: modules/mini-project/exercises/mini_project.html
+    - text: data
+      href: https://github.com/rcatlord/GSinR_materials/blob/master/mini-project/data/variables.csv
+    - text: example report
+      href: modules/mini-project/exercises/example_report.html
+    - text: example report - answer
+      href: https://github.com/rcatlord/GSinR_materials/blob/master/mini-project/example_report.Rmd
+  - text: Resources
+    menu:
+    - text: a menu of functions
+      href: useful_functions.html
+    - text: base R versus dplyr
+      href: base_R_versus_tidyverse.html
+    - text: useful links
+      href: resources.html
+  - icon: fa-github
+    href: https://github.com/rcatlord/GSinR_materials
+output:
+  html_document:
+    theme: simplex
+    highlight: textmate
+    include:
+      after_body: footer.html
+    lib_dir: site_libs
+    self_contained: no
+

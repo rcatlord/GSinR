@@ -1,0 +1,543 @@
+---
+title: "Data wrangling"
+author: "Réka Solymosi, Henry Partridge & Sam Langton"
+date: "4 July 2018"
+output: html_document
+---
+
+Now everything we've covered today is what can be classed as data wrangling. As with the whole course, we try to stick to the set of packages called tidyverse. The tidyverse is a collection of R packages that share common philosophies and are designed to work together. The core tidyverse packages are: ggplot2, tibble, tidyr, readr, purrr, and dplyr. These are the packages you are likely to use in almost every analyis. [Find out more about tidyverse here](http://tidyverse.org/). 
+
+
+The best place to learn about all the packages in the tidyverse and how they fit together is [R for Data Science](http://r4ds.had.co.nz/), the book we are using in this course. 
+
+
+In this session we will again be using these packages, so load them up!
+
+
+```{r, warning=FALSE, message=FALSE}
+library(tidyverse)
+```
+
+
+In order to be able to bring together all the data wrangling that we've learned today, in this tutorial we'll be following steps to recreate the work behind this fivethirtyeight blog post:  [Movies that pass the Bechdel Test do better at the box office](https://fivethirtyeight.com/features/the-dollar-and-cents-case-against-hollywoods-exclusion-of-women/). [Fivethirtyeight](https://fivethirtyeight.com/) is an organisation focused on using statistical analysis to tell compelling stories about elections, politics, sports, science, economics and other topics. It was founded by [Nate Silver](https://fivethirtyeight.com/contributors/nate-silver/) who is arguably one of the most famous statistitians these days. If you are not familiar, I would really recommend having a read of his book [The Signal and the Noise](https://en.wikipedia.org/wiki/The_Signal_and_the_Noise).  
+
+
+Have a look at the post. Pretty interesting, right?  So the [Bechdel test](https://en.wikipedia.org/wiki/Bechdel_test) asks whether a work of fiction features at least two women who talk to each other about something other than a man. The requirement that the two women must be named is sometimes added.
+
+
+So we'll go through the various steps for filtering and subsetting data while working towards reproducing this outcome. 
+
+
+#Get data 
+
+
+We can get the data and re-create the analysis using the [fivethrirtyeight R package](https://github.com/rudeboybert/fivethirtyeight). Note that while they received guidance from editors at 538, this package is not officially published by 538.
+
+
+As usual, if you don't already have the package installed on your machine, then you can install it using `install.packages()` function. Once that is done (or if you already have it installed) you can load the package into your environment. 
+
+
+```{r, warning=FALSE}
+library(fivethirtyeight)
+```
+
+
+You can then load up the data used for this particular analysis using the `data()` function. 
+This just loads the data frame called "bechdel" into your enviroment. 
+
+
+```{r}
+data(bechdel)
+```
+
+
+You should now see a dataframe called bechdel in your enviornment window in the top right of your RStudio. However, it doesn't say how many observations or variables... it should say `<Promise>`. If you load a data set via data() in RStudio, all you get in the environment panel is a `<Promise>` of the data set i.e. if you click the variable name, the Data Viewer spreadsheet does not pop up. It is only after you run some function on the object that you get this ability. For example, run the `head()` function to be able to see the first 6 rows.
+
+
+```{r}
+head(bechdel)
+```
+
+
+Now you can see that these rows are printed for you to look at, but also you can have a look again in your environment, and you will see that the object `bechdel` is now a dataframe with 1794 rows and 15 variables. 
+
+If you want to learn a bit about the data, you can do so making use of the `?` function. This will tell you where the data is from, and also a bit about all 15 variables. For example, year refers to the year of the release, imdb is the text appended to the url (so you can quickly navigate to the imdb page for the film, for example), and test, which tells you some detail about the result of the bechdel test for that particular movie. The film fails under three conditions: `men` refers to the women only talking about men, `notalk` means the women didn't talk to each other, and `nowomen` means there were no women in the film. It passed under the conditions `ok` and `dubious`. `Dubious` means that some BechdelTest.com contributors were skeptical about whether the films in question passed the test. You can see there is also a simple binary classification of PASS/FAIL for the test as well, if you don't want to know why the film did/didn't pass. 
+
+
+But before we get down to the bechdel test data analysis, let's have a quick go at running some of the transformation functions first. 
+
+
+#Transforming data
+
+
+Data wrangling is the art of getting your data into R in a useful form for visualisation and modelling. Data wrangling is very important: without it you can’t work with your own data! There are three main parts to data wrangling:
+
+- import
+- tidy
+- transform
+
+
+We've already covered importing yesterday, and tidying this morning. Now we focus on tidy and transform. There is definitely overlap between tidy and transform. As you saw with the previous example, it is rare that you get the data in exactly the right form you need. Often you’ll need to create some new variables or summaries, or maybe you just want to rename the variables or reorder the observations in order to make the data a little easier to work with. The material here covers the topics from [Chapter 5 in R4DS](http://r4ds.had.co.nz/transform.html). We've already used, for example, the `select()` function in the previous session, when cleaning up our football banning orders data. The three elements of import, tidy, and transform often blend together. 
+
+
+##Note: Logic
+
+One general thing to touch on before we get started with things like selecting values based on whether or not they meet your selection criteria is logical operators. In logic, a [logical connective (also called a logical operator)](https://en.wikipedia.org/wiki/Logical_connective) is a symbol or word used to connect two or more sentences (of either a formal or a natural language) in a grammatically valid way, such that the value of the compound sentence produced depends only on that of the original sentences and on the meaning of the connective.
+
+Subsetting is essentially built using logical operators. When you want to select rows of a data frame that meet a certain criteria, you have to create statements that return true with logical operators. For this you will need to know the boolean operators in R: 
+
+- `==` means equals
+- `!=` means does not equal
+- `&` means and
+- `|` means or
+- `>` means greater than
+- `<` means less than
+
+
+[Some more about this here](http://www.statmethods.net/management/operators.html). To practice with them, you can try this [free course on datacamp](https://www.datacamp.com/courses/intermediate-r) where you can learn about conditional statements, loops and functions. 
+
+
+There is an excellent visual representation in the R4DS book: 
+
+
+![Complete set of boolean operations. x is the left-hand circle, y is the right-hand circle, and the shaded region show which parts each operator selects - Chapter 5 in 'R for Data Science'](http://r4ds.had.co.nz/diagrams/transform-logical.png)
+
+
+But this will probably make more sense when illustrated with an example, so in the next section we will do some filtering to demonstrate.
+
+
+##Filter
+
+
+So what does this mean? Well let's say you have our example dataframe: 
+
+```{r}
+exampleDf <- data.frame("name" = c("bob", "bobbie", "bobette"),
+                        "gender" = c("male", "male", "female"), 
+                        "height" = c(178, 154, 164))
+```
+
+And you want to select only the men. That means you want all the rows where gender equals male. So the statement "gender == male" should equal true, in order for that row to be selected.
+
+
+So to filter rows you can use the `filter()` function from the tidyverse. 
+
+
+You have to pass two parameters to this function. The first one is the name of the dataframe that you want to filter. The second one is the logical argument that needs to return true for the row to be selected. So for the example of selecting all the rows with the men from our exampleDf, we would write the following function: 
+
+
+```{r}
+maleDf <- filter(exampleDf, gender=="male")
+```
+
+
+Now you should have a new dataframe with only the men, called **maleDf**. 
+
+What if you wanted to select all the lines that are NOT male though? (yes in this case you could just do the same as above, but replace male with female, however let's just imagine there are other values as well...!)
+
+
+Well you can use the `!=` (not equals) for example: 
+
+
+```{r}
+notMaleDf <- filter(exampleDf, gender != "male")
+```
+
+
+What about multiple conditions? What if you want all the cases of men who are taller than 170cm? Well you can put together multiple criteria using `&` (and) and `|` (or). But you have to think which one you want. If you want only men who are over 170cm tall, you need AND, because you need both conditions to be met. On the other hand, if you wanted to select people who meet just one or both of the criteria, you would use OR. For example, if you want to select events that happened on Sunday night, you might want to select everything that happens between 18:00-23:59 on Sunday *OR* 00:00 - 6:00 Monday. 
+
+
+To illustrate, here's our selection of males who are also 170cm or taller: 
+
+
+```{r}
+tallMaleDf <- filter(exampleDf, gender=="male" & height > 170)
+```
+
+
+##Select
+
+Sometimes you might have a dataframe where you don't need all of the columns for your analysis, and you want to select only a subset of them. For this you can use the `select()` function. Similarly to the filter function, you pass it two arguments, you have to tell it the dataframe we are selecting from, and again an argument that will return true on all the columns which you want to select. So if we want to select only gender and height we would say: 
+
+
+```{r}
+selectExampleDf <- select(exampleDf, gender, height)
+```
+
+
+There are a few variations to this as well, you can see the list in [Chapter 5 of R4DS](http://r4ds.had.co.nz/transform.html#select-columns-with-select). Specifically have a look at the **helper functions** which can be used to select columns that start with/ end with/ contain some letters or words, or select by column numer. For example, the same as above can be achieved by using the number of the column rather than it's name. So to select the 2nd and 3rd columns, you can use: 
+
+
+```{r}
+selectExampleDf2 <- select(exampleDf, 2:3)
+```
+
+
+And we can see they're the same: 
+
+
+```{r}
+identical(selectExampleDf, selectExampleDf2)
+```
+
+
+Usually, we would advise that you try and avoid referring to a column by its number. It's very easy to forget which number column refers to which variable, and anyone reading your code will not know unless they take a look at the data frame.
+
+##Slice
+
+
+Slice works similar to filter, except rather than being able to give conditions, you select rows by specifying their row number. Because of this, slice does not work with relational databases because they have no intrinsic notion of row order. Instead you can use `filter()` and `row_number()`. But just to demonstrate, if we wanted only the 2nd row of our example dataframe that would look like this: 
+
+
+```{r}
+
+second_row <- slice(exampleDf, 2)
+
+second_row
+  
+```
+
+
+Now this might not immediately seem a good way to subset your data frame. After all, the order of the rows might not be an entirely meaningful sequence. Taking the first row of your data is fairly pointless if it is not ordered in a particular way. However, combined with `arrange()` it might make a bit more sense. 
+
+##Arrange
+
+The `arrange()` function arranges the rows in your data frame by variables. Essentially you are using this to sort your data. So here is my example data frame: 
+
+```{r}
+
+exampleDf
+
+```
+
+
+And now here it is sorted
+
+
+```{r}
+
+arrange(exampleDf, height)
+
+```
+
+
+Note that now if I go to use exampleDf again, it is **not** sorted:
+
+
+```{r}
+
+exampleDf
+
+```
+
+
+Can you guess why?
+
+
+Yes, it's because you did not assign the function to a new object (or the existing object)! You just printed the result, but did not save it in the R environment. So, to save we can either overwrite the original data frame, or create a new one. The new data frame can become the one we subset rows with. For instance, using `slice`, can take the first of however many rows, or the Nth row, after having sorted the data frame by a particular variable. So if we want a dataframe with the 2nd tallest person we would: 
+
+
+```{r}
+
+
+sortedDf <- arrange(exampleDf, height)
+second_tallest <- slice(sortedDf, 2)
+
+
+second_tallest
+
+```
+
+
+That seems like an awful lot of assigning and creating new dataframes... If only there was some way to **pipe** such operations together...
+
+
+#%>%
+  
+Pipe operators, available in tidyverse R packages, serve to process a data-object using a sequence of operations by passing the result of one step as input for the next step. It does this by using 'infix-operators' rather than the more typical R method of nested function calls. The pipe operator, `%>%`, is used to insert an argument into a function. It is not a base feature of the language and can only be used after attaching a package that provides it. The pipe operator takes the left-hand side of the pipe and uses it as the first argument of the function on the right-hand side of the pipe.
+
+
+So how would we carry out the above steps of arrange and then slide, using the pipe operator?
+
+
+```{r}
+
+
+second_tallest <- exampleDf %>%
+  arrange(height) %>%
+  slice(2)
+
+
+second_tallest
+
+```
+
+
+Notice that for each function we removed the data argument, as this is passed on through the pipe operators. These operators tend to get really helpful when you use the `group_by()` and `summarise()` functions. 
+
+
+##Group by, Summarise, and Mutate
+
+
+Most data operations are useful when done on groups defined by variables in the dataset. The group_by function takes an existing tbl and converts it into a grouped tbl where operations are performed "by group".
+
+
+However when you are grouping varables together, you usually want to summarise the other variables somehow. 
+
+Let's say we want to know the average height in our data frame by gender. So we want the average height for men, and the average height for women (let's ignore for now that we only have 1 observation, this is for illustration and I promise it will get more exciting when we look at the bechdel data!)
+
+
+```{r}
+
+height_by_gender <- exampleDf %>%
+  group_by(gender) %>%
+  summarise(avg_height=mean(height))
+
+
+height_by_gender
+```
+
+
+There are many ways to summarise, you can count the number of observations as well, for example: 
+
+
+```{r}
+
+height_by_gender <- exampleDf %>%
+  group_by(gender) %>%
+  summarise(avg_height=mean(height), count=n())
+
+
+height_by_gender
+
+
+```
+
+
+And finally, you can create new variables using `mutate()`, and use those as well. For example, let's say we wanted the heights in inches. To convert between cm and inches, 1 cm is 0.393701 inches. So we can create a new variable using arithmetic, and then use this in our summarise function!
+
+
+```{r}
+
+height_by_gender <- exampleDf %>%
+  mutate(height_in = height*0.393701) %>%
+  group_by(gender) %>%
+  summarise(avg_cm_height=mean(height), 
+            avg_in_height=mean(height_in), 
+            count=n())
+
+
+height_by_gender
+
+
+```
+
+
+You can append multiple arguments to these functions with a comma. For example, here you can see that inside the `summarise()` there are three summaries being created, but they are all inside the same `summarise()` function, just separated by commas. You could do the same in the `group_by()` for example if you wanted to group by multiple categories. 
+
+
+Great, now we have the basics all under control, let's get down to some actual application! 
+
+
+
+#Bechdel test
+
+
+Remember our bechdel data? Let's have a look at it again anyhow: 
+
+
+
+```{r}
+
+head(bechdel)
+
+```
+
+
+Now let's say we want to have a look at return on investment (ROI) from these data, and determine whether the film passing the bechdel test or not has any implications on the film's ROI. Here are the steps now applying some learning from today, in order to prepare your data in such a way that will allow you to answer this question. 
+
+## Filter to only 1990 - 2013
+
+Focus only on films from 1990 to 2013
+
+```{r bechdel90_13}
+bechdel90_13 <- bechdel %>% filter(between(year, 1990, 2013))
+```
+
+
+## Calculate `ROI` variables
+
+
+Create international gross only and return on investment (ROI) columns and add to `bechdel_90_13` data frame. First we create a variable for only international gross (because we do not currently have such a column) by subtracting the domestic gross from the international gross. Then We want the total, so the international gross divided by the budget, as well as separately the the domestic gross and the international gross. 
+
+
+Because we are calculating new variables, we will be using the `mutate()` function. 
+
+
+```{r mutate}
+bechdel90_13 <- bechdel90_13 %>% 
+  mutate(int_only = intgross_2013 - domgross_2013,
+         roi_total = intgross_2013 / budget_2013,
+         roi_dom = domgross_2013 / budget_2013,
+         roi_int = int_only / budget_2013)
+```
+
+
+Now we have these new variables in the data frame. We can have a look:
+
+
+```{r}
+
+head(bechdel90_13)
+
+```
+
+
+## Create `generous` variable
+
+
+We also want to create a variable for granting a film a "generous" pass. Remember we have the binary PASS/ FAIL variable. But in the variable "clean_test" we saw that some movies were labelled as "dubious". Remember that "dubious" means that some BechdelTest.com contributors were skeptical about whether the films in question passed the test. So when we assign a "pass" to these films, we want to record ourselves being generous. This is so we can compare results of being generous vs. not, and how that affects our conclusions. (On the site, the authors note: "In our analysis, we include films labeled "dubious"" as passing the Bechdel test. Their inclusion did not have a significant effect on our findings.")
+
+
+So how would you go about creating this variable? Well we can think about the "pseudo code" we discussed in earlier sessions. We want a new variable, and we want this to return a PASS (in this case they labelled it as `TRUE`) if the clean_test variable takes the value of "dubious" or "OK". However, cases when the `clean_test` variable takes on any of the other values, we want it to return FALSE. 
+
+
+To help us with these sorts of situations is the `ifelse()` function. We saw this with the previous exercises, but I'll describe it briefly again. It allows us to assign some value to some variable based a certain conditions. The structure of the function is so that you have to pass it a condition, then a value to assign if the condition is true, and then another value if the condition is false. You are basically using this function to say: "if this condition is true, do first thing, else, do the second thing". It would look something like this:
+
+
+```{r, eval=FALSE}
+
+dataframe$new_variable <- ifelse(dataframe$some_numeric_var < 100, "smaller than 100", "not smaller than 100")
+
+```
+
+
+So in the case of the bechdel test, we want this to say something like "if the clean_test value is dubious or ok, then we want the generous variable to be TRUE, else we want it to be FALSE". 
+
+
+Something like `ifelse(test = clean_test == "ok" | clean_test == "dubious", yes = TRUE, no = FALSE)` would work (taking care not be confused by the first 'test =' argument, check `?ifelse` for an explanation).
+
+
+Now putting it within a `mutate()` function to create a new variable: 
+
+
+```{r}
+bechdel90_13 <- bechdel90_13 %>%
+  mutate(generous = ifelse(test = clean_test %in% c("ok", "dubious"),
+                           yes = TRUE,
+                           no = FALSE))
+```
+
+
+
+Ha! That's not the same you say! And you are right. There are usually 25 different ways to do the same thing in R, and this is the code that the 538 guys used, but I thought that I'd introduce you to both. So the one in our example above, we say that our conidion is TRUE if clean_test == "OK" **or** clean_test == "dubious". This will return true when the variable clean_test takes the value "OK" or when it takes the value "dubious."
+
+
+In the second version, our condition is TRUE if the value of the clean_test variable can be found in this list that contains two strings ( `c("OK", "dubious")` ). Again, whenever the clean_test variable takes on one of these values, the condition returns TRUE. 
+
+
+So which is better? As usual, the answer is *it depends*. However if you have a lot of possible conditions, it might make sense to create a list, and use the `%in%` function. 
+
+
+Have a look: 
+
+If we create another example dataframe: 
+
+
+```{r}
+
+exampleDf2 <- data.frame("days_of_week" = c("Mon", "Tue", "Wed", "Thu", "Fri", "Sat", "Sun"))
+
+
+```
+
+
+And then use the or operator `|`, it is a bit of a lengthy and repetitive code snippet: 
+
+
+```{r}
+exampleDf2$is_weekday <- ifelse(exampleDf2$days_of_week == "Mon" |
+                                  exampleDf2$days_of_week == "Tue" |
+                                  exampleDf2$days_of_week == "Wed" |
+                                  exampleDf2$days_of_week == "Thu" |
+                                  exampleDf2$days_of_week == "Fri", "weekday", "weekend")
+
+```
+
+
+However if we use `%in%`, it's much neater: 
+
+
+```{r}
+
+exampleDf2$is_weekday <- ifelse(exampleDf2$days_of_week %in% c("Mon", "Tue", "Wed", "Thu", "Fri"), "weekday", "weekend")
+
+```
+
+
+Anyway, whichever approach you used, you now have a new variable created using `ifelse()` function within the `mutate()` function. 
+
+
+## Determine median ROI and budget based on categories
+
+
+So now we will want to look at the differences between those who pass the test, and those who do not. To do this, we can use the `group_by()` function, in order to separate the ROI by the binary PASS/FAIL variable.
+
+
+```{r summary_ROI}
+
+ROI_by_binary <- bechdel90_13 %>% 
+  group_by(binary) %>% 
+  summarize(median_ROI = median(roi_total, na.rm = TRUE))
+
+ROI_by_binary
+
+
+```
+
+
+Okay, so there seems to be a higher median ROI for films that pass the bechdel test. Interesting...! Let's see what the overall median ROI is. Again we can use summarise:
+
+
+```{r}
+bechdel90_13 %>% 
+  summarize(
+    `Median Overall Return on Investment` = median(roi_total, na.rm = TRUE))
+```
+
+
+What about budget? Do the budgets differ significantly between films that pass the bechdel test and those that don't? Again we can `group_by()` the biary variable, and this time summarise the budget: 
+
+
+
+```{r summary_budget}
+budget_by_binary <- bechdel90_13 %>% 
+  group_by(binary) %>% 
+  summarise(median_budget = median(budget_2013, na.rm = TRUE))
+budget_by_binary
+
+```
+
+
+Looks like more expensive films fail the bechdel test! What is the median budget in our sample?
+
+
+```{r}
+
+bechdel90_13 %>% 
+  summarize(`Median Overall Budget` = median(budget_2013, na.rm = TRUE))
+
+```
+
+
+The rest of the analysis then goes on to graph and analyse these data. However we are not graphing until tomorrow, so we will have to wait. If you are interested in having a look at their code and analysis from this point on, you can have a look by calling the `vignette` function:
+
+
+```{r, eval=FALSE}
+vignette("bechdel", package = "fivethirtyeight")
+```
+
+
+But for data manipulation, that's about it. We now move on to the unguided examples, but if you have any questions about any particular transformation methods that you currently use, or think you will use in the future, do let us know. We will try to think about how we can help, or how you would be able to problem solve it, within the tidyverse.
+
+

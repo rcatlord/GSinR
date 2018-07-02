@@ -1,0 +1,89 @@
+---
+title: | 
+    | Getting Started in R
+    | an introduction to data analysis and visualisation
+subtitle: "Mini-project"
+author: "Réka Solymosi and Henry Partridge"
+date: "6 July 2018"
+output:
+  xaringan::moon_reader:
+    css: ["default", "my-theme.css"]
+    lib_dir: libs
+    nature:
+      highlightStyle: github
+      highlightLines: true
+      countIncrementalSlides: false
+editor_options: 
+  chunk_output_type: console
+---
+
+```{r setup, include=FALSE}
+options(htmltools.dir.version = FALSE)
+```
+
+## Background
+
+On 23 June 2016 the UK electorate was asked:
+<br>
+<br>
+
+--
+
+<img src="img/ballot.jpg" height="350px" />
+
+---
+## Background
+
+On 23 June 2016 the UK electorate was asked:
+<br>
+<br>
+
+<img src="img/ballot_results.jpg" height="350px" />
+
+<br>
+--
+
+Several newspapers tried to explain this unexpected result ...
+
+---
+class: center, middle
+### The Guardian
+<img src="img/theguardian.png" height="450px" />
+
+<https://www.theguardian.com/politics/ng-interactive/2016/jun/23/eu-referendum-live-results-and-analysis>
+
+---
+class: center, middle
+### The Economist
+<img src="img/theeconomist.png" height="450px" />
+
+<http://www.economist.com/blogs/graphicdetail/2016/06/daily-chart-17>
+
+---
+class: center, middle
+### Financial Times
+<img src="img/ft.png" height="450px" />
+
+<http://blogs.ft.com/ftdata/2016/06/24/brexit-demographic-divide-eu-referendum-results/>
+
+---
+class: center, middle, inverse
+## We are going to do the same in R!
+
+---
+class: center, middle
+## FT-style scatterplot (using ggplot2)
+<img src="img/ft_plot.png" height="450px" />
+
+---
+## Task
+
+Visualise the relationship between a number of different socio-demographic variables and EU Referendum voting patterns.
+
+You'll need to:
+
+1. **Import**: download and read data
+2. **Tidy**: clean data for analysis in R
+3. **Transform**: create new variables and merge different data sets
+4. **Visualise**: create a set of scatterplots
+5. **Report**: put together a summary document of your findings

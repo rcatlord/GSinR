@@ -1,0 +1,322 @@
+---
+title: "Tidy data"
+author: "Réka Solymosi, Henry Partridge & Sam Langton"
+date: "4 July 2018"
+output: html_document
+---
+
+
+```{r, message=FALSE, warning=FALSE}
+library(tidyverse)
+```
+
+Let's have a look at how we would use tidyr (part of the tidyverse) to mould our dataframe into the shapes that we need it to be, in order for us to be able to carry out the tasks we want to.
+
+To consider this, we will start with some Personal Expenditure Data from the United States. This data set consists of United States personal expenditures (in billions of dollars) in the categories; food and tobacco, household operation, medical and health, personal care, and private education for the years 1940, 1945, 1950, 1955 and 1960. Have a look at this data with the `View()` function. 
+
+
+It is actually quite small, so we can have a look here
+
+
+```{r}
+USPersonalExpenditure
+```
+
+
+We can see that the rows are the different categories of spending, while the columns are one for each year in the data set. Now there might be something you may have noticed. 
+
+
+```{r}
+
+class(USPersonalExpenditure)
+
+```
+
+
+
+The class of the dataset is actually a matrix, not a dataframe. We can convert this to a dataframe using the `as.data.frame()` function. You've seen this yesterday, when we were converting the twitter results to a data frame. 
+
+
+
+```{r}
+
+USPersonalExpenditure_df <- as.data.frame(USPersonalExpenditure)
+
+```
+
+
+Now, you can check and see that the `USPersonalExpenditure_df` object is a data frame. 
+
+
+```{r}
+
+class(USPersonalExpenditure_df)
+
+```
+
+
+Much better. 
+
+
+Now let's suppose we want to answer the question: *Is there a difference between years in spending?*
+
+
+Our first issue is that the row names are actually row names, and are not captured in a variable of "domain" of spending or something like this. If you ever come accross this, and you need to translate your row names in to a new column (variable) so that you can refer to them, you can use the following code: 
+
+
+```{r}
+
+USPersonalExpenditure_df <- tibble::rownames_to_column(USPersonalExpenditure_df, "Domain")
+
+```
+
+
+Now we have a new variable, called "Domain", which has the domain where the money was spent in each year. We can now use this, as a variable. Yay! We can take a look at the new data frame again below to check that we know what it looks like now:
+
+```{r}
+USPersonalExpenditure_df
+```
+
+
+OK so back to our question, that we want to be able to see whether there is a significant difference in spending overall between each year. Well, in order to answer this question, we need to be able to group by year - which should be a factor variable on it's own, rather than a bunch of column headings, right? 
+
+
+Think about how you would write the pseudo code for testing the difference between groups in spending. If you would use an ANOVA test for example, you would need two variables, the numeric variable (spending) and a grouping variable (year). The code in R for an anova test is `aov()`. So your pseudo code would look like this: 
+
+
+
+```{r, eval=FALSE}
+
+result <- aov(USPersonalExpenditure_df$Spending, USPersonalExpenditure_df$Year)
+
+```
+
+
+We currently don't have either of these variables! While we have the information in this data set, we do not have the actual variable. 
+
+
+Take a moment to think about how you would do this in the environment you are used to working in. Would you just do this manually? Well, what if your data was much larger? What if you had to do this with many data sets? 
+
+
+If you are thinking about what we need to do to the data, it helps to visualise what the data looks like now, and what you want it to look like. Is it wide? Is it narrow? Once you have visualised that, the tidyr cheatsheet can help you identify the best function. 
+
+
+
+Here is a very skillfull drawing of what we are trying to achieve:
+
+
+![](wide-long-drawing.png)
+
+
+So compare this with the tidyr cheat sheet [here](https://www.rstudio.com/wp-content/uploads/2015/02/data-wrangling-cheatsheet.pdf). So what looks closest? 
+
+
+##Gather
+
+
+To do this in R, you can use the `gather()` function from the tidyr package. What we want to do, is to gather all these columns into one. So that is why we use *gather*. Gather takes multiple columns and collapses into key-value pairs, duplicating all other columns as needed. You use `gather()` when you notice that you have columns that are not variables. The general structure for gather is to provide: 
+
+
+```{r, eval=FALSE}
+
+gather(data, key, value, start_column:end_column)
+
+```
+
+
+There are other parameters you can pass as well, if you want to read more, use the `?` function.
+
+
+So how does this apply to our data? 
+
+
+```{r}
+
+gathered_spending <- gather(USPersonalExpenditure_df, "Year", "Spending", 2:6)
+
+```
+
+
+Now have a look at this new data frame, and you will see it has quickly gathered up all our columns of years into one new variable called "Year", and the values into a column called "Spending". 
+
+
+
+```{r}
+
+gathered_spending
+
+```
+
+
+Now I knew that I wanted to include columns 2:6, but it's possible to also specify what I **don't** want to gather, so in this case, the "Domain" column. In that case I just enter the name of that variable, but with a `-` sign in front:
+
+
+```{r}
+
+gathered_spending <- gather(USPersonalExpenditure_df, "Year", "Spending", -Domain)
+
+```
+
+
+You can see we get the same result. 
+
+
+```{r}
+
+gathered_spending
+
+```
+
+
+Now we could look at the difference between years, since we have this year variable, maybe with a boxplot (we'll look at how to make these tomorrow). 
+
+
+```{r}
+
+ggplot(gathered_spending, aes(x=Year, y = Spending)) + 
+  geom_boxplot()
+
+```
+
+
+And we could also now run our anova test!
+
+
+```{r}
+
+result <- aov(Spending ~ Year, data = gathered_spending)
+summary(result)
+
+```
+
+
+Nope, looks like no significant difference between years in spending. 
+
+
+##Spread
+
+If we wanted to separate the data out again, then `spread()` is here to help:
+
+
+```{r}
+
+spread_spending <- spread(gathered_spending, Year, Spending)
+
+```
+
+
+Looks just like it did before: 
+
+
+```{r}
+
+spread_spending
+
+```
+
+
+If you want to be sure, we can use the `identical()` function to check whether this datafarme is now the same as the original one was: 
+
+
+```{r}
+identical(spread_spending, USPersonalExpenditure_df)
+```
+
+
+#A messy messy example
+
+OK so we’ve had a look at these nice neat examples, but let’s look at something more realistic. Remember we have some very messy data about banning orders? We had a go at cleaning it up by hand, but let’s look at what we can do with the tidyverse. The details surrounding this code will make more sense later. For now, the idea is to demonstrate how R can be used to turn hellish, messy data into lovely, tidy data for the purposes of visualisation and analysis. This example should help you formulate the step-by-step thought process of making data tidy and suitable to answer your research question.
+
+```{r, warning=FALSE, message=FALSE}
+df <- read_csv("https://raw.githubusercontent.com/rcatlord/GSinR_materials/master/4_tidy/banning_orders.csv")
+```
+
+As suggested by the warnings R will give you loading in the data, it's messy:
+
+![](https://raw.githubusercontent.com/rcatlord/GSinR_materials/master/images/messy_data.png)
+
+   
+     
+We are interested in comparing banning orders by league. Our research question might be something like: **to what extent does the number of banning orders for each club differ by league?** As it stands, the data is not in suitable shape to answer this research question, and it certainly doesn't look like 'tidy' data. Ideally, we want to have:  
+  
+1. a column with each club name in each row
+2. a column telling us which league each club belongs to    
+3. a column with the number of banning orders relating to each club.
+  
+This is when `gather` will really help us, but this time, there's lots of data cleaning to do first. The first thing we might want to do is get rid of the rows and columns that are confusing or not needed.
+
+A way to begin dealing with this, is simply to load in the data differently. There's an option within `read_csv` that allows you to skip a specified number of rows during the load. We can see above that the data only actually starts on the fourth line (including the column names), so let's skip the first three.
+
+```{r, warning=FALSE, message=FALSE}
+df <- read_csv("https://raw.githubusercontent.com/rcatlord/GSinR_materials/master/4_tidy/banning_orders.csv",
+               skip = 3)
+```
+
+Now when we take a look at the data (try `View(df)`) we can see that we've resolved two issues already: those first few pointless rows have been cut out, and because of that R has recognised the correct column names. You will notice that there are still plenty of rows at the end of the data frame which we don't need. Let's grab the ones we want using `slice` which subsets rows:
+
+```{r}
+df <- slice(df, 1:24)
+```
+
+Now let's do the same for columns. The equivalent of `slice` for columns is `select` but we can do it with column names instead, to make the code easier to read.
+
+```{r}
+df <- select(df, -c(X3, X6, X9, X12, X15))
+```
+
+Reviewing the data again (with the `View()` function) we can see that things are looking better. We still need to restructure the data and create the columns needed for our analysis. Here, I am going to take things one step at a time, and write some code to get what we want just for the Premier League. The following introduces the concept of the pipe `%>%` which we will talk about more later, but for now, take a look at what this does:
+
+```{r}
+premier <- df %>% 
+  select(`Premier League`, bos = `Banning Orders`) %>% 
+  gather(league, club, -bos)
+```
+
+We are creating a new data frame, selecting only the columns relating the the Premier League, and in the process of doing so, renaming one to bos. Using the pipe `%>%` we then `gather` the data, creating two new columns called 'league' and 'club' and keeping bos (which we know is the banning order counts). I am doing this one step at a time, so let's just do the same thing for the other leagues:
+
+```{r}
+championship <- df %>% select(Championship  , bos = `Banning Orders_1`) %>% gather(league, club, -bos)
+league1      <- df %>% select(`League One`  , bos = `Banning Orders_2`) %>% gather(league, club, -bos)
+league2      <- df %>% select(`League Two`  , bos = `Banning Orders_3`) %>% gather(league, club, -bos)
+foot_conf    <- df %>% select(`League Two`  , bos = `Banning Orders_4`) %>% gather(league, club, -bos)
+other        <- df %>% select(`Other Clubs4`, bos = `Banning Orders_5`) %>% gather(league, club, -bos)
+```
+
+We are nearly there! We now just need to stick these data frames together.
+
+```{r}
+tidy.df <- bind_rows(premier, championship, league1, league2, foot_conf, other)
+```
+
+And then get rid of the remaining missing values.
+
+```{r}
+tidy.df <- filter(tidy.df, !is.na(bos))
+```
+
+Let's take a look at the result
+
+```{r}
+View(tidy.df)
+```
+
+FINALLY! Our data looks like something we can use! After all this suffering. 
+
+We now now visualise the distribution of banning orders for each league.
+
+```{r}
+ggplot(tidy.df, aes(x = league, y = bos)) + 
+  geom_boxplot()
+```
+
+
+Some of the functions used above will become clearer when we get into data wrangling later on. The point of this exercise was to get you familiar with the thinking process of problem solving messy data. This was horrible data to begin with, but it's not unusual to download (or be given) data like this. It requires a lot of tweaking. You are likely to encounter many such data sets in your work. Maybe next time, the spread function will be helpful for you, or it will be unite. The key is that you have to be able to take a step back, and ask, what do I need to do to this data set to make it look the way I want? And then just google and problem solve away.
+
+
+Why is this better than doing it manually? A few reasons:
+
+- you can reproduce this any time with zero effort
+- you can share this with other people working on this data
+- you eliminate the chance for 'human error' resulting from incorrect copy and pasting
+- it's much more fun!
+

@@ -1,0 +1,40 @@
+---
+title: ""
+---
+
+<br><br>
+
+### Setup
+
+Please ensure that you have the latest version of [R](https://www.r-project.org) installed on your laptop. This is important because some R packages used during the course may not install correctly if R is not up to date.     
+
+*macOS users*   
+Install R by downloading and running this [.pkg](http://cran.r-project.org/bin/macosx/R-latest.pkg) file from [CRAN](https://cran.r-project.org/index.html).       
+ 
+*Windows users*    
+Install R by downloading and running this [.exe](https://cran.r-project.org/bin/windows/base/release.htm) file from [CRAN](https://cran.r-project.org/index.html).      
+
+Please also install [RStudio Desktop](https://www.rstudio.com/products/rstudio/download/). RStudio is a free and open-source integrated development environment (IDE) for R.
+
+<br>
+
+**Testing whether the installation was successful**
+
+Copy and paste the R code below into [RStudio's console pane](http://r4ds.had.co.nz/screenshots/rstudio-layout.png). Then hit Enter to run it. 
+```{r, eval=FALSE}
+install.packages("tidyverse")
+library(ggplot2)
+ggplot(mtcars, aes(mpg, wt)) +
+  geom_point()
+```
+
+If the plot below appears in the output pane of RStudio the installation was successful.   
+<br>
+
+```{r, echo=FALSE, fig.height=3}
+library(ggplot2)
+ggplot(mtcars, aes(mpg, wt)) +
+  geom_point()
+```
+
+<br>

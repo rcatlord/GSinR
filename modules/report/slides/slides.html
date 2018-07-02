@@ -1,0 +1,422 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <title></title>
+    <meta charset="utf-8">
+    <meta name="author" content="Réka Solymosi, Henry Partridge &amp; Sam Langton" />
+    <link href="libs/remark-css/default.css" rel="stylesheet" />
+    <link rel="stylesheet" href="my-theme.css" type="text/css" />
+  </head>
+  <body>
+    <textarea id="source">
+class: center, middle, inverse, title-slide
+
+# <div style="white-space: pre-line;">Getting Started in R
+an introduction to data analysis and visualisation</div>
+## Reporting
+### Réka Solymosi, Henry Partridge &amp; Sam Langton
+### 6 July 2018
+
+---
+
+
+
+
+class: inverse, center, middle
+
+# Markdown
+
+---
+### What is Markdown?
+
+Developed by John Gruber in 2004, [Markdown](https://daringfireball.net/projects/markdown/) is a simple formatting syntax for plain text documents that can be easily converted into HTML.      
+
+Markdown allows you to add formatting to plain text without the need to point and click in a word processor. With a few special characters, like asterisks for *emphasis*, you can focus on your writing without leaving the keyboard.
+
+- It’s just plain text
+- The formatting syntax is easy to remember
+- And there’s no need to use a mouse
+
+---
+In Markdown
+
+```md
+### What is Markdown?
+
+Developed by John Gruber in 2004, [Markdown](https://daringfireball.net/projects/markdown/) is a simple formatting syntax for plain text documents that can be easily converted into HTML.     
+
+Markdown allows you to add formatting to plain text without the need to point and click in a word processor. With a few special characters, like asterisks for *emphasis*, you can focus on your writing without leaving the keyboard.
+
+- It’s just plain text
+- The formatting syntax is easy to remember
+- And there’s no need to use a mouse
+```
+
+In HTML
+
+
+```html
+&lt;html&gt;&lt;head&gt;
+  &lt;title&gt;Page Title&lt;/title&gt;
+  &lt;/head&gt;
+  &lt;body&gt;
+  &lt;h3&gt;Writing with HTML&lt;/h3&gt;&lt;p&gt;Developed by John Gruber in 2004, &lt;a href="https://daringfireball.net/projects/markdown/"&gt;Markdown&lt;/a&gt; is a simple formatting syntax for plain text documents that can be easily converted into HTML.&lt;/p&gt;
+  &lt;p&gt;Markdown allows you to add formatting to plain text without the need to point and click in a word processor. With a few special characters, like asterisks for &lt;em&gt;emphasis&lt;/em&gt;, you can focus on your writing without leaving the keyboard.&lt;/p&gt;
+  &lt;ul&gt;
+  &lt;li&gt;It’s just plain text&lt;/li&gt;
+  &lt;li&gt;The formatting syntax is easy to remember&lt;/li&gt;
+  &lt;li&gt;And there’s no need to use a mouse&lt;/li&gt;
+  &lt;/ul&gt;
+  &lt;/body&gt;&lt;/html&gt;
+```
+---
+
+class: inverse, center, middle
+
+# Markdown syntax
+
+---
+## Emphasis
+
+Use a mixture of asterisks and tilde to add emphasis.
+
+`**bold**` → **bold**
+
+`*italics*` → *italics*
+
+`***bold italics***` → ***bold italics***
+
+`~~strikethrough~~` → ~~strikethrough~~
+
+---
+## Paragraphs
+
+
+```md
+End a line with two or more spaces to create
+a line break
+```
+
+End a line with two or more spaces to create  
+a line break
+
+---
+## Headings
+
+To create a header begin a line with a hash. Each additional hash makes the header smaller.
+
+`# 1st level heading`   
+`## 2nd level heading`   
+`### 3rd level heading`   
+`#### 4th level heading`     
+
+# 1st level heading 
+## 2nd level heading  
+### 3rd level heading
+#### 4th level heading
+
+---
+## Links
+
+Place the link text in square brackets and the URL in parentheses
+
+`Download and install the latest version of R [here](https://www.r-project.org)`
+
+Download and install the latest version of R [here](https://www.r-project.org)
+
+---
+## Images
+
+Place (optional) explanatory text in brackets and the image URL or path in parentheses, preceded by an exclamation mark
+
+`![R](https://cran.r-project.org/Rlogo.svg)`   
+&lt;img src="https://cran.r-project.org/Rlogo.svg" width="300"&gt;
+
+---
+## Code
+**Inline code**
+
+Wrap code in single backticks
+```
+Today’s date is `format(Sys.time(), '%d %B, %Y')`
+```
+Today’s date is 30 June, 2018
+
+---
+## Code
+**Code blocks**
+
+Place 3 backticks on a line above and below the code block
+
+    ```
+    library(ggplot2)
+    ggplot(mpg, aes(class)) +
+    geom_bar(colour = "white")
+    ```
+```
+library(ggplot2)
+ggplot(mpg, aes(class)) + 
+  geom_bar(colour = "white")
+```
+
+---
+## Blockquotes
+
+Blockquotes start the first line with a greater than symbol
+
+`&gt; Statistical thinking will one day be as necessary a qualification for efficient citizenship as the ability to read and write.`      
+`&gt; (H. G. Wells)`
+
+
+&gt; Statistical thinking will one day be as necessary a qualification for efficient citizenship as the ability to read and write.    
+&gt; (H. G. Wells)
+
+---
+## Lists: bullet points
+
+Precede each line in a list with a single asterisk, hyphen or plus sign
+
+```
+- ggplot2
+- tibble
+- tidyr
+- readr
+- purrr 
+- dplyr
+```
+
+- ggplot2
+- tibble
+- tidyr
+- readr
+- purrr 
+- dplyr
+
+---
+## Lists: numbered lists
+
+Precede each line in a list with a number and full stop
+
+```
+1. ggplot2
+2. tibble
+3. tidyr
+4. readr
+5. purrr 
+6. dplyr
+```
+
+1. ggplot2
+2. tibble
+3. tidyr
+4. readr
+5. purrr 
+6. dplyr
+
+To prevent text starting with a number being formatted as a numbered list just add a backslash.
+
+`4\. readr`     
+4\. readr
+
+---
+## Lists: nested lists
+
+Indent each item in the sublist by four spaces
+
+```
+1. core tidyverse packages:
+    - ggplot2
+    - tibble
+    - tidyr
+    - readr
+    - purrr 
+    - dplyr
+```
+
+1. core tidyverse packages:
+    - ggplot2
+    - tibble
+    - tidyr
+    - readr
+    - purrr 
+    - dplyr
+
+---
+class: inverse, center, middle
+
+# GitHub Flavored Markdown
+
+---
+## Task lists
+
+Add a space between a dash and an open bracket
+
+```
+- [x] Import data
+- [x] Tidy data
+- [ ] Transform data
+- [ ] Visualise data
+```
+
+- [x] Import data
+- [x] Tidy data
+- [ ] Transform data
+- [ ] Visualise data
+
+---
+## Tables
+
+Divide words with hyphens to create the column names and then separate each row with a pipe. Colons are used to align the values in the cells.
+
+```
+| Package | Purpose |
+|:----- |:----- |
+| ggplot2 | for data visualisation |
+| tibble | for tibbles |
+| tidyr | for data tidying |
+| readr | for importing data |
+| purrr | for functional programming |
+| dplyr | for data manipulation |
+```
+
+| Package | Purpose |
+|:----- |:---- |
+| ggplot2 | for data visualisation |
+| tibble | for tibbles |
+| tidyr | for data tidying |
+| readr | for importing data |
+| purrr | for functional programming |
+| dplyr | for data manipulation |
+
+---
+## Syntax highlighting
+
+Place three backticks on a line above and below the code block.
+
+    
+    ```r
+    library(ggplot2)
+    ggplot(mpg, aes(class)) +
+    geom_bar(colour = "white")
+    ```
+
+
+```r
+library(ggplot2)
+ggplot(mpg, aes(class)) + 
+  geom_bar(colour = "white")
+```
+
+---
+
+class: inverse, center, middle
+
+![rmarkdown](img/rmarkdown.png)
+
+---
+# R Markdown: What is it?
+
+--
+
+- Dynamic documents for R
+
+--
+
+- A plain text file (.Rmd) written in markdown containing chunks of embedded R code.
+
+--
+
+- Works with the [`rmarkdown`](https://cran.r-project.org/web/packages/rmarkdown/index.html) R package
+
+---
+# R Markdown: Why use it?
+
+--
+
+- Documents with embedded code are reproducible
+
+--
+
+- Integrates the entire data analysis workflow from importing to reporting.
+
+--
+
+- Documents can be outputted to a variety of formats: HTML, PDF, Microsoft Word, slideshows, dashboards, websites, and books.
+
+---
+# R Markdown: Example
+![](img/rmarkdown_input.png)
+
+---
+# R Markdown: YAML metadata
+![](img/YAML.png)
+---
+# R Markdown: Formatted text
+![](img/text.png)
+
+---
+# R Markdown: Code chunks and inline code
+![](img/code_chunk.png)
+
+---
+# R Markdown: output
+![](img/rmarkdown_output.png)
+
+---
+# R Markdown: workflow
+--
+
+- Create a new R Markdown document from the menu: `File -&gt; New File -&gt; R Markdown`
+
+--
+
+- Create a YAML header
+
+--
+
+- Write the content with markdown
+
+--
+
+- Embed the R code in code chunks or inline code
+
+--
+
+- Click the `Knit` button to compile it
+    </textarea>
+<script src="https://remarkjs.com/downloads/remark-latest.min.js"></script>
+<script>var slideshow = remark.create({
+"highlightStyle": "github",
+"highlightLines": true,
+"countIncrementalSlides": false
+});
+if (window.HTMLWidgets) slideshow.on('afterShowSlide', function (slide) {
+  window.dispatchEvent(new Event('resize'));
+});
+(function() {
+  var d = document, s = d.createElement("style"), r = d.querySelector(".remark-slide-scaler");
+  if (!r) return;
+  s.type = "text/css"; s.innerHTML = "@page {size: " + r.style.width + " " + r.style.height +"; }";
+  d.head.appendChild(s);
+})();</script>
+
+<script type="text/x-mathjax-config">
+MathJax.Hub.Config({
+  tex2jax: {
+    skipTags: ['script', 'noscript', 'style', 'textarea', 'pre']
+  }
+});
+</script>
+<!-- dynamically load mathjax for compatibility with self-contained -->
+<script>
+(function () {
+  var script = document.createElement('script');
+  script.type = 'text/javascript';
+  script.src  = 'https://cdn.bootcss.com/mathjax/2.7.1/MathJax.js?config=TeX-MML-AM_CHTML';
+  if (location.protocol !== 'file:' && /^https?:/.test(script.src))
+    script.src  = script.src.replace(/^https?:/, '');
+  document.getElementsByTagName('head')[0].appendChild(script);
+})();
+</script>
+  </body>
+</html>

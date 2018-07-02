@@ -1,0 +1,111 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <title></title>
+    <meta charset="utf-8">
+    <meta name="author" content="Réka Solymosi, Henry Partridge &amp; Sam Langton" />
+    <link href="libs/remark-css/default.css" rel="stylesheet" />
+    <link rel="stylesheet" href="my-theme.css" type="text/css" />
+  </head>
+  <body>
+    <textarea id="source">
+class: center, middle, inverse, title-slide
+
+# <div style="white-space: pre-line;">Getting Started in R
+an introduction to data analysis and visualisation</div>
+## Reading in Data from API
+### Réka Solymosi, Henry Partridge &amp; Sam Langton
+
+---
+
+
+
+
+class: inverse, center, middle
+
+# API
+
+---
+### What are APIs?
+
+###A set of functions and procedures that allow the creation of applications which access the features or data of an operating system, application, or other service.
+
+---
+### What are APIs?
+
+###You’ve probably heard of companies packaging APIs as products. For example, Weather Underground sells access to its weather data API.
+
+---
+### Example: Twitter API
+
+&lt;img src="https://static-content.springer.com/image/art%3A10.1186%2Fs40163-015-0023-8/MediaObjects/40163_2015_23_Fig3_HTML.gif" height="400px" /&gt;
+
+[Spatio-temporal crime hotspots and the ambient population](https://link.springer.com/article/10.1186/s40163-015-0023-8)
+
+---
+### Example: Twitter API
+
+&lt;img src="https://img.washingtonpost.com/wp-apps/imrs.php?src=https://img.washingtonpost.com/news/the-intersect/wp-content/uploads/sites/32/2016/09/alt-right-radicalization.png&amp;w=1484" height="400px" /&gt;
+
+[These charts show exactly how racist and radical the alt-right has gotten this year](https://www.washingtonpost.com/news/the-intersect/wp/2016/09/26/these-charts-show-exactly-how-racist-and-radical-the-alt-right-has-gotten-this-year/?utm_term=.a7139c409e4b)
+
+---
+### Authentication
+
+###To access the API you need credentials
+
+[dev.twitter.com](https://dev.twitter.com/)
+
+---
+### Script to get data
+
+###To access the API you need a script to get data
+
+
+```r
+library(twitteR)
+
+twitter_result &lt;- searchTwitter(search_word, n=number_of_tweets, geocode= paste(loc_of_tweets, search_radius, sep=","))
+```
+
+---
+### Let's try!
+
+![](https://media.giphy.com/media/3o6ZsUdQYvPAyT1hxm/giphy.gif)
+    </textarea>
+<script src="https://remarkjs.com/downloads/remark-latest.min.js"></script>
+<script>var slideshow = remark.create({
+"highlightStyle": "github",
+"highlightLines": true,
+"countIncrementalSlides": false
+});
+if (window.HTMLWidgets) slideshow.on('afterShowSlide', function (slide) {
+  window.dispatchEvent(new Event('resize'));
+});
+(function() {
+  var d = document, s = d.createElement("style"), r = d.querySelector(".remark-slide-scaler");
+  if (!r) return;
+  s.type = "text/css"; s.innerHTML = "@page {size: " + r.style.width + " " + r.style.height +"; }";
+  d.head.appendChild(s);
+})();</script>
+
+<script type="text/x-mathjax-config">
+MathJax.Hub.Config({
+  tex2jax: {
+    skipTags: ['script', 'noscript', 'style', 'textarea', 'pre']
+  }
+});
+</script>
+<!-- dynamically load mathjax for compatibility with self-contained -->
+<script>
+(function () {
+  var script = document.createElement('script');
+  script.type = 'text/javascript';
+  script.src  = 'https://cdn.bootcss.com/mathjax/2.7.1/MathJax.js?config=TeX-MML-AM_CHTML';
+  if (location.protocol !== 'file:' && /^https?:/.test(script.src))
+    script.src  = script.src.replace(/^https?:/, '');
+  document.getElementsByTagName('head')[0].appendChild(script);
+})();
+</script>
+  </body>
+</html>

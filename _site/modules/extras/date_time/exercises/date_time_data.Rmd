@@ -1,0 +1,208 @@
+---
+title: "Dealing with Temporal Data"
+author: "Réka Solymosi, Henry Partridge & Sam Langton"
+#date: '6 July 2018'
+output:
+  html_document:
+    toc: yes
+    toc_depth: '4'
+  github_document: default
+  html_notebook:
+    code_folding: show
+    highlight: textmate
+    theme: cosmo
+    toc: yes
+    toc_depth: 4
+    toc_float: yes
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo=TRUE, cache=TRUE, prompt=FALSE, tidy=TRUE, comment=NA, message=TRUE, warning=FALSE)
+
+# load necessary packages
+```
+
+***
+
+Most social phenomena that social scientists cover happen in a place and at a time. The spatial and temporal dimension of data is very important, and are used in a variety of settings and research questions. For instance, police forces need to understand crime both in terms of time and space to keep the public safe, given their limited resources. Allocating police patrols to suburban areas at 11pm on a Friday evening is perhaps not the best use of resources, for example. That's why police forces record crime that is geocoded and timestamped: analysing historical trends this way can help them allocate resources effectively and efficiently. 
+
+
+##Date time objects in R
+
+When discussing data types, we mentioned the datetime object. If we convert our variable that holds the temporal information about our data to a datetime object, we gain access to functions and the ability to draw inferences from this variable which we would not be able to do if we just classed it as a factor. To illustrate some of the potential here, I will introduce the `lubridate` package. So for this tutorial, if you don't already have it installed, you will need to install this package: 
+
+
+```{r, eval=FALSE}
+install.packages("lubridate")
+```
+
+
+And if you have done that already, then load it up:
+
+
+```{r}
+library(lubridate)
+```
+
+
+You will also need to work with some data. Here I have collected some twitter data that mentions the TV show 'Twin Peaks'. If you are familiar with this show, then that's awesome, I hope that you are watching the new series! If not, well that's alright as well, and it's not crucial to understanding the course contents (but you should spend some time this summer watching it though). 
+
+So load up your data. You can find this data set on github, so you can read it in from there:
+
+```{r}
+tweets_df <- read.csv("https://raw.githubusercontent.com/rcatlord/GSinR_materials/master/data/twinPeaksTweets.csv?token=AG9Cmy8EVUkF2TyNytFRpet-M7e-NzEfks5ZT_KRwA%3D%3D")
+```
+
+
+Now we can use the functions from the lubridate package to play around with the time and dates from this data. If you have a look at the data frame, you will see that the `created` column seems to contain something that looks suspiciously like datetime data. 
+
+But recall we used the `typeof()` and `class()` functions to check what such data actually looked like. So we can do this again, to determine whether these columns contain date variables, or if we have to convert between them: 
+
+```{r}
+typeof(tweets_df$created)
+```
+
+and
+
+```{r}
+class(tweets_df$created)
+```
+
+
+It's not, so we will have to convert
+
+##Converting to a datetime object
+
+Now in order to transform it to a datetime object, it needs to be of type **character**. We transform it using the `as.character()` function:
+
+
+```{r}
+tweets_df$created <- as.character(tweets_df$created)
+```
+
+
+So the next step is to use a function from the lubridate package. The function we will use, however will depend on the format of our data. What do I mean? Well to illustrate, have a look at a function: 
+
+`mdy_hms()`
+
+Hmm.. well what if I told you, that if your data were coming from the UK, you would probably prefer the function:
+
+`dmy_hms()`
+
+Yes, you guessed it, the function depends on the order of the values that represent the day, the month, the year, and also the hours, the minutes, and the seconds. It's also possible that you don't have time, only day in a variable. In that case, you could use:
+
+`dmy()`
+
+Now based on this syntax, let's have a look at our data. 
+
+```{r}
+head(tweets_df$created)
+```
+
+Looks like we've got year then month then day! And also we have hour, minute, and second. 
+So we are most likely to want to use a function that looks like this: 
+
+`ymd_hms()`
+
+Let's give it a go:
+
+
+```{r}
+tweets_df$created <- ymd_hms(tweets_df$created)
+```
+
+
+Now have a look at your data again:
+
+
+```{r}
+head(tweets_df$created)
+```
+
+
+OK, looks good, no changes... But... it's what's on the inside that counts...! Let's see it's class one more time: 
+
+
+```{r}
+class(tweets_df$created)
+```
+
+
+What is thaaaat? Well in R there are two basic classes of date/times. Class "POSIXct" represents the (signed) number of seconds since the beginning of 1970 (in the UTC time zone) as a numeric vector. Class "POSIXlt" is a named list of vectors representing seconds (0–61), minutes (0–59), hours (0-23), day of the month (1-31), months after the first of the year (0-11), year (years since 1900), day of the week (0-6), and day of the year (0-365). "POSIXct" is more convenient for including in data frames, and "POSIXlt" is closer to human-readable forms. A virtual class "POSIXt" exists from which both of the classes inherit: it is used to allow operations such as subtraction to mix the two classes.
+
+So when the `class()` function returns this answer, that means we have ourselves some date or datetime objects, that we can then do date-related things to. Let's look at some of these below.
+
+
+##Using lubridate to extract information
+
+Now why is this useful, well now we can grab information out of this variable, which we would not have been able to do, if it were another class of object, such as a factor. I'll demonstrate some of the cool stuff we can do with that here: 
+
+You can for example get the month into a separate column, if you want to compare tweets month by month: 
+
+
+```{r}
+tweets_df$created_month <- month(tweets_df$created, label = TRUE)
+```
+
+
+Or you can get the day of the week, if you wanted to look at what days of the week people were tweeting about an issue more or less frequently
+
+
+```{r}
+tweets_df$created_day <- wday(tweets_df$created, label = TRUE)
+```
+
+
+And we can get more granular if we want to look at what it's like at different hours of the day: 
+
+
+```{r}
+tweets_df$created_hour <- hour(tweets_df$created)
+```
+
+
+You might see above, that for the `month()` and the `wday()` functions we also pass a label parameter, and set it to TRUE. This means that the resulting variable will have text labels. Jan, Feb, Mar, etc for months, and Sun, Mon, Tue for days of the week. If we set this to FALSE (or do not pass this parameter, as the function's default is to set this to false) then we get numbers that represent these instead. So instead of May, we would get 5. You can give this a go if you'd like to:
+
+```{r}
+tweets_df$created_day <- wday(tweets_df$created, label = TRUE)
+head(tweets_df$created_day)
+```
+
+
+versus
+
+
+```{r}
+tweets_df$created_day <- wday(tweets_df$created)
+head(tweets_df$created_day)
+```
+
+
+As a personal preference I usually always use labels. Less space for confusion!
+
+So let's stick to that: 
+
+```{r}
+tweets_df$created_day <- wday(tweets_df$created, label=TRUE)
+```
+
+
+Now that we have these values extracted, we can do some cool things with this data. Unfortunately we do not have loads of time to go off on these fun tangents but you can look into time series analysis [link here](), or something else here. 
+
+
+Or you can just make sort of temporal heatmaps. Here is one for the tweets using the ggplot2() package. This doesn't have to make sense just yet, but we will be covering ggplot2() for graphing soon, and so you will be able to make sense of this code and create similar graphs soon! But just to illustrate this is a day/hour heatmap of our tweets about twin peaks: 
+
+
+```{r}
+library(ggplot2)
+
+t <- as.data.frame(table(tweets_df$created_hour, tweets_df$created_day))
+
+p <- ggplot(t, aes(Var1, Var2)) + 
+  geom_tile(aes(fill = Freq), colour = "white") + 
+  scale_fill_gradient(low = "white", high = "steelblue")
+
+p
+```
+
+You can see that the majority of tweets came in just after (and during) the premier of the new season (after 25 years!!!) on Monday, followed by some lingering discussion on Tuesday. Exciting stuff (and relatively easy to produce :) )

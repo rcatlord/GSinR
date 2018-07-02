@@ -1,0 +1,185 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <title></title>
+    <meta charset="utf-8">
+    <meta name="author" content="Réka Solymosi, Henry Partridge &amp; Sam Langton" />
+    <link href="libs/remark-css/default.css" rel="stylesheet" />
+    <link rel="stylesheet" href="my-theme.css" type="text/css" />
+  </head>
+  <body>
+    <textarea id="source">
+class: center, middle, inverse, title-slide
+
+# <div style="white-space: pre-line;">Getting Started in R
+an introduction to data analysis and visualisation</div>
+## Tidy
+### Réka Solymosi, Henry Partridge &amp; Sam Langton
+### 4 July 2018
+
+---
+
+
+
+
+class: inverse, center, middle
+
+![tidyr](img/tidyr.png)
+
+---
+### Tidy data
+
+Tidy data are structured for use in R and satisfy three rules:
+
+1. Each variable must have its own column
+2. Each observation must have its own row
+3. Each value must have its own cell.
+
+(Grolemund and Wickham 2017:149)
+
+There are two of tidy data formats: wide and long.
+
+---
+
+###  Tidy data
+
+![](http://garrettgman.github.io/images/tidy-1.png)&lt;!-- --&gt;
+
+[Source: Data Science with R, Garrett Grolemund](http://garrettgman.github.io/tidying/)
+
+---
+
+### Why tidy data?
+
+“Tidy datasets are all alike but every messy dataset is messy in its own way.”  
+  – Hadley Wickham
+
+---
+
+### Data
+
+```r
+wide &lt;- data.frame(Date = c("01-01-2017","02-01-2017","03-01-2017"),
+                    Burglary = c(7,5,13),
+                    Drugs = c(1,3,9),
+                    Robbery = c(9,0,9),
+                    Shoplifting = c(4,5,1))
+wide
+```
+
+```
+##         Date Burglary Drugs Robbery Shoplifting
+## 1 01-01-2017        7     1       9           4
+## 2 02-01-2017        5     3       0           5
+## 3 03-01-2017       13     9       9           1
+```
+
+---
+### `gather()`
+For when your columns are values, not variables (wide to long)
+
+```r
+long &lt;- gather(wide, category, count, -Date)
+long
+```
+
+```
+#          Date    category count
+# 1  01-01-2017    Burglary     7
+# 2  02-01-2017    Burglary     5
+# 3  03-01-2017    Burglary    13
+# 4  01-01-2017       Drugs     1
+# 5  02-01-2017       Drugs     3
+# 6  03-01-2017       Drugs     9
+# 7  01-01-2017     Robbery     9
+# 8  02-01-2017     Robbery     0
+# 9  03-01-2017     Robbery     9
+# 10 01-01-2017 Shoplifting     4
+# 11 02-01-2017 Shoplifting     5
+# 12 03-01-2017 Shoplifting     1
+```
+
+---
+### `spread()`
+For when observations have multiple rows (long to wide)
+
+```r
+wide &lt;- spread(long, category, count)
+wide
+```
+
+```
+#         Date Burglary Drugs Robbery Shoplifting
+# 1 01-01-2017        7     1       9           4
+# 2 02-01-2017        5     3       0           5
+# 3 03-01-2017       13     9       9           1
+```
+
+---
+### `separate()`
+Split columns
+
+```r
+split &lt;- separate(wide, Date, c("Day", "Month", "Year"), sep = "-")
+split
+```
+
+```
+#   Day Month Year Burglary Drugs Robbery Shoplifting
+# 1  01    01 2017        7     1       9           4
+# 2  02    01 2017        5     3       0           5
+# 3  03    01 2017       13     9       9           1
+```
+
+---
+### `unite()`
+Join columns
+
+```r
+united &lt;- unite(split, Date, c(Day, Month, Year), sep = "-")
+united
+```
+
+```
+#         Date Burglary Drugs Robbery Shoplifting
+# 1 01-01-2017        7     1       9           4
+# 2 02-01-2017        5     3       0           5
+# 3 03-01-2017       13     9       9           1
+```
+    </textarea>
+<script src="https://remarkjs.com/downloads/remark-latest.min.js"></script>
+<script>var slideshow = remark.create({
+"highlightStyle": "github",
+"highlightLines": true,
+"countIncrementalSlides": false
+});
+if (window.HTMLWidgets) slideshow.on('afterShowSlide', function (slide) {
+  window.dispatchEvent(new Event('resize'));
+});
+(function() {
+  var d = document, s = d.createElement("style"), r = d.querySelector(".remark-slide-scaler");
+  if (!r) return;
+  s.type = "text/css"; s.innerHTML = "@page {size: " + r.style.width + " " + r.style.height +"; }";
+  d.head.appendChild(s);
+})();</script>
+
+<script type="text/x-mathjax-config">
+MathJax.Hub.Config({
+  tex2jax: {
+    skipTags: ['script', 'noscript', 'style', 'textarea', 'pre']
+  }
+});
+</script>
+<!-- dynamically load mathjax for compatibility with self-contained -->
+<script>
+(function () {
+  var script = document.createElement('script');
+  script.type = 'text/javascript';
+  script.src  = 'https://cdn.bootcss.com/mathjax/2.7.1/MathJax.js?config=TeX-MML-AM_CHTML';
+  if (location.protocol !== 'file:' && /^https?:/.test(script.src))
+    script.src  = script.src.replace(/^https?:/, '');
+  document.getElementsByTagName('head')[0].appendChild(script);
+})();
+</script>
+  </body>
+</html>
