@@ -14,8 +14,6 @@ The following is a list of online resources that you might find useful:
 - [Quick-R](http://www.statmethods.net/)
 - [Cookbook for R](http://www.cookbook-r.com/)
 - [RStudio Cheat Sheets](https://www.rstudio.com/resources/cheatsheets/)
-- [R Graph Catalog](http://shinyapps.stat.ubc.ca/r-graph-catalog/)
-- [Color Brewer](https://github.com/rcatlord/GSinR_materials/blob/master/mini-project/data/variables.csv)
 
 **Style guides**
 
@@ -27,8 +25,7 @@ The following is a list of online resources that you might find useful:
 - [Google Developers: Intro to R](https://www.youtube.com/playlist?list=PLOU2XLYxmsIK9qQfztXeybpHvru-TrqAP)
 - [RStudio webinars](https://www.rstudio.com/resources/webinars/)
 - [Johns Hopkins Data Science Specialization](https://www.coursera.org/specializations/jhu-data-science) on Coursera
-- [UserR! 2016 Session Videos](https://channel9.msdn.com/Events/useR-international-R-User-conference/useR2016)
-- [Finding and Telling Stories with R](https://www.rstudio.com/resources/videos/finding-and-telling-stories-with-r/), a presentation by Andrew Flowers at rstudio::conf 2017
+- [UserR! 2017 Session Videos](https://channel9.msdn.com/Events/useR-international-R-User-conferences/useR-International-R-User-2017-Conference)
 
 **Blogs**
 
@@ -40,24 +37,28 @@ The following is a list of online resources that you might find useful:
 **Communities**
 
 - [StackOverflow](https://stackoverflow.com/questions/tagged/r)
+- [RStudio Community](https://community.rstudio.com)
 - [Twitter #rstats hashtag](https://twitter.com/search?q=%23rstats&src=tyah)
-- [Twitter #rbeginners hashtag](https://twitter.com/hashtag/rbeginners?src=hash)
 
 **R user groups**
 
 - [Manchester R](http://www.rmanchester.org/)
 - [London R](http://www.londonr.org/)
+- [R-Ladies](https://rladies.org)
 
 **Data visualisation**
 
-- [Dear Data](http://www.dear-data.com/theproject/)
 - [Edward Tufte](https://www.edwardtufte.com/tufte/)
 - [The Functional Art](http://www.thefunctionalart.com)
-- [Flowing Data](http://flowingdata.com)
-- [Information is Beautiful](http://www.informationisbeautiful.net)
-- [Visualising Data](http://www.visualisingdata.com)
-- [FT Visual Vocabulary](http://ft-interactive.github.io/visual-vocabulary/)
+- [Storytelling with Data](http://www.storytellingwithdata.com)
+- [Chartable by Datawrapper](https://blog.datawrapper.de)
 
+**Data sources**
+
+- [Gapminder](http://www.gapminder.org/data/)
+- [Our World in Data](https://ourworldindata.org)
+- [FiveThirtyEight](https://github.com/fivethirtyeight/data)
+- [ProPublica](https://www.propublica.org/datastore/)
 
 <br>
 <br>
