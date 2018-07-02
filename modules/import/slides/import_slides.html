@@ -1,0 +1,590 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <title></title>
+    <meta charset="utf-8">
+    <meta name="author" content="Réka Solymosi, Henry Partridge &amp; Sam Langton" />
+    <link href="libs/remark-css/default.css" rel="stylesheet" />
+    <link rel="stylesheet" href="my-theme.css" type="text/css" />
+  </head>
+  <body>
+    <textarea id="source">
+class: center, middle, inverse, title-slide
+
+# <div style="white-space: pre-line;">Getting Started in R
+an introduction to data analysis and visualisation</div>
+## Import
+### Réka Solymosi, Henry Partridge &amp; Sam Langton
+### 2 July 2018
+
+---
+
+
+
+
+class: inverse, center, middle
+
+# Import
+
+---
+### Sources of data
+
+- Files stored on your computer
+- Web link
+- Database
+- Web page
+- Application Programming Interface (API)
+
+---
+### Data formats
+
+.pull-left[
+#### Rectangular
+- CSV (.csv)
+- Excel files (.xls, .xlsx)
+- SPSS, Stata, and SAS files (.sav, .dta, .sas)
+]
+
+.pull-right[
+#### Hierarchical
+- eXtensible Markup Language (.xml)
+- JavaScript Object Notation (.json)
+- Geographic JavaScript Object Notation (.geojson)
+]
+
+---
+### Reading in data
+
+.pull-left[
+#### Rectangular
+#### .csv
+
+```r
+library(readr)
+read_csv()
+```
+
+#### .xls, .xlsx
+
+```r
+library(readxl)
+read_excel()
+```
+
+#### .sav, .dta, .sas
+
+```r
+library(haven)
+read_sav()
+read_dta()
+read_sas()
+```
+]
+
+.pull-right[
+#### Hierarchical
+#### .xml
+```r
+library(xml2)
+read_xml()
+```
+
+#### .json
+```r
+library(jsonlite)
+read_json()
+```
+
+#### .geojson
+```r
+library(sf)
+st_read()
+```
+]
+
+---
+class: inverse, middle, center
+
+# Parse
+
+---
+### Parsing data
+The process of ...
+
+1. converting a text file into a matrix of rows and columns and,
+2. coercing columns to different data type(s)
+
+---
+#### .csv, .xls, .xlsx
+
+
+```r
+library(readr)
+read_csv(
+"country,continent,year,lifeExp,pop,gdpPercap\
+Italy,Europe,2007,80.546,58147733,28569.7197\
+Nigeria,Africa,2007,46.859,135031164,2013.977305"
+)
+```
+
+```
+# # A tibble: 2 x 6
+#   country continent  year lifeExp       pop gdpPercap
+#   &lt;chr&gt;   &lt;chr&gt;     &lt;int&gt;   &lt;dbl&gt;     &lt;int&gt;     &lt;dbl&gt;
+# 1 Italy   Europe     2007    80.5  58147733    28570.
+# 2 Nigeria Africa     2007    46.9 135031164     2014.
+```
+
+---
+#### .xml
+.pull-left[
+
+```r
+library(xml2)
+xml &lt;- 
+'&lt;?xml version="1.0" encoding="UTF-8"?&gt;
+&lt;root&gt;
+  &lt;row&gt;
+    &lt;country&gt;Iceland&lt;/country&gt;
+    &lt;continent&gt;Europe&lt;/continent&gt;
+    &lt;year&gt;2007&lt;/year&gt;
+    &lt;lifeExp&gt;81.757&lt;/lifeExp&gt;
+    &lt;pop&gt;301931&lt;/pop&gt;
+    &lt;gdpPercap&gt;36180.78919&lt;/gdpPercap&gt;
+  &lt;/row&gt;
+  &lt;row&gt;
+    &lt;country&gt;Italy&lt;/country&gt;
+    &lt;continent&gt;Europe&lt;/continent&gt;
+    &lt;year&gt;2007&lt;/year&gt;
+    &lt;lifeExp&gt;80.546&lt;/lifeExp&gt;
+    &lt;pop&gt;58147733&lt;/pop&gt;
+    &lt;gdpPercap&gt;28569.7197&lt;/gdpPercap&gt;
+  &lt;/row&gt;
+&lt;/root&gt;'
+```
+]
+.pull-right[
+
+```r
+*xml_obj &lt;- read_xml(xml)
+*country &lt;- xml_text(xml_find_all(xml_obj, "//country"))
+*continent &lt;- xml_text(xml_find_all(xml_obj, "//continent"))
+*year &lt;- xml_text(xml_find_all(xml_obj, "//year"))
+*lifeExp &lt;- xml_text(xml_find_all(xml_obj, "//lifeExp"))
+*pop &lt;- xml_text(xml_find_all(xml_obj, "//pop"))
+*gdpPercap &lt;- xml_text(xml_find_all(xml_obj, "//gdpPercap"))
+*data.frame(country, continent, year, lifeExp, pop, gdpPercap)
+```
+
+```
+#   country continent year lifeExp      pop   gdpPercap
+# 1 Iceland    Europe 2007  81.757   301931 36180.78919
+# 2   Italy    Europe 2007  80.546 58147733  28569.7197
+```
+]
+
+---
+#### .json
+
+
+```r
+library(jsonlite)
+json &lt;- 
+'[
+  {
+    "country": "Italy",
+    "continent": "Europe",
+    "year": 2007,
+    "lifeExp": 80.546,
+    "pop": 58147733,
+    "gdpPercap": 28569.7197
+  },
+  {
+    "country": "Nigeria",
+    "continent": "Africa",
+    "year": 2007,
+    "lifeExp": 46.859,
+    "pop": 135031164,
+    "gdpPercap": 2013.977305
+  }
+]'
+*fromJSON(json)
+```
+
+```
+#   country continent year lifeExp       pop gdpPercap
+# 1   Italy    Europe 2007  80.546  58147733 28569.720
+# 2 Nigeria    Africa 2007  46.859 135031164  2013.977
+```
+
+---
+#### .geojson
+.pull-left[
+
+```r
+library(sf)
+*italy &lt;- st_read("https://code.highcharts.com/mapdata/countries/it/it-all.geo.json", quiet = TRUE)
+as.data.frame(italy)[1:5, 14:15]
+```
+
+```
+#        name country
+# 1    Napoli   Italy
+# 2   Trapani   Italy
+# 3   Palermo   Italy
+# 4   Messina   Italy
+# 5 Agrigento   Italy
+```
+
+```r
+plot(st_geometry(italy))
+```
+
+![](import_slides_files/figure-html/unnamed-chunk-5-1.png)&lt;!-- --&gt;
+]
+
+.pull-right[
+
+```r
+*nigeria &lt;- st_read("https://code.highcharts.com/mapdata/countries/ng/ng-all.geo.json", quiet = TRUE)
+as.data.frame(nigeria)[1:5, 14:15]
+```
+
+```
+#      name country
+# 1  Rivers Nigeria
+# 2 Katsina Nigeria
+# 3  Sokoto Nigeria
+# 4 Zamfara Nigeria
+# 5    Yobe Nigeria
+```
+
+```r
+plot(st_geometry(nigeria))
+```
+
+![](import_slides_files/figure-html/unnamed-chunk-6-1.png)&lt;!-- --&gt;
+]
+
+---
+### Coercing columns to different data type
+
+- `logical` variables can store TRUE or FALSE
+- `integer` variables can only store whole numbers
+- `double` variables can store decimal numbers
+- `character` variables can store strings of characters
+- `date` variables can store a date - time
+- `factor` variables can store a fixed and known set of possible values
+
+---
+#### .csv, .xls, .xlsx
+
+
+```r
+library(readr)
+df &lt;- read_csv(
+"country,continent,year,lifeExp,pop,gdpPercap\
+Italy,Europe,2007,80.546,58147733,28569.7197\
+Nigeria,Africa,2007,46.859,135031164,2013.977305",
+*col_types = cols(
+* country = col_character(),
+* continent = col_character(),
+* year = col_integer(),
+* lifeExp = col_double(),
+* pop = col_integer(),
+* gdpPercap = col_double()
+* )
+)
+glimpse(df)
+```
+
+```
+# Observations: 2
+# Variables: 6
+# $ country   &lt;chr&gt; "Italy", "Nigeria"
+# $ continent &lt;chr&gt; "Europe", "Africa"
+# $ year      &lt;int&gt; 2007, 2007
+# $ lifeExp   &lt;dbl&gt; 80.546, 46.859
+# $ pop       &lt;int&gt; 58147733, 135031164
+# $ gdpPercap &lt;dbl&gt; 28569.720, 2013.977
+```
+
+---
+### Defining dates and times
+- Coerce variables as dates when you need to create a plot, extract information or conduct time series analysis.
+
+.pull-left[
+
+```r
+parse_date("03-07-18", "%d-%m-%y")
+```
+
+```
+# [1] "2018-07-03"
+```
+
+```r
+parse_date("03-07-18", "%m-%d-%y")
+```
+
+```
+# [1] "2018-03-07"
+```
+
+```r
+parse_date("03-07-18", "%y-%m-%d")
+```
+
+```
+# [1] "2003-07-18"
+```
+
+```r
+# as.Date(x, "%d-%m-%y")
+```
+]
+
+.pull-right[
+| Symbol | Description | Example  |
+|:--- |:---- |:---- |
+|%d| day as a number | 02 |
+|%a| abbreviated day | Tue |
+|%A| day | Tuesday |
+|%m| month as a number | 07 |
+|%b| abbreviated month | Jul |
+|%B| month | July |
+|%y| 2-digit year | 18 |
+|%Y| 4-digit year |  2018 |
+]
+
+---
+### Defining factors
+- Coerce variables to factors when you need a specific ordering of string values, e.g. in a model or a plot.
+
+
+```r
+parse_factor(df$country, levels = c("Italy", "Nigeria"))
+```
+
+```
+# [1] Italy   Nigeria
+# Levels: Italy Nigeria
+```
+
+```r
+df$country &lt;- factor(df$country, 
+                     levels = unique(df$country),
+                     ordered = FALSE)
+```
+
+---
+class: inverse, middle, center
+
+# Delving into factors
+
+---
+### Inspecting factors
+
+```r
+library(gapminder)
+class(gapminder$continent)
+```
+
+```
+# [1] "factor"
+```
+
+```r
+levels(gapminder$continent)
+```
+
+```
+# [1] "Africa"   "Americas" "Asia"     "Europe"   "Oceania"
+```
+
+---
+### Dropping unused factor levels
+
+```r
+g7 &lt;- gapminder %&gt;% 
+  filter(country %in% c("Canada", "France", "Germany", "Italy", "Japan", "United Kingdom", "United States"))
+levels(g7$country)[1:20]
+```
+
+```
+#  [1] "Afghanistan"            "Albania"               
+#  [3] "Algeria"                "Angola"                
+#  [5] "Argentina"              "Australia"             
+#  [7] "Austria"                "Bahrain"               
+#  [9] "Bangladesh"             "Belgium"               
+# [11] "Benin"                  "Bolivia"               
+# [13] "Bosnia and Herzegovina" "Botswana"              
+# [15] "Brazil"                 "Bulgaria"              
+# [17] "Burkina Faso"           "Burundi"               
+# [19] "Cambodia"               "Cameroon"
+```
+
+```r
+g7$country &lt;- droplevels(g7$country)
+levels(g7$country)
+```
+
+```
+# [1] "Canada"         "France"         "Germany"        "Italy"         
+# [5] "Japan"          "United Kingdom" "United States"
+```
+
+---
+### Recoding factors
+
+```r
+library(forcats)
+g7$country &lt;- g7$country %&gt;%
+  fct_recode("UK" = "United Kingdom", "USA" = "United States") 
+levels(g7$country)
+```
+
+```
+# [1] "Canada"  "France"  "Germany" "Italy"   "Japan"   "UK"      "USA"
+```
+
+---
+### Reordering factors
+
+
+```r
+g7_2007 &lt;- g7 %&gt;% filter(year == 2007)
+levels(g7_2007$country)
+```
+
+```
+# [1] "Canada"  "France"  "Germany" "Italy"   "Japan"   "UK"      "USA"
+```
+
+```r
+ggplot(g7_2007, aes(x = gdpPercap, y = country)) +
+  geom_point() +
+  labs(x = "GDP per capita", y = NULL) +
+  theme_minimal()
+```
+
+![](import_slides_files/figure-html/unnamed-chunk-13-1.png)&lt;!-- --&gt;
+
+---
+### Reordering factors
+
+```r
+fct_reorder(g7_2007$country, g7_2007$gdpPercap, .desc = TRUE) %&gt;% 
+  levels()
+```
+
+```
+# [1] "USA"     "Canada"  "UK"      "Germany" "Japan"   "France"  "Italy"
+```
+
+```r
+ggplot(g7_2007, aes(x = gdpPercap, y = fct_reorder(country, gdpPercap))) +
+  geom_point() +
+  labs(x = "GDP per capita", y = NULL) +
+  theme_minimal()
+```
+
+![](import_slides_files/figure-html/unnamed-chunk-14-1.png)&lt;!-- --&gt;
+
+---
+class: inverse, middle, center
+
+# Export
+
+---
+### Writing out data
+
+.pull-left[
+#### Rectangular
+#### .csv
+
+```r
+library(readr)
+write_csv()
+```
+
+#### .xls, .xlsx
+
+```r
+library(readxl)
+write_excel()
+```
+
+#### .sav, .dta, .sas
+
+```r
+library(haven)
+write_sav()
+write_dta()
+write_sas()
+```
+]
+
+.pull-right[
+#### Hierarchical
+#### .xml
+```r
+library(xml2)
+write_xml()
+```
+
+#### .json
+```r
+library(jsonlite)
+write_json()
+```
+
+#### .geojson
+```r
+library(sf)
+st_write()
+```
+]
+
+---
+### Please note
+
+- R stores factors as integer codes 1, 2, 3 etc. not character strings. So ensure that you set your factor levels.
+- Column type information is lost when you export to a CSV. Recommend exporting to .Rds, the native R data format using `write_rds()`
+    </textarea>
+<script src="https://remarkjs.com/downloads/remark-latest.min.js"></script>
+<script>var slideshow = remark.create({
+"highlightStyle": "github",
+"highlightLines": true,
+"countIncrementalSlides": false
+});
+if (window.HTMLWidgets) slideshow.on('afterShowSlide', function (slide) {
+  window.dispatchEvent(new Event('resize'));
+});
+(function() {
+  var d = document, s = d.createElement("style"), r = d.querySelector(".remark-slide-scaler");
+  if (!r) return;
+  s.type = "text/css"; s.innerHTML = "@page {size: " + r.style.width + " " + r.style.height +"; }";
+  d.head.appendChild(s);
+})();</script>
+
+<script type="text/x-mathjax-config">
+MathJax.Hub.Config({
+  tex2jax: {
+    skipTags: ['script', 'noscript', 'style', 'textarea', 'pre']
+  }
+});
+</script>
+<!-- dynamically load mathjax for compatibility with self-contained -->
+<script>
+(function () {
+  var script = document.createElement('script');
+  script.type = 'text/javascript';
+  script.src  = 'https://cdn.bootcss.com/mathjax/2.7.1/MathJax.js?config=TeX-MML-AM_CHTML';
+  if (location.protocol !== 'file:' && /^https?:/.test(script.src))
+    script.src  = script.src.replace(/^https?:/, '');
+  document.getElementsByTagName('head')[0].appendChild(script);
+})();
+</script>
+  </body>
+</html>

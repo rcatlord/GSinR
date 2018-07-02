@@ -45,8 +45,10 @@ navbar:
       href: modules/visualise/exercises/visualise_data.html
   - text: Model
     menu:
-    - text: basic_stats
-      href: modules/model/basic_stats.html
+    - text: slides
+      href: modules/model/slides/model_slides.html
+    - text: exercise
+      href: modules/model/exercises/model_data.html
   - text: Report
     menu:
     - text: slides
