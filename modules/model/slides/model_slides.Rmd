@@ -1,0 +1,176 @@
+---
+title: | 
+    | Getting Started in R
+    | an introduction to data analysis and visualisation
+subtitle: "Modeling Data"
+author: "Réka Solymosi, Henry Partridge & Sam Langton"
+date: "`r format(Sys.time(), '%d-%b-%Y')`"
+output:
+  xaringan::moon_reader:
+    css: ["default", "my-theme.css"]
+    lib_dir: libs
+    nature:
+      highlightStyle: github
+      highlightLines: true
+      countIncrementalSlides: false
+editor_options: 
+  chunk_output_type: console
+---
+
+```{r setup, include=FALSE}
+options(htmltools.dir.version = FALSE)
+```
+
+class: inverse, center, middle
+
+# Modeling Data
+
+---
+## Making inferences from data
+
+
+---
+## Univariate 
+
+### Summary of one variable
+
+
+---
+## Univariate 
+
+For all variables in dataframe
+
+```{r, echo=FALSE}
+library(gapminder)
+```
+
+```{r}
+summary(gapminder)
+```
+
+---
+## Univariate 
+
+For all variables in dataframe with skimr
+
+```{r}
+library(skimr)
+```
+
+---
+
+```{r}
+gapminder %>%  skim()
+```
+
+
+---
+## Bivariate stats 
+
+### making comparisons
+
+---
+##Numeric - numeric
+
+```{r, eval=FALSE}
+cor( var1, var2, method = "method")
+```
+
+```{r, eval=FALSE}
+cor.test(var1, var2, method = "method")
+```
+
+---
+##Categorical - categorical
+
+###Cross tabs
+
+```{r, eval=FALSE}
+
+chisq.test(table(var1, var2))
+
+```
+
+```{r, eval=FALSE}
+fisher.test(table(var1, var2))
+```
+
+---
+##Categorical - categorical
+
+###Odds ratio
+
+```{r, eval = FALSE}
+library(vcd)
+
+oddsratio(table(var1, var2)) 
+```
+
+---
+##Categorical - numeric
+
+```{r, eval = FALSE}
+
+#t-test
+t.test(var1 ~ var2)
+
+#anova
+aov(var1 ~ var2, data=mydataframe)
+
+
+```
+
+---
+##Multivariate 
+
+```{r, eval = FALSE}
+
+fit_1 <- glm(dependent_var ~ independent_var_1 + independent_var_2, data = mydata)
+summary(fit_1)
+
+```
+
+---
+##Multivariate 
+
+```{r}
+fit_2 <- glm(lifeExp ~ continent + gdpPercap, data = gapminder)
+summary(fit_2)
+
+```
+
+---
+##Multivariate 
+
+```{r}
+library(car)
+
+residualPlots(fit_2)
+```
+
+---
+##Multivariate 
+
+```{r}
+marginalModelPlots(fit_2)
+
+```
+
+---
+##Multivariate 
+
+```{r, warning=FALSE, message=FALSE}
+library(effects)
+plot(allEffects(fit_2))
+```
+
+---
+##Multivariate 
+
+```{r, warning=FALSE, message=FALSE}
+library(sjPlot)
+plot_model(fit_2, show.values = TRUE)
+```
+
+
+

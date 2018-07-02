@@ -1,0 +1,509 @@
+---
+title: "Analysing Data in R"
+author: "Reka Solymosi & Henry Partridge"
+date: "`r format(Sys.time(), '%d-%b-%Y')`"
+output:
+  html_document: default
+  
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo=TRUE, cache=TRUE, prompt=FALSE, tidy=TRUE, comment=NA, message=TRUE, warning=FALSE)
+
+# load necessary packages
+```
+
+***
+
+So now that you are familiar with the R syntax, know how to import data, and know how to get that data into the shape and form that you need for your analysis, we can begin to perform some basic operations to explore your data. 
+
+In your normal workflow, we are conscious that lot of your data exploration will come from visualisation. We cover visualisation tomorrow though, so we will stick to your basic stats in this session. We will cover
+
+- Univariate analysis (summary stats)
+- Bivariate analysis ( chi-square test, t-test, anova )
+
+We just want to note that this tutrial is not meant to be a primer in stats, rather just an illustration of how to do these stats in R. We assume that you are already familiar with these techniques. If not, there are a variety of statistics resources out there.
+
+```{r}
+library(tidyverse)
+```
+
+#The data
+
+We will be working through the gapminder data set again. To load this data set into your environment, load the package: 
+
+```{r}
+library(gapminder)
+```
+
+But we also want to do some data manipulation by filtering and creating a new variable we will use later. 
+
+```{r}
+
+gapminder_2007 <- gapminder %>%
+  filter(year==2007) %>%
+  mutate(gdp_factor = if_else(gdpPercap > mean(gdpPercap), "high gdp", "low gdp"), 
+         below_avg_life_exp = if_else(lifeExp < mean(lifeExp), "low life expectancy", "high life expectancy"))
+
+gapminder_2007$gdp_factor <- as.factor(gapminder_2007$gdp_factor)
+gapminder_2007$below_avg_life_exp <- as.factor(gapminder_2007$below_avg_life_exp)
+
+
+
+```
+
+
+#Univariate stats
+
+```{r}
+summary(gapminder_2007$gdpPercap)
+```
+
+```{r}
+sd(gapminder_2007$gdpPercap)
+```
+
+```{r}
+summary(gapminder_2007$gdp_factor)
+```
+
+For the whole dataframe
+
+```{r}
+summary(gapminder_2007)
+```
+
+
+#Bivariate stats
+
+##Numeric - numeric
+
+###Correlation
+
+
+R can perform correlation with the `cor()` function. Built-in to the base distribution of the program are three routines; for Pearson, Kendal and Spearman Rank correlations.
+
+
+The pseudo code to get the correlation coefficient would be:
+
+
+```{r, eval=FALSE}
+cor( var1, var2, method = "method")
+```
+
+
+The default method is "pearson" so you may omit this if that is what you want. If you type "kendall" or "spearman" then you will get the appropriate correlation coefficient.
+
+
+Correlation coefficients
+- The default correlation returns the pearson correlation coefficient:	`cor(var1, var2)`
+- If you specify "spearman" you will get the spearman correlation coefficient:	`cor(var1, var2, method = "spearman")`
+- If you use a datset instead of separate variables you will return a matrix of all the pairwize correlation coefficients:	`cor(dataset, method = "pearson")`
+
+
+Getting a correlation coefficient is generally only half the story; you will want to know if the relationship is significant. The `cor()` function in R can be extended to provide the significance testing required. The function is `cor.test()`
+
+
+To run a correlation test, the pseudo code would look like this:
+
+
+```{r, eval=FALSE}
+cor.test(var1, var2, method = "method")
+```
+
+
+The default method is "pearson" so you may omit this if that is what you want. If you type "kendall" or "spearman" then you will get the appropriate significance test.
+
+
+As usual with R it is a good idea to assign a variable name to your result in case you want to perfom additional operations.
+
+
+Correlation Significance tests
+
+
+- The default method is "pearson"	`cor.p	= cor.test(var1, var2)`
+- If you specify "spearman" you will get the spearman correlation coefficient:	`cor.s	= cor.test(var1, var2, method = "spearman")`
+- To see a summary of your correlation test type the name of the variable e.g. `cor.s`
+
+
+So if we want to test the correlation between life expectancy and GDP per capita, using a pearson correlation, then we would do the following: 
+
+
+```{r}
+
+gapminder_corr <- cor.test(gapminder_2007$lifeExp, gapminder_2007$gdpPercap)
+gapminder_corr
+
+```
+
+
+You can also plot the correlation coefficient on top of a scatterplot of the variables:
+
+
+```{r}
+ggplot(gapminder_2007, aes(x = lifeExp, y = gdpPercap)) +
+  geom_point() +
+  geom_smooth(colour = "red", fill = "lightgreen", method = 'lm')
+```
+
+
+Finally, you can get a correlation matrix, to assess the relationship between all your variables in your data set. For this, we need to select only the quantitative variables in our data set. We should be experts at such subsetting by now, so let's do this by **select**ing the quantitative variables: 
+
+
+```{r}
+
+quant_gap <- gapminder_2007 %>%
+  select(lifeExp, pop, gdpPercap)
+
+```
+
+
+Now print a correlation table of all the quantitative variables:
+
+
+```{r}
+
+res <- cor(quant_gap)
+round(res, 2)
+
+```
+
+
+
+You can also use the `corrplot` package to visualise this:
+
+
+
+```{r, eval=FALSE}
+
+install.packages("corrplot")
+```
+
+
+```{r}
+
+library(corrplot)
+corrplot(cor(quant_gap), type = "upper", order = "hclust", 
+         tl.col = "black", tl.srt = 45)
+
+```
+
+
+The function `corrplot()` takes the correlation matrix as the first argument. The second argument `(type="upper")` is used to display only the upper triangular of the correlation matrix.
+
+
+
+##Categorical - categorical
+
+###Chi-square
+
+So you want to look at a cross-tab between two variables. This is as easy as using the `table()` function, and passing it the two variables as arguments. For example, if we want to look at the relationship between our two dichotomous variables we created about high and low gdp and also below average life expectancy or not, we can just type: 
+
+
+```{r}
+table(gapminder_2007$gdp_factor, gapminder_2007$below_avg_life_exp)
+```
+
+
+Excellent, now we can run a chi square test with the... `chisq.test()` function. Inside the brackets you have to pass a frequency table. Like the one we made below. This can be something you saved as an object, or you can just recreate the table inside the function. 
+
+
+Very straightforward. Now what we want to do is save this to an object: 
+
+
+```{r}
+
+life_exp_v_gdp <- chisq.test(table(gapminder_2007$gdp_factor, gapminder_2007$below_avg_life_exp))
+```
+
+
+Now, we can call all sort of information from this chi square test object: 
+
+
+Your test statistic:
+
+
+```{r}
+life_exp_v_gdp$statistic
+```
+
+
+Your degress of freedom:
+
+
+```{r}
+  life_exp_v_gdp$parameter
+```
+
+
+Your p value: 
+
+
+```{r}
+  life_exp_v_gdp$p.value
+```
+
+
+Your expected counts for the cells: 
+
+
+```{r}
+  life_exp_v_gdp$expected
+```
+
+
+Your residuals:
+
+
+```{r}
+  life_exp_v_gdp$residuals
+```
+
+
+Your standardized residuals: 
+
+
+```{r}
+  life_exp_v_gdp$stdres
+```
+
+
+However if you want to see it all together, you can use the `CrossTable()` function from the `gmodels` package: 
+
+
+```{r, eval=FALSE}
+  install.packages("gmodels")
+```
+
+
+You can even specify for your table to follow the format you might be familiar with from SPSS or SAS. Use `?CrossTable()` to see all the parameters you can specify with this function:  
+
+
+```{r}
+library(gmodels)
+CrossTable(gapminder_2007$gdp_factor, gapminder_2007$below_avg_life_exp , prop.t=FALSE, prop.r=FALSE, prop.c=FALSE, expected = TRUE, resid = TRUE, sresid = TRUE, format = "SPSS")
+
+```
+
+###Fisher test
+
+
+Now since we are all stats-minded people, you may have noticed that we have a very low cell count in one of our cells in our contingency table. Since this can call into doubt our findings, it's always helpful to use tests that account for these issues as well. In this case, the test would be a Fischer exact test, which you carry out in R with the `fisher-test()` function. This function also just needs a contingency table passed to it as an argument: 
+
+
+```{r}
+fisher.test(table(gapminder_2007$gdp_factor, gapminder_2007$below_avg_life_exp))
+```
+
+
+###Odds ratio
+
+To get the odds ratio from a 2 x 2 cross tab, you can use the `oddsratio()` function from the `vcd` package. 
+
+
+```{r, eval=FALSE}
+install.packages("vcd")
+```
+
+
+And again, all you need to pass it, is a contingency table, and an arument to specify that you want odds ratio, and not log odds
+
+```{r}
+library(vcd)
+oddsratio(table(gapminder_2007$gdp_factor, gapminder_2007$below_avg_life_exp), log = FALSE) 
+```
+
+
+You can see how it's blank where it says "and". If you passes it a table with column names, it would tell you what your odds ratio is being calculated for. But luckily with the code right there, we still see, and if we were to forge the values, we can always just re-print the table. In this case, we know now that the odds of having below-average life expectancy for low gdp countries are 19 times the odds for high gdp countries. 
+
+
+But we know that we had issues with the small cell count, and in general in stats we like to be explicit about our uncertainties, so let's also include some confidence intervals here. So a final step is to do this with the `confint()` function: 
+
+
+```{r}
+confint(oddsratio(table(gapminder_2007$gdp_factor, gapminder_2007$below_avg_life_exp), log = FALSE) )
+```
+
+
+
+##Categorical - numeric
+
+Finally we want to look at the differences in a numeric value between groups.  As mentioned, we don't go into the stats, just how to run the stats in R, but we just wanted to mention that what we cover here, the t-test and the anova test, both have the assumption that you can run them if the numeric variable meets the assumption of normal distribution. If not, we would want to use non-parametric alternatives. [Here is a quick guide](http://www.statmethods.net/stats/nonparametric.html) on these, that will give you pointers on how to run these test. But here we will focus just on the t-test and the anova test. 
+
+
+###T-test
+
+For categorical variables with two possible values, we would use the t-test, if the numeric variable meets the assumption of normal distribution. By now you should be able to guess what functions are called in R! Any ideas for the t-test? 
+
+Well... the function is called `t.test()`. The R function `t.test()` can be used to perform both one and two sample t-tests on vectors of data.
+The function contains a variety of options and can be called as follows:
+
+
+```{r, eval=FALSE}
+t.test(x ~ y, alternative = c("two.sided", "less", "greater"), mu = 0, paired =
+FALSE, var.equal = FALSE, conf.level = 0.95)
+```
+
+
+Here x is a numeric vector of data values and y is a binary factor. The option mu provides a number indicating the true value of the mean (or difference in means if you are performing a two sample test) under the null hypothesis. The option alternative is a character string specifying the alternative hypothesis, and must be one of the following: "two.sided" (which is the default), "greater" or "less" depending on whether the alternative hypothesis is that the mean is different than, greater than or less than mu, respectively. 
+
+
+For example the following call:
+
+
+```{r, eval=FALSE}
+t.test(x, alternative = "less", mu = 10)
+```
+
+
+performs a one sample t-test on the data contained in x where the null hypothesis is that =10 and the alternative is that <10. The option paired indicates whether or not you want a paired t-test (TRUE = yes and FALSE = no). If you leave this option out it defaults to FALSE. The option var.equal is a logical variable indicating whether or not to assume the two variances as being equal when performing a two-sample t-test. If TRUE then the pooled variance is used to estimate the variance otherwise the Welch (or Satterthwaite) approximation to the degrees of freedom is used. If you leave this option out it defaults
+to FALSE. Finally, the option conf.level determines the confidence level of the reported confidence interval for in the one-sample case and 1- 2 in the two-sample case.
+
+
+So if we want to look at life expectancy between high and low gdp countries, using a t-test, we would: 
+
+
+```{r}
+
+t.test(gapminder_2007$lifeExp ~ gapminder_2007$gdp_factor, alternative = "two.sided", paired=FALSE, conf.level = 0.95)
+```
+
+
+So now you can say that the difference in mean life expectancy between high and low gdp countries is statistically significant, and is between 11 - 17 years. 
+
+
+###ANOVA
+
+And what about the difference in life expectancy between continents? The function here is called `aov()` and the setup is very similar to the t.test(): 
+
+
+```{r, eval=FALSE}
+fit <- aov(x ~ y, data=mydataframe)
+```
+
+
+Where x refers to the numeric variable, and y to the categorical variable with multiple possible values. You also specify the data souce, so you only have to use the column names as the x and the y values. [For other variations of ANOVA, eg two factor design, see this quick start guide](http://www.statmethods.net/stats/anova.html)
+
+
+```{r}
+
+fit <- aov(lifeExp ~ continent, data = gapminder_2007)
+summary(fit)
+```
+
+You also want to carry out post-hoc testing: 
+
+
+```{r}
+TukeyHSD(fit)
+```
+
+
+#Multivariate stats
+
+
+`glm()` is used to fit generalized linear models, specified by giving a symbolic description of the linear predictor and a description of the error distribution.
+
+```{r}
+fit_2 <- glm(lifeExp ~ continent + gdpPercap, data = gapminder_2007)
+summary(fit_2)
+
+```
+
+
+Important to specify what sort of general linear model you want to use. You can do this with the *Family* parameter. The default is gaussian, which runs an OLS regression which assumes a normal distribution of your dependent variable. If you have a categorical dichotomous variable as your dependent variable for example, this follows a binomial distribution and you want to run a logistic regression. To do this, you would set family to binomial like so: 
+
+
+```{r, eval=FALSE}
+fit_2 <- glm(dependent_variable ~ independent_variable_1 + independent_variable_2, data = mydata, family = "binomial")
+```
+
+
+If your outcome variable follows a poisson distribution, and you need to run a poisson regression then set family parameter to poisson: 
+
+
+```{r, eval=FALSE}
+fit_2 <- glm(dependent_variable ~ independent_variable_1 + independent_variable_2, data = mydata, family = "poisson")
+```
+
+## Diagnostics
+
+R has various functions for model diagnostics. 
+
+For example the package *car* has a function `redidual plots` which produces residual plots from your model. So from our fit_2 above, we can see our resirual plots by passing the regression to the function: 
+
+```{r}
+library(car)
+
+residualPlots(fit_2)
+```
+
+When you run the `residualPlots()` function R will also print two numerical tests. 
+
+First we have a curvature test for each of the plots by adding a quadratic term and testing the quadratic to be zero (more on this in a few sections). This is Tukey's test for nonadditivity when plotting against fitted values. When this test is significant it may indicate a **lack of fit** for this particular predictor. 
+
+The Tukey test optimally should not be significant. We can see in the first of the three plots that the red line is a bit curved. It is this pattern that the printed tests are picking up. 
+
+We can further diagnose the model by printing **marginal model plots** using the `marginalModelPlots()` function of the `car` package.
+
+```{r}
+marginalModelPlots(fit_2)
+
+```
+
+This will plot a scatterplot for each predictor variable against the response variable. This displays the conditional distribution of the response given each predictor, *ignoring the other predictors*. They are called marginal plots because they show the marginal relationship between the outcome and *each predictor*. It will also print a scatterplot of the response versus the fitted value displaying the conditional distribution of the outcome given the fit of the model. We observe here the curvature that was already identified by the previous plots (notice the blue line).
+
+We can also use the `marginalModelPlots()` function to assess the **homogeneity of variance** assumption using the following argument:
+
+```{r}
+marginalModelPlots(fit_2, sd = TRUE)
+```
+
+This will print the estimated standard deviation lines to the graph. You would want this to be **constant** across the X axis.
+
+###Density estimate of the residuals
+We could plot the density estimate of the residuals:
+
+```{r}
+plot(density(rstudent(fit_2)))
+```
+
+We can see that the right hand side tail is heavier than it should be. 
+
+
+####Outliers
+We can also run a formal test for outliers using the `outlierTest()` function from the `car` package. This function locates the largest Studentised residuals in absolute value and computes a Bonferroni-corrected t test. If the probability value associated with this test is smaller than your alpha value, then you can conclude the observation you are dealing with is likely an outlier. 
+
+```{r}
+outlierTest(fit_2)
+```
+
+
+## Interpreting coefficients
+
+One solution to this is to produce graphical displays of the relationship such as those that can be obtained with the `effects` package.
+
+```{r}
+library(effects)
+plot(allEffects(fit_2))
+```
+
+
+
+You can also create a nice looking forest plot, which looks good in presentations, using the `plot_model()` function frmo the sjPlot package.  
+
+```{r}
+library(sjPlot)
+plot_model(fit_2, show.values = TRUE)
+```
+
+
+#Resources
+- [Mark Gardener, Using R for statistical analyses](http://www.stat.columbia.edu/~martin/W2024/R2.pdf)
+- [Introduction to Statistical Learning with applications in R](http://www-bcf.usc.edu/~gareth/ISL/)
+- [Juanjo Medina, R-for-Criminologists](https://jjmedinaariza.github.io/R-for-Criminologists/)
+
+
+
+
+
