@@ -1,6 +1,6 @@
 ---
 title: "Analysing Data in R"
-author: "Reka Solymosi & Henry Partridge"
+author: "Reka Solymosi & Henry Partridge & Sam Langton"
 date: "`r format(Sys.time(), '%d-%b-%Y')`"
 output:
   html_document: default
@@ -28,7 +28,7 @@ We just want to note that this tutrial is not meant to be a primer in stats, rat
 library(tidyverse)
 ```
 
-#The data
+# The data
 
 We will be working through the gapminder data set again. To load this data set into your environment, load the package: 
 
@@ -53,7 +53,7 @@ gapminder_2007$below_avg_life_exp <- as.factor(gapminder_2007$below_avg_life_exp
 ```
 
 
-#Univariate stats
+# Univariate stats
 
 ```{r}
 summary(gapminder_2007$gdpPercap)
@@ -74,11 +74,11 @@ summary(gapminder_2007)
 ```
 
 
-#Bivariate stats
+# Bivariate stats
 
-##Numeric - numeric
+## Numeric - numeric
 
-###Correlation
+### Correlation
 
 
 R can perform correlation with the `cor()` function. Built-in to the base distribution of the program are three routines; for Pearson, Kendal and Spearman Rank correlations.
@@ -193,9 +193,9 @@ The function `corrplot()` takes the correlation matrix as the first argument. Th
 
 
 
-##Categorical - categorical
+## Categorical - categorical
 
-###Chi-square
+### Chi-square
 
 So you want to look at a cross-tab between two variables. This is as easy as using the `table()` function, and passing it the two variables as arguments. For example, if we want to look at the relationship between our two dichotomous variables we created about high and low gdp and also below average life expectancy or not, we can just type: 
 
@@ -285,7 +285,7 @@ CrossTable(gapminder_2007$gdp_factor, gapminder_2007$below_avg_life_exp , prop.t
 
 ```
 
-###Fisher test
+### Fisher test
 
 
 Now since we are all stats-minded people, you may have noticed that we have a very low cell count in one of our cells in our contingency table. Since this can call into doubt our findings, it's always helpful to use tests that account for these issues as well. In this case, the test would be a Fischer exact test, which you carry out in R with the `fisher-test()` function. This function also just needs a contingency table passed to it as an argument: 
@@ -296,7 +296,7 @@ fisher.test(table(gapminder_2007$gdp_factor, gapminder_2007$below_avg_life_exp))
 ```
 
 
-###Odds ratio
+### Odds ratio
 
 To get the odds ratio from a 2 x 2 cross tab, you can use the `oddsratio()` function from the `vcd` package. 
 
@@ -326,17 +326,16 @@ confint(oddsratio(table(gapminder_2007$gdp_factor, gapminder_2007$below_avg_life
 
 
 
-##Categorical - numeric
+## Categorical - numeric
 
 Finally we want to look at the differences in a numeric value between groups.  As mentioned, we don't go into the stats, just how to run the stats in R, but we just wanted to mention that what we cover here, the t-test and the anova test, both have the assumption that you can run them if the numeric variable meets the assumption of normal distribution. If not, we would want to use non-parametric alternatives. [Here is a quick guide](http://www.statmethods.net/stats/nonparametric.html) on these, that will give you pointers on how to run these test. But here we will focus just on the t-test and the anova test. 
 
 
-###T-test
+### T-test
 
 For categorical variables with two possible values, we would use the t-test, if the numeric variable meets the assumption of normal distribution. By now you should be able to guess what functions are called in R! Any ideas for the t-test? 
 
-Well... the function is called `t.test()`. The R function `t.test()` can be used to perform both one and two sample t-tests on vectors of data.
-The function contains a variety of options and can be called as follows:
+Well... the function is called `t.test()`. The R function `t.test()` can be used to perform both one and two sample t-tests on vectors of data. The function contains a variety of options and can be called as follows:
 
 
 ```{r, eval=FALSE}
@@ -372,7 +371,7 @@ t.test(gapminder_2007$lifeExp ~ gapminder_2007$gdp_factor, alternative = "two.si
 So now you can say that the difference in mean life expectancy between high and low gdp countries is statistically significant, and is between 11 - 17 years. 
 
 
-###ANOVA
+### ANOVA
 
 And what about the difference in life expectancy between continents? The function here is called `aov()` and the setup is very similar to the t.test(): 
 
@@ -399,7 +398,7 @@ TukeyHSD(fit)
 ```
 
 
-#Multivariate stats
+# Multivariate stats
 
 
 `glm()` is used to fit generalized linear models, specified by giving a symbolic description of the linear predictor and a description of the error distribution.
@@ -461,7 +460,7 @@ marginalModelPlots(fit_2, sd = TRUE)
 
 This will print the estimated standard deviation lines to the graph. You would want this to be **constant** across the X axis.
 
-###Density estimate of the residuals
+### Density estimate of the residuals
 We could plot the density estimate of the residuals:
 
 ```{r}
@@ -471,7 +470,7 @@ plot(density(rstudent(fit_2)))
 We can see that the right hand side tail is heavier than it should be. 
 
 
-####Outliers
+#### Outliers
 We can also run a formal test for outliers using the `outlierTest()` function from the `car` package. This function locates the largest Studentised residuals in absolute value and computes a Bonferroni-corrected t test. If the probability value associated with this test is smaller than your alpha value, then you can conclude the observation you are dealing with is likely an outlier. 
 
 ```{r}
@@ -498,7 +497,7 @@ plot_model(fit_2, show.values = TRUE)
 ```
 
 
-#Resources
+# Resources
 - [Mark Gardener, Using R for statistical analyses](http://www.stat.columbia.edu/~martin/W2024/R2.pdf)
 - [Introduction to Statistical Learning with applications in R](http://www-bcf.usc.edu/~gareth/ISL/)
 - [Juanjo Medina, R-for-Criminologists](https://jjmedinaariza.github.io/R-for-Criminologists/)
