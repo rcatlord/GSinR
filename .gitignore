@@ -1,3 +1,12 @@
+<<<<<<< Updated upstream
+=======
+<<<<<<< HEAD
+.Rproj.user
+.Rhistory
+.RData
+.Ruserdata
+=======
+>>>>>>> Stashed changes
 # Mac specific
 .DS_Store
 
@@ -35,3 +44,7 @@ vignettes/*.pdf
 *.utf8.md
 *.knit.md
 .Rproj.user
+<<<<<<< Updated upstream
+=======
+>>>>>>> origin/master
+>>>>>>> Stashed changes
