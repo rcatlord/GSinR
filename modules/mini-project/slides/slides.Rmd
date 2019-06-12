@@ -3,8 +3,8 @@ title: |
     | Getting Started in R
     | an introduction to data analysis and visualisation
 subtitle: "Mini-project"
-author: "Réka Solymosi and Henry Partridge"
-date: "6 July 2018"
+author: ""
+date: "1 July 2019"
 output:
   xaringan::moon_reader:
     css: ["default", "my-theme.css"]
@@ -81,6 +81,18 @@ class: center, middle
 Visualise the relationship between a number of different socio-demographic variables and EU Referendum voting patterns.
 
 You'll need to:
+
+1. **Import**: download and read data
+2. **Tidy**: clean data for analysis in R
+3. **Transform**: create new variables and merge different data sets
+4. **Visualise**: create a set of scatterplots
+5. **Report**: put together a summary document of your findings
+
+
+---
+## Option B
+
+Do your own thing (BYOD - bring your own data)
 
 1. **Import**: download and read data
 2. **Tidy**: clean data for analysis in R
