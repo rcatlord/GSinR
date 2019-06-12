@@ -1,10 +1,11 @@
+
 ---
 title: | 
     | Getting Started in R
     | an introduction to data analysis and visualisation
 subtitle: "Basics"
 author: "Réka Solymosi & Sam Langton"
-date: "3 July 2019"
+date: "2 July 2019"
 output:
   xaringan::moon_reader:
     css: ["default", "my-theme.css"]
@@ -316,6 +317,4 @@ city_pop
 <br>
 <br>
 Data source: <http://www.centreforcities.org/data-tool/>
-
-
 
