@@ -1,4 +1,3 @@
-
 ---
 title: | 
     | Getting Started in R
@@ -317,4 +316,4 @@ city_pop
 <br>
 <br>
 Data source: <http://www.centreforcities.org/data-tool/>
-
+---
