@@ -1,7 +1,7 @@
 ---
 title: "Data wrangling"
-author: "Réka Solymosi, Henry Partridge & Sam Langton"
-date: "4 July 2018"
+author: "Réka Solymosi & Sam Langton"
+date: "3 July 2019"
 output: html_document
 ---
 
@@ -28,7 +28,7 @@ Have a look at the post. Pretty interesting, right?  So the [Bechdel test](https
 So we'll go through the various steps for filtering and subsetting data while working towards reproducing this outcome. 
 
 
-#Get data 
+# Get data 
 
 
 We can get the data and re-create the analysis using the [fivethrirtyeight R package](https://github.com/rudeboybert/fivethirtyeight). Note that while they received guidance from editors at 538, this package is not officially published by 538.
@@ -67,7 +67,7 @@ If you want to learn a bit about the data, you can do so making use of the `?` f
 But before we get down to the bechdel test data analysis, let's have a quick go at running some of the transformation functions first. 
 
 
-#Transforming data
+# Transforming data
 
 
 Data wrangling is the art of getting your data into R in a useful form for visualisation and modelling. Data wrangling is very important: without it you can’t work with your own data! There are three main parts to data wrangling:
@@ -80,7 +80,7 @@ Data wrangling is the art of getting your data into R in a useful form for visua
 We've already covered importing yesterday, and tidying this morning. Now we focus on tidy and transform. There is definitely overlap between tidy and transform. As you saw with the previous example, it is rare that you get the data in exactly the right form you need. Often you’ll need to create some new variables or summaries, or maybe you just want to rename the variables or reorder the observations in order to make the data a little easier to work with. The material here covers the topics from [Chapter 5 in R4DS](http://r4ds.had.co.nz/transform.html). We've already used, for example, the `select()` function in the previous session, when cleaning up our football banning orders data. The three elements of import, tidy, and transform often blend together. 
 
 
-##Note: Logic
+## Note: Logic
 
 One general thing to touch on before we get started with things like selecting values based on whether or not they meet your selection criteria is logical operators. In logic, a [logical connective (also called a logical operator)](https://en.wikipedia.org/wiki/Logical_connective) is a symbol or word used to connect two or more sentences (of either a formal or a natural language) in a grammatically valid way, such that the value of the compound sentence produced depends only on that of the original sentences and on the meaning of the connective.
 
@@ -106,7 +106,7 @@ There is an excellent visual representation in the R4DS book:
 But this will probably make more sense when illustrated with an example, so in the next section we will do some filtering to demonstrate.
 
 
-##Filter
+## Filter
 
 
 So what does this mean? Well let's say you have our example dataframe: 
@@ -155,7 +155,7 @@ tallMaleDf <- filter(exampleDf, gender=="male" & height > 170)
 ```
 
 
-##Select
+## Select
 
 Sometimes you might have a dataframe where you don't need all of the columns for your analysis, and you want to select only a subset of them. For this you can use the `select()` function. Similarly to the filter function, you pass it two arguments, you have to tell it the dataframe we are selecting from, and again an argument that will return true on all the columns which you want to select. So if we want to select only gender and height we would say: 
 
@@ -183,7 +183,7 @@ identical(selectExampleDf, selectExampleDf2)
 
 Usually, we would advise that you try and avoid referring to a column by its number. It's very easy to forget which number column refers to which variable, and anyone reading your code will not know unless they take a look at the data frame.
 
-##Slice
+## Slice
 
 
 Slice works similar to filter, except rather than being able to give conditions, you select rows by specifying their row number. Because of this, slice does not work with relational databases because they have no intrinsic notion of row order. Instead you can use `filter()` and `row_number()`. But just to demonstrate, if we wanted only the 2nd row of our example dataframe that would look like this: 
@@ -200,7 +200,7 @@ second_row
 
 Now this might not immediately seem a good way to subset your data frame. After all, the order of the rows might not be an entirely meaningful sequence. Taking the first row of your data is fairly pointless if it is not ordered in a particular way. However, combined with `arrange()` it might make a bit more sense. 
 
-##Arrange
+## Arrange
 
 The `arrange()` function arranges the rows in your data frame by variables. Essentially you are using this to sort your data. So here is my example data frame: 
 
@@ -252,7 +252,7 @@ second_tallest
 That seems like an awful lot of assigning and creating new dataframes... If only there was some way to **pipe** such operations together...
 
 
-#%>%
+# %>%
   
 Pipe operators, available in tidyverse R packages, serve to process a data-object using a sequence of operations by passing the result of one step as input for the next step. It does this by using 'infix-operators' rather than the more typical R method of nested function calls. The pipe operator, `%>%`, is used to insert an argument into a function. It is not a base feature of the language and can only be used after attaching a package that provides it. The pipe operator takes the left-hand side of the pipe and uses it as the first argument of the function on the right-hand side of the pipe.
 
@@ -276,7 +276,7 @@ second_tallest
 Notice that for each function we removed the data argument, as this is passed on through the pipe operators. These operators tend to get really helpful when you use the `group_by()` and `summarise()` functions. 
 
 
-##Group by, Summarise, and Mutate
+## Group by, Summarise, and Mutate
 
 
 Most data operations are useful when done on groups defined by variables in the dataset. The group_by function takes an existing tbl and converts it into a grouped tbl where operations are performed "by group".
@@ -340,7 +340,7 @@ Great, now we have the basics all under control, let's get down to some actual a
 
 
 
-#Bechdel test
+# Bechdel test
 
 
 Remember our bechdel data? Let's have a look at it again anyhow: 
