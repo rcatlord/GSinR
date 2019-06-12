@@ -1,7 +1,7 @@
 ---
 title: "Analysing Data in R"
-author: "Reka Solymosi & Henry Partridge & Sam Langton"
-date: "`r format(Sys.time(), '%d-%b-%Y')`"
+author: "Reka Solymosi, Sam Langton & & Emily Buehler"
+date: "4 July 2019"
 output:
   html_document: default
   

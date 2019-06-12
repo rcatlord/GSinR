@@ -3,7 +3,7 @@ title: |
     | Getting Started in R
     | an introduction to data analysis and visualisation
 subtitle: "Reading in Data from API"
-author: "Réka Solymosi, Henry Partridge & Sam Langton"
+author: "Réka Solymosi & Sam Langton"
 output:
   xaringan::moon_reader:
     css: ["default", "my-theme.css"]

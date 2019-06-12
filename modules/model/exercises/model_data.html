@@ -9,8 +9,9 @@
 <meta name="generator" content="pandoc" />
 
 
-<meta name="author" content="Reka Solymosi &amp; Henry Partridge &amp; Sam Langton" />
+<meta name="author" content="Reka Solymosi, Sam Langton &amp; &amp; Emily Buehler" />
 
+<meta name="date" content="2019-07-04" />
 
 <title>Analysing Data in R</title>
 
@@ -255,9 +256,7 @@ h6 {
 </style>
 
 
-</head>
 
-<body>
 
 <style type="text/css">
 .main-container {
@@ -276,25 +275,98 @@ img {
 .tabbed-pane {
   padding-top: 12px;
 }
+.html-widget {
+  margin-bottom: 20px;
+}
 button.code-folding-btn:focus {
   outline: none;
+}
+summary {
+  display: list-item;
 }
 </style>
 
 
 
-<div class="container-fluid main-container">
-
 <!-- tabsets -->
+
+<style type="text/css">
+.tabset-dropdown > .nav-tabs {
+  display: inline-table;
+  max-height: 500px;
+  min-height: 44px;
+  overflow-y: auto;
+  background: white;
+  border: 1px solid #ddd;
+  border-radius: 4px;
+}
+
+.tabset-dropdown > .nav-tabs > li.active:before {
+  content: "";
+  font-family: 'Glyphicons Halflings';
+  display: inline-block;
+  padding: 10px;
+  border-right: 1px solid #ddd;
+}
+
+.tabset-dropdown > .nav-tabs.nav-tabs-open > li.active:before {
+  content: "";
+  border: none;
+}
+
+.tabset-dropdown > .nav-tabs.nav-tabs-open:before {
+  content: "";
+  font-family: 'Glyphicons Halflings';
+  display: inline-block;
+  padding: 10px;
+  border-right: 1px solid #ddd;
+}
+
+.tabset-dropdown > .nav-tabs > li.active {
+  display: block;
+}
+
+.tabset-dropdown > .nav-tabs > li > a,
+.tabset-dropdown > .nav-tabs > li > a:focus,
+.tabset-dropdown > .nav-tabs > li > a:hover {
+  border: none;
+  display: inline-block;
+  border-radius: 4px;
+}
+
+.tabset-dropdown > .nav-tabs.nav-tabs-open > li {
+  display: block;
+  float: none;
+}
+
+.tabset-dropdown > .nav-tabs > li {
+  display: none;
+}
+</style>
+
 <script>
 $(document).ready(function () {
   window.buildTabsets("TOC");
+});
+
+$(document).ready(function () {
+  $('.tabset-dropdown > .nav-tabs > li').click(function () {
+    $(this).parent().toggleClass('nav-tabs-open')
+  });
 });
 </script>
 
 <!-- code folding -->
 
 
+
+
+</head>
+
+<body>
+
+
+<div class="container-fluid main-container">
 
 
 
@@ -304,8 +376,8 @@ $(document).ready(function () {
 
 
 <h1 class="title toc-ignore">Analysing Data in R</h1>
-<h4 class="author"><em>Reka Solymosi &amp; Henry Partridge &amp; Sam Langton</em></h4>
-<h4 class="date"><em>05-Jul-2018</em></h4>
+<h4 class="author">Reka Solymosi, Sam Langton &amp; &amp; Emily Buehler</h4>
+<h4 class="date">4 July 2019</h4>
 
 </div>
 
@@ -396,13 +468,13 @@ gapminder_2007$below_avg_life_exp &lt;- as.factor(gapminder_2007$below_avg_life_
 <ul>
 <li>The default method is “pearson” <code>cor.p  = cor.test(var1, var2)</code></li>
 <li>If you specify “spearman” you will get the spearman correlation coefficient: <code>cor.s  = cor.test(var1, var2, method = &quot;spearman&quot;)</code></li>
-<li>To see a summary of your correlation test type the name of the variable e.g. <code>cor.s</code></li>
+<li>To see a summary of your correlation test type the name of the variable e.g. <code>cor.s</code></li>
 </ul>
 <p>So if we want to test the correlation between life expectancy and GDP per capita, using a pearson correlation, then we would do the following:</p>
 <pre class="r"><code>gapminder_corr &lt;- cor.test(gapminder_2007$lifeExp, gapminder_2007$gdpPercap)
 gapminder_corr</code></pre>
 <pre><code>
-    Pearson's product-moment correlation
+    Pearson&#39;s product-moment correlation
 
 data:  gapminder_2007$lifeExp and gapminder_2007$gdpPercap
 t = 10.933, df = 140, p-value &lt; 2.2e-16
@@ -519,11 +591,11 @@ gapminder_2007$gdp_factor | high life expectancy  |  low life expectancy  |     
 Statistics for All Table Factors
 
 
-Pearson's Chi-squared test 
+Pearson&#39;s Chi-squared test 
 ------------------------------------------------------------
 Chi^2 =  33.31927     d.f. =  1     p =  7.820385e-09 
 
-Pearson's Chi-squared test with Yates' continuity correction 
+Pearson&#39;s Chi-squared test with Yates&#39; continuity correction 
 ------------------------------------------------------------
 Chi^2 =  31.25234     d.f. =  1     p =  2.265738e-08 
 
@@ -535,7 +607,7 @@ Chi^2 =  31.25234     d.f. =  1     p =  2.265738e-08
 <p>Now since we are all stats-minded people, you may have noticed that we have a very low cell count in one of our cells in our contingency table. Since this can call into doubt our findings, it’s always helpful to use tests that account for these issues as well. In this case, the test would be a Fischer exact test, which you carry out in R with the <code>fisher-test()</code> function. This function also just needs a contingency table passed to it as an argument:</p>
 <pre class="r"><code>fisher.test(table(gapminder_2007$gdp_factor, gapminder_2007$below_avg_life_exp))</code></pre>
 <pre><code>
-    Fisher's Exact Test for Count Data
+    Fisher&#39;s Exact Test for Count Data
 
 data:  table(gapminder_2007$gdp_factor, gapminder_2007$below_avg_life_exp)
 p-value = 1.457e-09
@@ -608,7 +680,7 @@ summary(fit)</code></pre>
 continent     4  13061    3265   59.71 &lt;2e-16 ***
 Residuals   137   7491      55                   
 ---
-Signif. codes:  0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1 ' ' 1</code></pre>
+Signif. codes:  0 &#39;***&#39; 0.001 &#39;**&#39; 0.01 &#39;*&#39; 0.05 &#39;.&#39; 0.1 &#39; &#39; 1</code></pre>
 <p>You also want to carry out post-hoc testing:</p>
 <pre class="r"><code>TukeyHSD(fit)</code></pre>
 <pre><code>  Tukey multiple comparisons of means
@@ -653,7 +725,7 @@ continentEurope   1.523e+01  1.956e+00   7.786 1.57e-12 ***
 continentOceania  1.665e+01  4.974e+00   3.348  0.00105 ** 
 gdpPercap         3.466e-04  5.674e-05   6.109 9.89e-09 ***
 ---
-Signif. codes:  0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1 ' ' 1
+Signif. codes:  0 &#39;***&#39; 0.001 &#39;**&#39; 0.01 &#39;*&#39; 0.05 &#39;.&#39; 0.1 &#39; &#39; 1
 
 (Dispersion parameter for gaussian family taken to be 43.22029)
 
@@ -674,11 +746,11 @@ Number of Fisher Scoring iterations: 2</code></pre>
 <p>For example the package <em>car</em> has a function <code>redidual plots</code> which produces residual plots from your model. So from our fit_2 above, we can see our resirual plots by passing the regression to the function:</p>
 <pre class="r"><code>library(car)</code></pre>
 <pre><code>
-Attaching package: 'car'</code></pre>
-<pre><code>The following object is masked from 'package:dplyr':
+Attaching package: &#39;car&#39;</code></pre>
+<pre><code>The following object is masked from &#39;package:dplyr&#39;:
 
     recode</code></pre>
-<pre><code>The following object is masked from 'package:purrr':
+<pre><code>The following object is masked from &#39;package:purrr&#39;:
 
     some</code></pre>
 <pre class="r"><code>residualPlots(fit_2)</code></pre>
@@ -718,8 +790,8 @@ gdpPercap   578.662        0</code></pre>
 <pre class="r"><code>library(effects)</code></pre>
 <pre><code>Loading required package: carData</code></pre>
 <pre><code>
-Attaching package: 'carData'</code></pre>
-<pre><code>The following objects are masked from 'package:car':
+Attaching package: &#39;carData&#39;</code></pre>
+<pre><code>The following objects are masked from &#39;package:car&#39;:
 
     Guyer, UN, Vocab</code></pre>
 <pre><code>lattice theme set by effectsTheme()

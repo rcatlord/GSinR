@@ -4,7 +4,7 @@ title: |
     | an introduction to data analysis and visualisation
 subtitle: "Reporting"
 author: "Réka Solymosi, Henry Partridge & Sam Langton"
-date: "6 July 2018"
+date: "5 July 2019"
 output:
   xaringan::moon_reader:
     css: ["default", "my-theme.css"]

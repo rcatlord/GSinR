@@ -1,6 +1,6 @@
 ---
 title: "Dealing with Temporal Data"
-author: "Réka Solymosi, Henry Partridge & Sam Langton"
+author: "Réka Solymosi"
 #date: '6 July 2018'
 output:
   html_document:
