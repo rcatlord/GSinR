@@ -3,8 +3,8 @@ title: |
     | Getting Started in R
     | an introduction to data analysis and visualisation
 subtitle: "Welcome!"
-author: "Réka Solymosi, Henry Partridge & Sam Langton"
-date: "2 July 2018"
+author: "Réka Solymosi & Sam Langton & Emily Buehler"
+date: "1 July 2019"
 output:
   xaringan::moon_reader:
     css: ["default", "my-theme.css"]
@@ -27,13 +27,6 @@ class: inverse, center, middle
 ---
 ## About us
 
-```{r, out.width = "100px", echo=FALSE}
-knitr::include_graphics("https://pbs.twimg.com/profile_images/1010470338113822720/OjfxRmB0_400x400.jpg")
-
-```
-
-@rcatlord
-
 
 ```{r, out.width = "100px", echo=FALSE}
 knitr::include_graphics("https://avatars1.githubusercontent.com/u/7291547?v=3&s=400")
@@ -46,6 +39,14 @@ knitr::include_graphics("https://avatars0.githubusercontent.com/u/36928709?s=400
 ```
 
 @sh_langton
+
+
+```{r, out.width = "100px", echo=FALSE}
+knitr::include_graphics("https://pbs.twimg.com/profile_images/826431771868807168/42VQ-_sY_400x400.jpg")
+
+```
+
+@emily_buehler
 
 ---
 ## About you
@@ -433,9 +434,9 @@ knitr::include_graphics('img/google_how_to.gif')
 
 Top resources: 
  - Stack Overflow
- - Datacamp 
  - RPubs
  - R4DS
+ - Twitter
 
 ---
 ## Community driven
