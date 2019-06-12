@@ -1,7 +1,7 @@
 ---
 title: "Tidy data"
-author: "Réka Solymosi, Henry Partridge & Sam Langton"
-date: "4 July 2018"
+author: "Réka Solymosi & Sam Langton"
+date: "3 July 2018"
 output: html_document
 ---
 
@@ -111,7 +111,7 @@ Here is a very skillfull drawing of what we are trying to achieve:
 So compare this with the tidyr cheat sheet [here](https://www.rstudio.com/wp-content/uploads/2015/02/data-wrangling-cheatsheet.pdf). So what looks closest? 
 
 
-##Gather
+## Gather
 
 
 To do this in R, you can use the `gather()` function from the tidyr package. What we want to do, is to gather all these columns into one. So that is why we use *gather*. Gather takes multiple columns and collapses into key-value pairs, duplicating all other columns as needed. You use `gather()` when you notice that you have columns that are not variables. The general structure for gather is to provide: 
@@ -193,7 +193,7 @@ summary(result)
 Nope, looks like no significant difference between years in spending. 
 
 
-##Spread
+## Spread
 
 If we wanted to separate the data out again, then `spread()` is here to help:
 
@@ -223,7 +223,7 @@ identical(spread_spending, USPersonalExpenditure_df)
 ```
 
 
-#A messy messy example
+# A messy messy example
 
 OK so we’ve had a look at these nice neat examples, but let’s look at something more realistic. Remember we have some very messy data about banning orders? We had a go at cleaning it up by hand, but let’s look at what we can do with the tidyverse. The details surrounding this code will make more sense later. For now, the idea is to demonstrate how R can be used to turn hellish, messy data into lovely, tidy data for the purposes of visualisation and analysis. This example should help you formulate the step-by-step thought process of making data tidy and suitable to answer your research question.
 
@@ -248,8 +248,7 @@ This is when `gather` will really help us, but this time, there's lots of data c
 A way to begin dealing with this, is simply to load in the data differently. There's an option within `read_csv` that allows you to skip a specified number of rows during the load. We can see above that the data only actually starts on the fourth line (including the column names), so let's skip the first three.
 
 ```{r, warning=FALSE, message=FALSE}
-df <- read_csv("https://raw.githubusercontent.com/rcatlord/GSinR_materials/master/4_tidy/banning_orders.csv",
-               skip = 3)
+df <- read_csv("https://raw.githubusercontent.com/rcatlord/GSinR_materials/master/4_tidy/banning_orders.csv", skip = 3)
 ```
 
 Now when we take a look at the data (try `View(df)`) we can see that we've resolved two issues already: those first few pointless rows have been cut out, and because of that R has recognised the correct column names. You will notice that there are still plenty of rows at the end of the data frame which we don't need. Let's grab the ones we want using `slice` which subsets rows:
