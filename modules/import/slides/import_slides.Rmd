@@ -3,8 +3,8 @@ title: |
     | Getting Started in R
     | an introduction to data analysis and visualisation
 subtitle: "Import"
-author: "Réka Solymosi, Henry Partridge & Sam Langton"
-date: "2 July 2018"
+author: "Réka Solymosi & Sam Langton"
+date: "2 July 2019"
 output:
   xaringan::moon_reader:
     css: ["default", "my-theme.css"]

@@ -1,7 +1,7 @@
 ---
 title: "Import data into R"
 author: "Réka Solymosi, Henry Partridge & Sam Langton"
-date: "3 July 2018"
+date: "2 July 2019"
 output: html_document
 ---
 
@@ -10,9 +10,9 @@ Before we get started on manipulating our data in order to get some meaningful i
 
 If there is a particular data source/ type of data which you work with, which we do not cover in this course, then please speak to us, and we will work with you to make sure you can import your data in a way that lends itself to some smooth R manipulation 
 
-#Quick recap
+# Quick recap
 
-##The data frame
+## The data frame
 
 
 The format in which R holds data is called a data frame. A data frame is a rectangular collection of variables (in the columns) and observations (in the rows) [Wickham & Grolemund, 2016](http://r4ds.had.co.nz/data-visualisation.html). In a dataframe, each column is a **variable**, and each row is an **observation**. 
@@ -38,7 +38,7 @@ name_for_dataframe <- afunction_to_read_in_data(source_from_which_to_read_data)
 For the rest of this tutorial we will go thourgh importing data from various sources, into data frame objects.
 
 
-#Importing data from .csv files
+# Importing data from .csv files
 
 
 CSV stands for comma separated value, and it refers to a data set where columns are separated by commas, and rows by line breaks. You might have come across this data format before. It is very simple, and the method for reading these csv files into R are very straightforward, because these formats tend to be flat, and look like a dataframe would. 
@@ -71,11 +71,11 @@ You might recognise this as the dataframe we created manually. Perhaps for somet
 So if you have a .csv file, you can use the `read.csv()` file to import it into your working directory. There are a variety of arguments you can pass to this function, and to see a full list you can use the help function (by typing question mark followed by the function name, so in this case `?read.csv()`). But usually you can leave many to the default, and specify only the file path where it should read from, and whether your file has headers or not. 
 
 
-To get the file path, there are a variety of tricks you can do. The simplest thing is just to save your file into your working directory. In this case, you only have to specify the file name, and R will know to look in your working directory. So if I have a file in my working directory called `myCsv.csv`, then I can make the path the file name, like so: 
+To get the file path, there are a variety of tricks you can do. The simplest thing is just to save your file into your working directory. In this case, you only have to specify the file name, and R will know to look in your working directory. So if I have a file in my working directory called `my_csv.csv`, then I can make the path the file name, like so: 
 
 
 ```{r, eval=FALSE}
-my_csv_path <- "myCsv.csv"
+my_csv_path <- "my_csv.csv"
 ```
 
 
@@ -86,7 +86,7 @@ If you know your file path that is fantastic, and you can just type that and ass
 
 
 ```{r}
-my_csv_path <- "/Users/reka/Desktop/course-incubator/data/myCsv.csv"
+my_csv_path <- "/Users/reka/Desktop/course-incubator/data/my_csv.csv"
 ```
 
 
@@ -142,7 +142,7 @@ my_dataframe <- read.csv(file=my_csv_path, header = TRUE)
 ```
 
 
-##Reading tables (tab separated)
+## Reading tables (tab separated)
 
 Just as very often you will see data in .csv format, you will also see a similar format, which is the .tab format. In fact, most data sets that you would download from the [UK data service website](https://www.ukdataservice.ac.uk/) would come in this format. 
 
@@ -203,7 +203,7 @@ identical(my_dataframe_2, my_dataframe_3)
 Indeed they are. So this is great, you can skip that whole step of manually saving your data, you can just grab it directly from the web! Nice!
 
 
-###Other separators?
+### Other separators?
 
 
 If you're astute you may have noticed that `read.csv()` is essentially a way of reading a table where the separators are commas. If you are curious, you could give this a go, and try to use the `read.table()` function, and specifying the separator to be the comma:
@@ -220,7 +220,7 @@ the choice of separator affects the input of quoted strings. If you have a tab-d
 
 
 
-##Reading files from SPSS
+## Reading files from SPSS
 
 
 Well here we are, you're a reformed SPSS user, and you don't want to lose all your data that you have in .sav files. Don't worry, R welcomes people converting from all types of formats. In this case, we will have to make use of a new package, to read it in. We talked about packages before, these are bits of code that someone else has written and packaged, to make available for use for the rest of us. So, lucky for us, someone has written a package for reading in files that are considered foreign to R. SPSS files (.sav files) are one such format. This package is called `foreign`. If this is the first time you have used this, and you don't have the package on your computer, you will need to use the `install.packages()` function: 
@@ -264,7 +264,7 @@ my_dataframe_5 <- read.spss(file = my_spss_path, to.data.frame = TRUE )
 Now you can see that you have this .sav file, in a data frame. 
 
 
-#Excel
+# Excel
 
 
 The last common file type we'll cover here are files that come from Excel. No doubt you will work with data that has come form Excel. The common file extension for this is `.xlsx`. There are a few ways of reading in these data. For one, you could convert the workbook you need to a .csv file, by selecting "Save as..." and choosing comma separated value (csv) as one of the options. Then you can use the instructions for .csv to read in your data (with the `read.csv()` function). 
@@ -313,7 +313,7 @@ head(my_data_frame_7)
 Now we've discussed reading data in from most traditional static file sources. We've even used `read.tables()` to get data directly from a website. But there are also ways to retreive data from active data sources. We will cover APIs and Web Scraping in the next section, for example. However there are many other possibilities. I'll quickly touch here on reading data from database connections. 
 
 
-#Getting data from database connections
+# Getting data from database connections
 
 It's possible that your data will be stored in databases. We do not really cover how to set up a connection with databases in R, but I'll briefly touch on this. For example, in a previous role I set up my R session to [connect with an SQL Server](https://support.rstudio.com/hc/en-us/articles/214510788-Setting-up-R-to-connect-to-SQL-Server-). To do this I used the [RODBC package](https://cran.r-project.org/web/packages/RODBC/vignettes/RODBC.pdf). Firstly, you will also have to install the appropriate drivers for the appropriate databases. There should be lots of tutorials for doing this online. Then you can use the RODBC package to connect to the database, and retreive data. 
 
@@ -344,7 +344,7 @@ Anyway I just put this in here in case this is something that you will need to s
 
 
 
-#Refsources
+# Resources
 
 
 - [Foreign package](https://cran.r-project.org/web/packages/foreign/foreign.pdf)
