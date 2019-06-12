@@ -1,16 +1,13 @@
 <!DOCTYPE html>
-<html>
+<html xmlns="http://www.w3.org/1999/xhtml" lang="" xml:lang="">
   <head>
-    <title></title>
-    <meta charset="utf-8">
-    <meta name="author" content="Réka Solymosi, Henry Partridge &amp; Sam Langton" />
+    <title>slides.utf8</title>
+    <meta charset="utf-8" />
+    <meta name="author" content="Réka Solymosi &amp; Sam Langton" />
+    <meta name="date" content="2019-07-03" />
     <link href="libs/remark-css/default.css" rel="stylesheet" />
     <script src="libs/htmlwidgets/htmlwidgets.js"></script>
     <script src="libs/jquery/jquery.min.js"></script>
-    <script src="libs/datatables-binding/datatables.js"></script>
-    <link href="libs/dt-core/css/jquery.dataTables.min.css" rel="stylesheet" />
-    <link href="libs/dt-core/css/jquery.dataTables.extra.css" rel="stylesheet" />
-    <script src="libs/dt-core/js/jquery.dataTables.min.js"></script>
     <link href="libs/leaflet/leaflet.css" rel="stylesheet" />
     <script src="libs/leaflet/leaflet.js"></script>
     <link href="libs/leafletfix/leafletfix.css" rel="stylesheet" />
@@ -24,11 +21,11 @@
     <textarea id="source">
 class: center, middle, inverse, title-slide
 
-# <div style="white-space: pre-line;">Getting Started in R
+# <div class="line-block">Getting Started in R<br />
 an introduction to data analysis and visualisation</div>
 ## Basics
-### Réka Solymosi, Henry Partridge &amp; Sam Langton
-### 3 July 2018
+### Réka Solymosi &amp; Sam Langton
+### 3 July 2019
 
 ---
 
@@ -161,9 +158,6 @@ DT::datatable(
 )
 ```
 
-<div id="htmlwidget-7fbf6abae1781c28480e" style="width:100%;height:auto;" class="datatables html-widget"></div>
-<script type="application/json" data-for="htmlwidget-7fbf6abae1781c28480e">{"x":{"filter":"none","fillContainer":false,"data":[["Alabama","Alaska","Arizona","Arkansas","California","Colorado","Connecticut","Delaware","Florida","Georgia"],[13.2,10,8.1,8.8,9,7.9,3.3,5.9,15.4,17.4],[236,263,294,190,276,204,110,238,335,211],[58,48,80,50,91,78,77,72,80,60],[21.2,44.5,31,19.5,40.6,38.7,11.1,15.8,31.9,25.8]],"container":"<table class=\"display\">\n  <thead>\n    <tr>\n      <th> <\/th>\n      <th>Murder<\/th>\n      <th>Assault<\/th>\n      <th>UrbanPop<\/th>\n      <th>Rape<\/th>\n    <\/tr>\n  <\/thead>\n<\/table>","options":{"pageLength":5,"columnDefs":[{"className":"dt-right","targets":[1,2,3,4]},{"orderable":false,"targets":0}],"order":[],"autoWidth":false,"orderClasses":false,"lengthMenu":[5,10,25,50,100]}},"evals":[],"jsHooks":[]}</script>
-
 ---
 
 ### Maps
@@ -176,8 +170,8 @@ leaflet() %&gt;% addTiles() %&gt;%
              popup = "University of Manchester")
 ```
 
-<div id="htmlwidget-cb62d09bb2bcecee7426" style="width:100%;height:360px;" class="leaflet html-widget"></div>
-<script type="application/json" data-for="htmlwidget-cb62d09bb2bcecee7426">{"x":{"options":{"crs":{"crsClass":"L.CRS.EPSG3857","code":null,"proj4def":null,"projectedBounds":null,"options":{}}},"calls":[{"method":"addTiles","args":["//{s}.tile.openstreetmap.org/{z}/{x}/{y}.png",null,null,{"minZoom":0,"maxZoom":18,"tileSize":256,"subdomains":"abc","errorTileUrl":"","tms":false,"noWrap":false,"zoomOffset":0,"zoomReverse":false,"opacity":1,"zIndex":1,"detectRetina":false,"attribution":"&copy; <a href=\"http://openstreetmap.org\">OpenStreetMap<\/a> contributors, <a href=\"http://creativecommons.org/licenses/by-sa/2.0/\">CC-BY-SA<\/a>"}]},{"method":"addMarkers","args":[53.466478,-2.236518,null,null,null,{"interactive":true,"draggable":false,"keyboard":true,"title":"","alt":"","zIndexOffset":0,"opacity":1,"riseOnHover":false,"riseOffset":250},"University of Manchester",null,null,null,null,{"interactive":false,"permanent":false,"direction":"auto","opacity":1,"offset":[0,0],"textsize":"10px","textOnly":false,"className":"","sticky":true},null]}],"limits":{"lat":[53.466478,53.466478],"lng":[-2.236518,-2.236518]}},"evals":[],"jsHooks":[]}</script>
+<div id="htmlwidget-b52b3793895e48a708ad" style="width:100%;height:360px;" class="leaflet html-widget"></div>
+<script type="application/json" data-for="htmlwidget-b52b3793895e48a708ad">{"x":{"options":{"crs":{"crsClass":"L.CRS.EPSG3857","code":null,"proj4def":null,"projectedBounds":null,"options":{}}},"calls":[{"method":"addTiles","args":["//{s}.tile.openstreetmap.org/{z}/{x}/{y}.png",null,null,{"minZoom":0,"maxZoom":18,"tileSize":256,"subdomains":"abc","errorTileUrl":"","tms":false,"noWrap":false,"zoomOffset":0,"zoomReverse":false,"opacity":1,"zIndex":1,"detectRetina":false,"attribution":"&copy; <a href=\"http://openstreetmap.org\">OpenStreetMap<\/a> contributors, <a href=\"http://creativecommons.org/licenses/by-sa/2.0/\">CC-BY-SA<\/a>"}]},{"method":"addMarkers","args":[53.466478,-2.236518,null,null,null,{"interactive":true,"draggable":false,"keyboard":true,"title":"","alt":"","zIndexOffset":0,"opacity":1,"riseOnHover":false,"riseOffset":250},"University of Manchester",null,null,null,null,{"interactive":false,"permanent":false,"direction":"auto","opacity":1,"offset":[0,0],"textsize":"10px","textOnly":false,"className":"","sticky":true},null]}],"limits":{"lat":[53.466478,53.466478],"lng":[-2.236518,-2.236518]}},"evals":[],"jsHooks":[]}</script>
 
 ---
 class: inverse, center, middle
@@ -418,6 +412,7 @@ city_pop
 &lt;br&gt;
 Data source: &lt;http://www.centreforcities.org/data-tool/&gt;
     </textarea>
+<style data-target="print-only">@media screen {.remark-slide-container{display:block;}.remark-slide-scaler{box-shadow:none;}}</style>
 <script src="https://remarkjs.com/downloads/remark-latest.min.js"></script>
 <script>var slideshow = remark.create({
 "highlightStyle": "github",
@@ -427,26 +422,79 @@ Data source: &lt;http://www.centreforcities.org/data-tool/&gt;
 if (window.HTMLWidgets) slideshow.on('afterShowSlide', function (slide) {
   window.dispatchEvent(new Event('resize'));
 });
-(function() {
-  var d = document, s = d.createElement("style"), r = d.querySelector(".remark-slide-scaler");
+(function(d) {
+  var s = d.createElement("style"), r = d.querySelector(".remark-slide-scaler");
   if (!r) return;
   s.type = "text/css"; s.innerHTML = "@page {size: " + r.style.width + " " + r.style.height +"; }";
   d.head.appendChild(s);
+})(document);
+
+(function(d) {
+  var el = d.getElementsByClassName("remark-slides-area");
+  if (!el) return;
+  var slide, slides = slideshow.getSlides(), els = el[0].children;
+  for (var i = 1; i < slides.length; i++) {
+    slide = slides[i];
+    if (slide.properties.continued === "true" || slide.properties.count === "false") {
+      els[i - 1].className += ' has-continuation';
+    }
+  }
+  var s = d.createElement("style");
+  s.type = "text/css"; s.innerHTML = "@media print { .has-continuation { display: none; } }";
+  d.head.appendChild(s);
+})(document);
+// delete the temporary CSS (for displaying all slides initially) when the user
+// starts to view slides
+(function() {
+  var deleted = false;
+  slideshow.on('beforeShowSlide', function(slide) {
+    if (deleted) return;
+    var sheets = document.styleSheets, node;
+    for (var i = 0; i < sheets.length; i++) {
+      node = sheets[i].ownerNode;
+      if (node.dataset["target"] !== "print-only") continue;
+      node.parentNode.removeChild(node);
+    }
+    deleted = true;
+  });
 })();</script>
 
-<script type="text/x-mathjax-config">
-MathJax.Hub.Config({
-  tex2jax: {
-    skipTags: ['script', 'noscript', 'style', 'textarea', 'pre']
+<script>
+(function() {
+  var links = document.getElementsByTagName('a');
+  for (var i = 0; i < links.length; i++) {
+    if (/^(https?:)?\/\//.test(links[i].getAttribute('href'))) {
+      links[i].target = '_blank';
+    }
   }
-});
+})();
+</script>
+
+<script>
+slideshow._releaseMath = function(el) {
+  var i, text, code, codes = el.getElementsByTagName('code');
+  for (i = 0; i < codes.length;) {
+    code = codes[i];
+    if (code.parentNode.tagName !== 'PRE' && code.childElementCount === 0) {
+      text = code.textContent;
+      if (/^\\\((.|\s)+\\\)$/.test(text) || /^\\\[(.|\s)+\\\]$/.test(text) ||
+          /^\$\$(.|\s)+\$\$$/.test(text) ||
+          /^\\begin\{([^}]+)\}(.|\s)+\\end\{[^}]+\}$/.test(text)) {
+        code.outerHTML = code.innerHTML;  // remove <code></code>
+        continue;
+      }
+    }
+    i++;
+  }
+};
+slideshow._releaseMath(document);
 </script>
 <!-- dynamically load mathjax for compatibility with self-contained -->
 <script>
 (function () {
   var script = document.createElement('script');
   script.type = 'text/javascript';
-  script.src  = 'https://cdn.bootcss.com/mathjax/2.7.1/MathJax.js?config=TeX-MML-AM_CHTML';
+  script.src  = 'https://mathjax.rstudio.com/latest/MathJax.js?config=TeX-MML-AM_CHTML';
   if (location.protocol !== 'file:' && /^https?:/.test(script.src))
     script.src  = script.src.replace(/^https?:/, '');
   document.getElementsByTagName('head')[0].appendChild(script);
