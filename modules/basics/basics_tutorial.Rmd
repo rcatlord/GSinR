@@ -4,7 +4,7 @@ author: "Réka Solymosi & Sam Langton"
 date: "2 July 2019"
 output:
   html_document: default
-  
+
 ---
 
 ```{r setup, include=FALSE}

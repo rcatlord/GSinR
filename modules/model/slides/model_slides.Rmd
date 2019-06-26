@@ -40,7 +40,7 @@ class: inverse, center, middle
 
 For all variables in dataframe
 
-```{r, echo=FALSE}
+```{r, echo=FALSE, warning=F}
 library(gapminder)
 ```
 
@@ -53,7 +53,7 @@ summary(gapminder)
 
 For all variables in dataframe with skimr
 
-```{r}
+```{r, warning=F, message=F}
 library(skimr)
 ```
 
@@ -70,20 +70,20 @@ gapminder %>%  skim()
 ### making comparisons
 
 ---
-##Numeric - numeric
+## Numeric - numeric
 
 ```{r, eval=FALSE}
-cor( var1, var2, method = "method")
+cor(var1, var2, method = "pearson") # kendall, spearman
 ```
 
 ```{r, eval=FALSE}
-cor.test(var1, var2, method = "method")
+cor.test(var1, var2, method = "pearson") # kendall, spearman
 ```
 
 ---
-##Categorical - categorical
+## Categorical - categorical
 
-###Cross tabs
+### Cross tabs
 
 ```{r, eval=FALSE}
 
@@ -96,9 +96,9 @@ fisher.test(table(var1, var2))
 ```
 
 ---
-##Categorical - categorical
+## Categorical - categorical
 
-###Odds ratio
+### Odds ratio
 
 ```{r, eval = FALSE}
 library(vcd)
@@ -107,21 +107,21 @@ oddsratio(table(var1, var2))
 ```
 
 ---
-##Categorical - numeric
+## Categorical - numeric
 
 ```{r, eval = FALSE}
 
-#t-test
+# t-test
 t.test(var1 ~ var2)
 
-#anova
+# anova
 aov(var1 ~ var2, data=mydataframe)
 
 
 ```
 
 ---
-##Multivariate 
+## Multivariable 
 
 ```{r, eval = FALSE}
 
@@ -131,7 +131,7 @@ summary(fit_1)
 ```
 
 ---
-##Multivariate 
+## Multivariable
 
 ```{r}
 fit_2 <- glm(lifeExp ~ continent + gdpPercap, data = gapminder)
@@ -140,37 +140,68 @@ summary(fit_2)
 ```
 
 ---
-##Multivariate 
+## Multivariable
 
-```{r}
+```{r, warning = F, message = F, out.height="450px"}
 library(car)
-
 residualPlots(fit_2)
 ```
 
 ---
-##Multivariate 
+## Multivariable
 
-```{r}
+```{r, warning = F, message = F, out.height="350px"}
 marginalModelPlots(fit_2)
 
 ```
 
 ---
-##Multivariate 
+## Multivariable
 
-```{r, warning=FALSE, message=FALSE}
+```{r, warning=FALSE, message=FALSE, out.height="350px"}
 library(effects)
 plot(allEffects(fit_2))
 ```
 
 ---
-##Multivariate 
+## Multivariable
 
-```{r, warning=FALSE, message=FALSE}
+```{r, warning=FALSE, message=FALSE, out.height="350px"}
 library(sjPlot)
 plot_model(fit_2, show.values = TRUE)
 ```
 
+---
 
+## Multivariable
 
+```{r, warning=FALSE, message=FALSE}
+p1 <- plot_model(fit_2)
+```
+
+```{r, echo = F, warning = F, message = F}
+library(ggplot2)
+```
+
+```{r, eval=F, warning = F, message = F}
+ggplot(p1$data) + theme_minimal() +
+  geom_vline(xintercept = 1, linetype = "dashed") +
+  geom_errorbarh(aes(xmin = conf.low, xmax = conf.high, y = term), height = 0.2) +
+  geom_point(aes(y = term, x = estimate), size = 3, col = "red") +
+  labs(y = " ", x = "Estimate") + xlim(0,23) +
+  scale_y_discrete(labels = c("GDP","Oceania","Europe","Asia","America"))
+```
+
+---
+
+## Multivariable
+
+```{r, echo = F, out.width="600px", fig.align = "center", fig.asp = .62}
+ggplot(p1$data) + theme_bw() +
+  geom_vline(xintercept = 1, linetype = "dashed") +
+  geom_errorbarh(aes(xmin = conf.low, xmax = conf.high, y = term), height = 0.2) +
+  geom_point(aes(y = term, x = estimate), size = 3, col = "black") +
+  labs(y = " ", x = "Estimate", title = "Figure 1: regression results example") +
+  xlim(0,23) +
+  scale_y_discrete(labels = c("GDP","Oceania","Europe","Asia","America"))
+```

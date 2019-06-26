@@ -59,7 +59,7 @@ class: inverse, center, middle
 ---
 ### Creating a ggplot
 
-```{r}
+```{r, warning = F, message = F}
 library(ggplot2)
 ```
 
@@ -75,7 +75,7 @@ ggplot(data = mpg) +
 ### Pseudocode
 
 
-```{r, eval=FALSE}
+```{r, eval=FALSE, warning = F, message=F}
 
 ggplot(data = <DATA>) + 
   <GEOM_FUNCTION>(mapping = aes(<MAPPINGS>))

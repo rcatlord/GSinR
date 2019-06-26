@@ -1,6 +1,6 @@
 ---
 title: "Import data into R"
-author: "Réka Solymosi, Henry Partridge & Sam Langton"
+author: "Réka Solymosi & Sam Langton"
 date: "2 July 2019"
 output: html_document
 ---

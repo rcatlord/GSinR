@@ -398,7 +398,7 @@ TukeyHSD(fit)
 ```
 
 
-# Multivariate stats
+# Multivariable stats
 
 
 `glm()` is used to fit generalized linear models, specified by giving a symbolic description of the linear predictor and a description of the error distribution.
@@ -496,6 +496,13 @@ library(sjPlot)
 plot_model(fit_2, show.values = TRUE)
 ```
 
+It's also possible to easily extract the data from this plot if you want to report your findings in a table. Try the following:
+
+```{r, eval = F}
+p1 <- plot_model(fit_2) # assign the plot to an object
+results.df <- p1$data   # pull out the data and assign it to a new object
+View(results.df)        # view the results in a new window
+```
 
 # Resources
 - [Mark Gardener, Using R for statistical analyses](http://www.stat.columbia.edu/~martin/W2024/R2.pdf)

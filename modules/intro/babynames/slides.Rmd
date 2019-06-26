@@ -3,8 +3,8 @@ title: |
     | Getting Started in R
     | an introduction to data analysis and visualisation
 subtitle: "babynames"
-author: "Réka Solymosi, Henry Partridge & Sam Langton"
-date: "2 July 2018"
+author: "Réka Solymosi & Sam Langton"
+date: "1 July 2019"
 output:
   xaringan::moon_reader:
     css: ["default", "my-theme.css"]
@@ -23,7 +23,7 @@ options(htmltools.dir.version = FALSE)
 
 ### `babynames`
 Names of boys and girls born each year in the U.S. since 1880
-```{r}
+```{r, warning=F}
 library(babynames)
 babynames
 ```
@@ -186,7 +186,7 @@ babynames %>%
 ]
 
 ---
-### Use `geom_line()` to connect the observations, map the `sex` variable to colour and set the line thickness
+### Use `geom_line()` to connect observations, map the `sex` variable to colour and set line thickness
 .pull-left[
 ```r
 library(tidyverse) ; library(babynames) 
@@ -221,7 +221,7 @@ babynames %>%
 
 ---
 ### Specify which colours the `sex` variable is mapped to
-<br>
+<!-- <br> -->
 .pull-left[
 ```r
 library(tidyverse) ; library(babynames) 
@@ -258,7 +258,7 @@ babynames %>%
 
 ---
 ### Add a title, label the axes, include a caption, and drop the legend title
-<br>
+<!-- <br> -->
 .pull-left[
 ```r
 library(tidyverse) ; library(babynames) 

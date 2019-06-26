@@ -78,17 +78,6 @@ For all variables in dataframe with skimr
 library(skimr)
 ```
 
-```
-## 
-## Attaching package: 'skimr'
-```
-
-```
-## The following object is masked from 'package:stats':
-## 
-##     filter
-```
-
 ---
 
 
@@ -101,7 +90,7 @@ gapminder %&gt;%  skim()
 ##  n obs: 1704 
 ##  n variables: 6 
 ## 
-## -- Variable type:factor ---------------------------------------------------
+## -- Variable type:factor ----------------------------------------------------------------------
 ##   variable missing complete    n n_unique
 ##  continent       0     1704 1704        5
 ##    country       0     1704 1704      142
@@ -109,7 +98,7 @@ gapminder %&gt;%  skim()
 ##  Afr: 624, Asi: 396, Eur: 360, Ame: 300   FALSE
 ##      Afg: 12, Alb: 12, Alg: 12, Ang: 12   FALSE
 ## 
-## -- Variable type:integer --------------------------------------------------
+## -- Variable type:integer ---------------------------------------------------------------------
 ##  variable missing complete    n    mean       sd    p0        p25     p50
 ##       pop       0     1704 1704 3e+07    1.1e+08 60011 2793664    7e+06  
 ##      year       0     1704 1704  1979.5 17.27     1952    1965.75  1979.5
@@ -117,7 +106,7 @@ gapminder %&gt;%  skim()
 ##  2e+07       1.3e+09 &lt;U+2587&gt;&lt;U+2581&gt;&lt;U+2581&gt;&lt;U+2581&gt;&lt;U+2581&gt;&lt;U+2581&gt;&lt;U+2581&gt;&lt;U+2581&gt;
 ##   1993.25 2007       &lt;U+2587&gt;&lt;U+2583&gt;&lt;U+2587&gt;&lt;U+2583&gt;&lt;U+2583&gt;&lt;U+2587&gt;&lt;U+2583&gt;&lt;U+2587&gt;
 ## 
-## -- Variable type:numeric --------------------------------------------------
+## -- Variable type:numeric ---------------------------------------------------------------------
 ##   variable missing complete    n    mean      sd     p0     p25     p50
 ##  gdpPercap       0     1704 1704 7215.33 9857.45 241.17 1202.06 3531.85
 ##    lifeExp       0     1704 1704   59.47   12.92  23.6    48.2    60.71
@@ -133,22 +122,22 @@ gapminder %&gt;%  skim()
 ### making comparisons
 
 ---
-##Numeric - numeric
+## Numeric - numeric
 
 
 ```r
-cor( var1, var2, method = "method")
+cor(var1, var2, method = "pearson") # kendall, spearman
 ```
 
 
 ```r
-cor.test(var1, var2, method = "method")
+cor.test(var1, var2, method = "pearson") # kendall, spearman
 ```
 
 ---
-##Categorical - categorical
+## Categorical - categorical
 
-###Cross tabs
+### Cross tabs
 
 
 ```r
@@ -161,9 +150,9 @@ fisher.test(table(var1, var2))
 ```
 
 ---
-##Categorical - categorical
+## Categorical - categorical
 
-###Odds ratio
+### Odds ratio
 
 
 ```r
@@ -173,19 +162,19 @@ oddsratio(table(var1, var2))
 ```
 
 ---
-##Categorical - numeric
+## Categorical - numeric
 
 
 ```r
-#t-test
+# t-test
 t.test(var1 ~ var2)
 
-#anova
+# anova
 aov(var1 ~ var2, data=mydataframe)
 ```
 
 ---
-##Multivariate 
+## Multivariable 
 
 
 ```r
@@ -194,7 +183,7 @@ summary(fit_1)
 ```
 
 ---
-##Multivariate 
+## Multivariable
 
 
 ```r
@@ -232,22 +221,15 @@ summary(fit_2)
 ```
 
 ---
-##Multivariate 
+## Multivariable
 
 
 ```r
 library(car)
-```
-
-```
-## Loading required package: carData
-```
-
-```r
 residualPlots(fit_2)
 ```
 
-![](model_slides_files/figure-html/unnamed-chunk-13-1.png)&lt;!-- --&gt;
+&lt;img src="model_slides_files/figure-html/unnamed-chunk-13-1.png" height="450px" /&gt;
 
 ```
 ##           Test stat Pr(&gt;|Test stat|)    
@@ -258,21 +240,17 @@ residualPlots(fit_2)
 ```
 
 ---
-##Multivariate 
+## Multivariable
 
 
 ```r
 marginalModelPlots(fit_2)
 ```
 
-```
-## Warning in mmps(...): Interactions and/or factors skipped
-```
-
-![](model_slides_files/figure-html/unnamed-chunk-14-1.png)&lt;!-- --&gt;
+&lt;img src="model_slides_files/figure-html/unnamed-chunk-14-1.png" height="350px" /&gt;
 
 ---
-##Multivariate 
+## Multivariable
 
 
 ```r
@@ -280,10 +258,10 @@ library(effects)
 plot(allEffects(fit_2))
 ```
 
-![](model_slides_files/figure-html/unnamed-chunk-15-1.png)&lt;!-- --&gt;
+&lt;img src="model_slides_files/figure-html/unnamed-chunk-15-1.png" height="350px" /&gt;
 
 ---
-##Multivariate 
+## Multivariable
 
 
 ```r
@@ -291,7 +269,34 @@ library(sjPlot)
 plot_model(fit_2, show.values = TRUE)
 ```
 
-![](model_slides_files/figure-html/unnamed-chunk-16-1.png)&lt;!-- --&gt;
+&lt;img src="model_slides_files/figure-html/unnamed-chunk-16-1.png" height="350px" /&gt;
+
+---
+
+## Multivariable
+
+
+```r
+p1 &lt;- plot_model(fit_2)
+```
+
+
+
+
+```r
+ggplot(p1$data) + theme_minimal() +
+  geom_vline(xintercept = 1, linetype = "dashed") +
+  geom_errorbarh(aes(xmin = conf.low, xmax = conf.high, y = term), height = 0.2) +
+  geom_point(aes(y = term, x = estimate), size = 3, col = "red") +
+  labs(y = " ", x = "Estimate") + xlim(0,23) +
+  scale_y_discrete(labels = c("GDP","Oceania","Europe","Asia","America"))
+```
+
+---
+
+## Multivariable
+
+&lt;img src="model_slides_files/figure-html/unnamed-chunk-20-1.png" width="600px" style="display: block; margin: auto;" /&gt;
     </textarea>
 <style data-target="print-only">@media screen {.remark-slide-container{display:block;}.remark-slide-scaler{box-shadow:none;}}</style>
 <script src="https://remarkjs.com/downloads/remark-latest.min.js"></script>
