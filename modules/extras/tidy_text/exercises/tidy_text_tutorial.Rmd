@@ -1,12 +1,12 @@
 ---
 title: ''
 output:
+  html_document:
+    df_print: paged
   html_notebook:
     code_folding: show
     highlight: textmate
     theme: simplex
-  html_document:
-    df_print: paged
 ---
 
 ```{r setup, include=FALSE}

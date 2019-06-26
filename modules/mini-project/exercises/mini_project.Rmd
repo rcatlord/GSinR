@@ -1,7 +1,6 @@
 ---
 title: "Mini-project"
-author: "Réka Solymosi and Henry Partridge"
-date: "6 July 2018"
+date: "1 July 2019"
 output: html_document
 ---
 
