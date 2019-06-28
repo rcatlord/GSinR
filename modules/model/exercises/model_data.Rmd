@@ -22,9 +22,9 @@ In your normal workflow, we are conscious that lot of your data exploration will
 - Univariate analysis (summary stats)
 - Bivariate analysis ( chi-square test, t-test, anova )
 
-We just want to note that this tutrial is not meant to be a primer in stats, rather just an illustration of how to do these stats in R. We assume that you are already familiar with these techniques. If not, there are a variety of statistics resources out there.
+We just want to note that this tutrial is not meant to be a primer in stats, rather just an illustration of how to do these stats in R. If you are not familiar with all of these techniques there are a variety of statistics resources out there.
 
-```{r}
+```{r, message = F, warning=F}
 library(tidyverse)
 ```
 
