@@ -238,28 +238,6 @@ Indent each item in the sublist by four spaces
     - dplyr
 
 ---
-class: inverse, center, middle
-
-# GitHub Flavored Markdown
-
----
-## Task lists
-
-Add a space between a dash and an open bracket
-
-```
-- [x] Import data
-- [x] Tidy data
-- [ ] Transform data
-- [ ] Visualise data
-```
-
-- [x] Import data
-- [x] Tidy data
-- [ ] Transform data
-- [ ] Visualise data
-
----
 ## Tables
 
 Divide words with hyphens to create the column names and then separate each row with a pipe. Colons are used to align the values in the cells.
@@ -284,22 +262,6 @@ Divide words with hyphens to create the column names and then separate each row 
 | purrr | for functional programming |
 | dplyr | for data manipulation |
 
----
-## Syntax highlighting
-
-Place three backticks on a line above and below the code block.
-
-    ```{r, eval=FALSE}
-    library(ggplot2)
-    ggplot(mpg, aes(class)) +
-    geom_bar(colour = "white")
-    ```
-
-```{r, eval=FALSE}
-library(ggplot2)
-ggplot(mpg, aes(class)) + 
-  geom_bar(colour = "white")
-```
 
 ---
 

@@ -47,7 +47,7 @@ class: inverse, center, middle
 
 --
 
-- Companies like Google, Facebook and the Financial Times use it
+- Companies like Google, Facebook and the Financial Times use it. The [BBC](https://bbc.github.io/rcookbook/#how_to_create_bbc_style_graphics) have also recently made a big push to use it for their visualisations.
 
 ---
 
@@ -124,7 +124,7 @@ class: inverse, center, middle
 ---
 
 ### Charts
-```{r out.width='700px', fig.height=3, fig.align='center'}
+```{r out.width='700px', fig.height=3, fig.align='center', message = F, warning - F}
 library(ggplot2) 
 p <- ggplot(mpg, aes(x = displ, y = hwy)) +  geom_point() +
   geom_smooth(method = "loess", se = FALSE) +

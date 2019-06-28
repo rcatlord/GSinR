@@ -430,14 +430,13 @@ bechdel90_13 <- bechdel90_13 %>%
 
 
 
-Ha! That's not the same you say! And you are right. There are usually 25 different ways to do the same thing in R, and this is the code that the 538 guys used, but I thought that I'd introduce you to both. So the one in our example above, we say that our conidion is TRUE if clean_test == "OK" **or** clean_test == "dubious". This will return true when the variable clean_test takes the value "OK" or when it takes the value "dubious."
+Ha! That's not the same you say! And you are right. There are usually 25 different ways to do the same thing in R, and this is the code that the 538 guys used, but I thought that I'd introduce you to both. So the one in our example above, we say that our condition is TRUE if clean_test == "OK" **or** clean_test == "dubious". This will return true when the variable clean_test takes the value "OK" or when it takes the value "dubious."
 
 
 In the second version, our condition is TRUE if the value of the clean_test variable can be found in this list that contains two strings ( `c("OK", "dubious")` ). Again, whenever the clean_test variable takes on one of these values, the condition returns TRUE. 
 
 
 So which is better? As usual, the answer is *it depends*. However if you have a lot of possible conditions, it might make sense to create a list, and use the `%in%` function. 
-
 
 Have a look: 
 
@@ -476,6 +475,8 @@ exampleDf2$is_weekday <- ifelse(exampleDf2$days_of_week %in% c("Mon", "Tue", "We
 
 
 Anyway, whichever approach you used, you now have a new variable created using `ifelse()` function within the `mutate()` function. 
+
+We could have also used `if_else` for this, which is the tidyverse version of `ifelse` (somewhat confusingly). They behave very similar but `if_else` is a bit [more strict](https://stackoverflow.com/questions/50646133/dplyr-if-else-vs-base-r-ifelse). We use `if_else` a bit in the course, so you'll get to try it out.
 
 
 ## Determine median ROI and budget based on categories

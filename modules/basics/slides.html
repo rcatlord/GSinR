@@ -65,7 +65,7 @@ class: inverse, center, middle
 
 --
 
-- Companies like Google, Facebook and the Financial Times use it
+- Companies like Google, Facebook and the Financial Times use it. The [BBC](https://bbc.github.io/rcookbook/#how_to_create_bbc_style_graphics) have also recently made a big push to use it for their visualisations.
 
 ---
 
@@ -143,17 +143,6 @@ class: inverse, center, middle
 
 ```r
 library(ggplot2) 
-```
-
-```
-## Registered S3 methods overwritten by 'ggplot2':
-##   method         from 
-##   [.quosures     rlang
-##   c.quosures     rlang
-##   print.quosures rlang
-```
-
-```r
 p &lt;- ggplot(mpg, aes(x = displ, y = hwy)) +  geom_point() +
   geom_smooth(method = "loess", se = FALSE) +
   labs(x = "Engine size", y = "Miles per gallon", 
@@ -162,7 +151,7 @@ p &lt;- ggplot(mpg, aes(x = displ, y = hwy)) +  geom_point() +
 p
 ```
 
-&lt;img src="slides_files/figure-html/unnamed-chunk-2-1.png" width="700px" style="display: block; margin: auto;" /&gt;
+&lt;img src="slides_files/figure-html/warning-F-1.png" width="700px" style="display: block; margin: auto;" /&gt;
 
 ---
 
@@ -176,8 +165,8 @@ DT::datatable(
 )
 ```
 
-<div id="htmlwidget-8d70de4d8b1b52d3dd20" style="width:100%;height:auto;" class="datatables html-widget"></div>
-<script type="application/json" data-for="htmlwidget-8d70de4d8b1b52d3dd20">{"x":{"filter":"none","fillContainer":false,"data":[["Alabama","Alaska","Arizona","Arkansas","California","Colorado","Connecticut","Delaware","Florida","Georgia"],[13.2,10,8.1,8.8,9,7.9,3.3,5.9,15.4,17.4],[236,263,294,190,276,204,110,238,335,211],[58,48,80,50,91,78,77,72,80,60],[21.2,44.5,31,19.5,40.6,38.7,11.1,15.8,31.9,25.8]],"container":"<table class=\"display\">\n  <thead>\n    <tr>\n      <th> <\/th>\n      <th>Murder<\/th>\n      <th>Assault<\/th>\n      <th>UrbanPop<\/th>\n      <th>Rape<\/th>\n    <\/tr>\n  <\/thead>\n<\/table>","options":{"pageLength":5,"columnDefs":[{"className":"dt-right","targets":[1,2,3,4]},{"orderable":false,"targets":0}],"order":[],"autoWidth":false,"orderClasses":false,"lengthMenu":[5,10,25,50,100]}},"evals":[],"jsHooks":[]}</script>
+<div id="htmlwidget-354ae41ccfe585f750be" style="width:100%;height:auto;" class="datatables html-widget"></div>
+<script type="application/json" data-for="htmlwidget-354ae41ccfe585f750be">{"x":{"filter":"none","fillContainer":false,"data":[["Alabama","Alaska","Arizona","Arkansas","California","Colorado","Connecticut","Delaware","Florida","Georgia"],[13.2,10,8.1,8.8,9,7.9,3.3,5.9,15.4,17.4],[236,263,294,190,276,204,110,238,335,211],[58,48,80,50,91,78,77,72,80,60],[21.2,44.5,31,19.5,40.6,38.7,11.1,15.8,31.9,25.8]],"container":"<table class=\"display\">\n  <thead>\n    <tr>\n      <th> <\/th>\n      <th>Murder<\/th>\n      <th>Assault<\/th>\n      <th>UrbanPop<\/th>\n      <th>Rape<\/th>\n    <\/tr>\n  <\/thead>\n<\/table>","options":{"pageLength":5,"columnDefs":[{"className":"dt-right","targets":[1,2,3,4]},{"orderable":false,"targets":0}],"order":[],"autoWidth":false,"orderClasses":false,"lengthMenu":[5,10,25,50,100]}},"evals":[],"jsHooks":[]}</script>
 
 ---
 
@@ -191,8 +180,8 @@ leaflet() %&gt;% addTiles() %&gt;%
              popup = "University of Manchester")
 ```
 
-<div id="htmlwidget-2d6d1813a4b462b0ca72" style="width:100%;height:360px;" class="leaflet html-widget"></div>
-<script type="application/json" data-for="htmlwidget-2d6d1813a4b462b0ca72">{"x":{"options":{"crs":{"crsClass":"L.CRS.EPSG3857","code":null,"proj4def":null,"projectedBounds":null,"options":{}}},"calls":[{"method":"addTiles","args":["//{s}.tile.openstreetmap.org/{z}/{x}/{y}.png",null,null,{"minZoom":0,"maxZoom":18,"tileSize":256,"subdomains":"abc","errorTileUrl":"","tms":false,"noWrap":false,"zoomOffset":0,"zoomReverse":false,"opacity":1,"zIndex":1,"detectRetina":false,"attribution":"&copy; <a href=\"http://openstreetmap.org\">OpenStreetMap<\/a> contributors, <a href=\"http://creativecommons.org/licenses/by-sa/2.0/\">CC-BY-SA<\/a>"}]},{"method":"addMarkers","args":[53.466478,-2.236518,null,null,null,{"interactive":true,"draggable":false,"keyboard":true,"title":"","alt":"","zIndexOffset":0,"opacity":1,"riseOnHover":false,"riseOffset":250},"University of Manchester",null,null,null,null,{"interactive":false,"permanent":false,"direction":"auto","opacity":1,"offset":[0,0],"textsize":"10px","textOnly":false,"className":"","sticky":true},null]}],"limits":{"lat":[53.466478,53.466478],"lng":[-2.236518,-2.236518]}},"evals":[],"jsHooks":[]}</script>
+<div id="htmlwidget-a1c44869850321983aa4" style="width:100%;height:360px;" class="leaflet html-widget"></div>
+<script type="application/json" data-for="htmlwidget-a1c44869850321983aa4">{"x":{"options":{"crs":{"crsClass":"L.CRS.EPSG3857","code":null,"proj4def":null,"projectedBounds":null,"options":{}}},"calls":[{"method":"addTiles","args":["//{s}.tile.openstreetmap.org/{z}/{x}/{y}.png",null,null,{"minZoom":0,"maxZoom":18,"tileSize":256,"subdomains":"abc","errorTileUrl":"","tms":false,"noWrap":false,"zoomOffset":0,"zoomReverse":false,"opacity":1,"zIndex":1,"detectRetina":false,"attribution":"&copy; <a href=\"http://openstreetmap.org\">OpenStreetMap<\/a> contributors, <a href=\"http://creativecommons.org/licenses/by-sa/2.0/\">CC-BY-SA<\/a>"}]},{"method":"addMarkers","args":[53.466478,-2.236518,null,null,null,{"interactive":true,"draggable":false,"keyboard":true,"title":"","alt":"","zIndexOffset":0,"opacity":1,"riseOnHover":false,"riseOffset":250},"University of Manchester",null,null,null,null,{"interactive":false,"permanent":false,"direction":"auto","opacity":1,"offset":[0,0],"textsize":"10px","textOnly":false,"className":"","sticky":true},null]}],"limits":{"lat":[53.466478,53.466478],"lng":[-2.236518,-2.236518]}},"evals":[],"jsHooks":[]}</script>
 
 ---
 class: inverse, center, middle

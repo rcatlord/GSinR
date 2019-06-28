@@ -225,10 +225,10 @@ The classic book is [The Visual Dispay of Quantitative Information by Edward Tuf
 They tend to result in recommendations on what to use (and not use) in certain contexts
 
 
-For example, most data visualisation experts agree that you should not use 3D graphics unless there is a meaning to the third dimension. So using 3D graphics just for decoration, as in [this case](https://mir-s3-cdn-cf.behance.net/project_modules/disp/2505dd10837923.56030acd2ef20.jpg) is normally frowed upon. However there are cases when including a third dimension is vital to communicating your findings. See this [example](http://www.visualisingdata.com/2015/03/when-3d-works/).
+For example, most data visualisation experts agree that you should not use 3D graphics unless there is a meaning to the third dimension. So using 3D graphics just for decoration, as in [this case](https://mir-s3-cdn-cf.behance.net/project_modules/disp/2505dd10837923.56030acd2ef20.jpg) is normally frowned upon. However there are cases when including a third dimension is vital to communicating your findings. See this [example](http://www.visualisingdata.com/2015/03/when-3d-works/).
 
 
-Also often certain chart types are villainised. The pie chart is one such example. A lot of people really dislike piecharts, eg see [here](http://www.storytellingwithdata.com/blog/2011/07/death-to-pie-charts) or [here](http://www.businessinsider.com/pie-charts-are-the-worst-2013-6?IR=T). 
+Also often certain chart types are villainous. The pie chart is one such example. A lot of people really dislike piecharts, eg see [here](http://www.storytellingwithdata.com/blog/2011/07/death-to-pie-charts) or [here](http://www.businessinsider.com/pie-charts-are-the-worst-2013-6?IR=T). 
 If you want to display proportion, research indicates that a square pie chart is more likely to be interpreted correctly by viewers: [see here](https://eagereyes.org/blog/2016/a-reanalysis-of-a-study-about-square-pie-charts-from-2009)
 
 
@@ -362,10 +362,10 @@ sum(gapminder_2007$lifeExp >= 60 )
 ```
 
 
-We can see that the large majority of countries, 99 out of 142, have a life expectancy over 60. But we can also see that there are some countries that have a low life expectancies. You can see how we can use visualisations to show the data and get a first feeling for how it may be distributed.
+We can see that the large majority of countries, 99 out of 142, have a life expectancy over 60. But we can also see that there are some countries that have a low life expectancy. You can see how we can use visualisations to show the data and get a first feeling for how it may be distributed.
 
 
-Often we visualise data because we want to compare distributions. **Most of data analysis is about making comparisons**. We are going to explore whether the life expectancy is different for less affluent countries. The variable *gdpPercap* measures the country's GDP per capita. For the purposes of this illustration I want to dichotomise this variable. We've covered data manipulation already, so you hopefully you can remember the `ifelse` command used below. Here we will be grouping anything that's got GDP higher than the mean as "high gdp", and everything else as "low gdp". 
+Often we visualise data because we want to compare distributions. **Most of data analysis is about making comparisons**. We are going to explore whether the life expectancy is different for less affluent countries. The variable *gdpPercap* measures the country's GDP per capita. For the purposes of this illustration I want to dichotomies this variable. We've covered data manipulation already, so you hopefully you can remember the `if_else` command used below. Here we will be grouping anything that's got GDP higher than the mean as "high gdp", and everything else as "low gdp". 
 
 
 ```{r}
@@ -388,7 +388,7 @@ ggplot(gapminder_2007, aes(x = lifeExp)) +
 ```
 
 
-Visually this may not look great, but it begins to tell a story. We can see that there is a lower proportion of countries with low life expectency in the group of countries that have higher life expectancies. It is a flatter, less skewed distribution. You can see how the `facet_wrap()` expression is telling R to create the histogram of the variable mentioned in the ggplot function for the groups defined by the categorical input of interest (the factor "gdp_factor").
+Visually this may not look great, but it begins to tell a story. We can see that there is a lower proportion of countries with low life expectancy in the group of countries that have higher life expectancy. It is a flatter, less skewed distribution. You can see how the `facet_wrap()` expression is telling R to create the histogram of the variable mentioned in the ggplot function for the groups defined by the categorical input of interest (the factor "gdp_factor").
 
 
 Instead of using facets, we could overlay the histograms with a bit of transparency. Transparencies work better in screens than in printed document, so keep in mind this when deciding whether to use them instead of facets. The code is as follows:
@@ -434,7 +434,7 @@ ggplot(gapminder_2007, aes(x = lifeExp, fill = gdp_factor)) +
 ```
 
 
-Did you notice the difference with the comparative histograms? By using density plots we are rescaling to ensure the same area for each of the levels in our grouping variable. This makes it easier to compare two groups that have different frequencies. The areas under the curve add up to 1 for both of the groups, whereas in the histogram the area within the bars represent the number of cases in each of the groups. If you have many more cases in one group than the other it may be difficult to make comparisons or to clearly see the distribution for the group with fewer cases. So, this is one of the reasons why you may want to use density plots.
+Did you notice the difference with the comparative histograms? By using density plots we are resealing to ensure the same area for each of the levels in our grouping variable. This makes it easier to compare two groups that have different frequencies. The areas under the curve add up to 1 for both of the groups, whereas in the histogram the area within the bars represent the number of cases in each of the groups. If you have many more cases in one group than the other it may be difficult to make comparisons or to clearly see the distribution for the group with fewer cases. So, this is one of the reasons why you may want to use density plots.
 
 
 # Box plots
@@ -511,29 +511,20 @@ ggplot(gapminder_2007, aes(x = gdpPercap, y = lifeExp)) +
 
 What this is doing is creating boxes within the two dimensional plane; counting the number of points within those boxes; and attaching a colour (fill) to the box in function of the density of points within each of the rectangles.
 
-When looking at scatterplots, sometimes it is useful to summarise the relationships by mean of drawing lines. You could for example add a line representing the **conditional mean**. A conditional mean is simply mean of your Y variable for each value of X. We can ask R to plot a line connecting these means using `geom_line()` and specifying you want the conditional means.
-
-
-```{r}
-ggplot(gapminder_2007, aes(x = gdpPercap, y = lifeExp)) +
-  geom_point(alpha=.4) +
-  geom_line(stat='summary', fun.y=mean)
-```
-
-<!-- ![](Week_2_Graphics_files/figure-html/unnamed-chunk-21-1.png) --> 
-
-With only 142 cases there are loads of ups and downs. If you have many more cases for each level of X the line would look less rough. You can, in any case, produce a smoother line using `geom_smooth` instead. This is computed using the "loess" method. A [Loess regression line](http://en.wikipedia.org/wiki/Local_regression) subsets chunks of data around your X axis to try to estimate a regression line that fits well a region of the data. 
+When looking at scatterplots, you can produce a smoother line using `geom_smooth`. This is computed using the "loess" method. A [Loess regression line](http://en.wikipedia.org/wiki/Local_regression) subsets chunks of data around your X axis to try to estimate a regression line that fits well a region of the data. 
 
 
 
 ```{r}
 ggplot(gapminder_2007, aes(x = gdpPercap, y = lifeExp)) +
   geom_point(alpha=.4) +
-  geom_smooth(colour="red", size=1, se=TRUE) # The se argument asks whether to display the confidence intervals (I like them, so have specified TRUE), colour is simply asking for a red line instead of blue, and size makes the line a bit thicker with size 1)
+  geom_smooth(colour="red", size=1, se=TRUE) 
+
 ```
 
+The se argument asks whether to display the confidence intervals (I like them, so have specified TRUE), colour is simply asking for a red line instead of blue, and size makes the line a bit thicker with size 1).
 
-As you can see here you produce a smoother line than with the conditional means. The line, as the scatterplot, seems to be suggesting an overall curvilinear relationship that almost flattens out once the GDP is around 30,000. 
+The line, as the scatterplot, seems to be suggesting an overall curvilinear relationship that almost flattens out once the GDP is around 30,000. 
 
 # Scatter plots conditioning in a third variable
 
@@ -618,7 +609,7 @@ ggplot(gapminder_2007, aes(x = gdpPercap, y = lifeExp, colour = continent)) +
 
 # Bar charts
 
-You may be wondering, what about categorical data? So far we have only discussed various visualisations where at least one of your variables is quantitative (continuous). When your variable is categorical you can use bar plots. We map the factor variable in the aesthetics and then use the `geom_bar()` function to ask for a bar chart. The default option for `geom_bar()` is a count, becuase that's what most people want barplots for. For this reason, you don't specify the Y variable, ggplot calculates the counts for you under the hood.
+You may be wondering, what about categorical data? So far we have only discussed various visualisations where at least one of your variables is quantitative (continuous). When your variable is categorical you can use bar plots. We map the factor variable in the aesthetics and then use the `geom_bar()` function to ask for a bar chart. The default option for `geom_bar()` is a count, because that's what most people want barplots for. For this reason, you don't specify the Y variable, ggplot calculates the counts for you under the hood.
 
 
 ```{r}
@@ -724,7 +715,7 @@ You can read more about them [here](https://www.r-bloggers.com/making-waffle-cha
 
 # Interactivity
 
-So we talked about plotly in the presentation. There are excellend resources available online, so I do reocmment some further reading. 
+So we talked about plotly in the presentation. There are excellent resources available online, so I do recommend some further reading. 
 
 Other ways of making your charts and overall presentation of information interactive include building [Shiny dashboards](https://rstudio.github.io/shinydashboard/).
 

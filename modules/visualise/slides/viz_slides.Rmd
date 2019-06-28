@@ -28,8 +28,23 @@ class: inverse, center, middle
 ---
 ### The grammar of graphics
 
-![](img/table.png)
+![](img/gg1.png)
 
+
+[Wickham, H. (2010). A layered grammar of graphics. Journal of Computational and Graphical Statistics, 19(1), 3-28.](http://vita.had.co.nz/papers/layered-grammar.pdf)
+
+---
+### The grammar of graphics
+
+![](img/gg2.png)
+
+
+[Wickham, H. (2010). A layered grammar of graphics. Journal of Computational and Graphical Statistics, 19(1), 3-28.](http://vita.had.co.nz/papers/layered-grammar.pdf)
+
+---
+### The grammar of graphics
+
+![](img/gg3.png)
 
 [Wickham, H. (2010). A layered grammar of graphics. Journal of Computational and Graphical Statistics, 19(1), 3-28.](http://vita.had.co.nz/papers/layered-grammar.pdf)
 
@@ -166,8 +181,7 @@ ggplot(data = mpg) +
 bp <- ggplot(data = PlantGrowth) +
   geom_boxplot(mapping = aes(x = group, y = weight, fill = group),
                size = 1.2, alpha = 0.8) +
-  scale_x_discrete(breaks = c("ctrl"   , "trt1"  , "trt2"),
-                   labels = c("control", "treat1", "treat2")) +
+  scale_x_discrete(labels = c("control", "treat1", "treat2")) +
   labs(title = "Figure 1: group distributions",
          x = " ") +
   scale_fill_brewer(palette = "Accent") +
@@ -209,8 +223,7 @@ bp
 ### Axes
 
 ```{r, eval = FALSE}
-bp + scale_x_discrete(breaks = c("ctrl"   , "trt1"  , "trt2"),
-                      labels = c("control", "treat1", "treat2"))
+bp + scale_x_discrete(labels = c("control", "treat1", "treat2"))
 
 ```
 
@@ -270,8 +283,7 @@ bp + theme(legend.position = "none",
 bp <- ggplot(data = PlantGrowth) +
   geom_boxplot(mapping = aes(x = group, y = weight, fill = group),
                size = 1.2, alpha = 0.8) +
-  scale_x_discrete(breaks = c("ctrl"   , "trt1"  , "trt2"),
-                   labels = c("control", "treat1", "treat2")) +
+  scale_x_discrete(labels = c("control", "treat1", "treat2")) +
   labs(title = "Figure 1: group distributions",
          x = " ") +
   scale_fill_brewer(palette = "Accent") +

@@ -82,11 +82,12 @@ ggsave("baby_plot.png", scale=1, dpi=300)
 ```
 ]
 
-.pull-right[
-```{r, echo=FALSE}
+```{r, echo=FALSE, warning = F}
+
 library(tidyverse) ; library(babynames)
+
 ```
-]
+
 
 ---
 ### Access the `babynames` data

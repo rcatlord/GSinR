@@ -605,7 +605,7 @@ levels(the_smiths)
 Most commonly, when you use variables in R, you create **vectors**. What is a vector? An atomic vector is simply a set of elements *of the same class* (typically: character, numeric, integer, or logical -as in True/False). It is the basic data structure in R. Typically you will use the `c()` function (c stands for concatenate) to create vectors.
 
 
-For example, we created the string vector of the smiths above with:
+For example, we created the string vector of the Smiths above with:
 
 
 ```{r}
@@ -635,7 +635,7 @@ for(member in the_smiths){
 
 ```
 
-Don't worry if the above code looks a bit mad right now... Things will become clearer!
+Don't worry if the above code looks a bit mad right now... Things will become clearer! Often, stuff like the above, where you are 'looping' through things, do not have to written manually in R (like we did above), because there are functions which makes things easier for you!
 
 You can also carry out operation on every item in the vector by simply performing to the operation to the vector object. For example, if we wanted to add 1 to all elements of our numeric vector we can do: 
 
@@ -686,7 +686,7 @@ In the most basic instance, you can create your own dataframe by hand, within R.
 
 ```{r}
 exampleDf <- data.frame("name" = c("bob", "bobbie", "bobette"),
-                        "gender" = c("male", "male", "female"), 
+                        "gender" = c("male", "male", "female"),
                         "height" = c(178, 154, 164))
 ```
 
@@ -749,7 +749,7 @@ You may notice these give you two different results. That is because they are lo
 The function `typeof()` determines the R internal type of an object. The values it can return include logical, integer, double, character, list, and a few more. To see them all, access the help documentation for the function by using `?`. 
 
 
-The function `class()` on the other hand has to do with the object oriented programming nature of R. This is what we've been refering to where the R objects belong to certain classes. And based on what class they belong to, they inherit certain traits. So an object of type character can belong to the factors class, in which case it will inherit characteristics like having values that can be put in a specific order. But, it can also belong to the class datetime, in which case it inherits other characteristics, to do with dates and times. 
+The function `class()` on the other hand has to do with the object oriented programming nature of R. This is what we've been refering to where the R objects belong to certain classes. And based on what class they belong to, they inherit certain traits. So an object of type character can belong to the factors class, in which case it will inherit characteristics like having values that can be put in a specific order. But, it can also belong to the class datetime, in which case it inherits other characteristics, to do with dates and times.
 
 
 Why is this important to know? Well in terms of what class the object belongs to, as mentioned already a few times, it determines what characteristics it inherits, and that determines what you can do with it. If we ignore R for a second, and consider your knowledge of data analysis - you know that you can do different things with a categorical variable than a numeric variable. Similarly in R, depening on what the variable is, we can carry out different operations with it. For example, if an object is a date, then you can extract values from it. For example if `20170618` is a number, then you can divide it by 2, but if it's a date then you can extract from it a day of the week to learn it's a Sunday. Often, you might want to translate a variable from one type to another. The next section covers just this. 

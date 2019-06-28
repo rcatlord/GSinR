@@ -94,7 +94,25 @@ By the end of the week you will be able to:
  - community driven
 
  
- 
+---
+## Growing popularity
+
+```{r, out.height = "450px", echo=FALSE}
+knitr::include_graphics('https://i0.wp.com/r4stats.com/wp-content/uploads/2017/06/Fig_2d_ScholarlyImpact2016.png')
+```
+
+source: http://r4stats.com/articles/popularity/
+
+
+---
+## Growing popularity
+
+```{r, out.height = "450px", echo=FALSE}
+knitr::include_graphics('https://i0.wp.com/r4stats.com/wp-content/uploads/2017/06/Fig_2e_ScholarlyImpactSubset2016.png?w=650')
+```
+
+source: http://r4stats.com/articles/popularity/
+
 ---
 ## Growing popularity
 
@@ -102,29 +120,6 @@ By the end of the week you will be able to:
 knitr::include_graphics('https://i0.wp.com/r4stats.com/wp-content/uploads/2017/02/Fig-1a-IndeedJobs-2017.png?w=650')
 ```
   
-source: http://r4stats.com/articles/popularity/
-
-
----
-## Growing popularity
-
-```{r, out.width = "500px", echo=FALSE}
-knitr::include_graphics('https://i1.wp.com/r4stats.com/wp-content/uploads/2017/02/Fig-1c-R-v-SAS-2017-02-18.png?w=733')
-```
-
-Data science job trends for SAS (orange) and R (blue).
-  
-  source: http://r4stats.com/articles/popularity/
-
-
----
-## Growing popularity
-
-```{r, out.height = "450px", echo=FALSE}
-knitr::include_graphics('https://i2.wp.com/r4stats.com/wp-content/uploads/2012/04/Fig_2a_ScholarlyImpact2015.png?w=650')
-```
-
-
 source: http://r4stats.com/articles/popularity/
 
 ---
@@ -179,7 +174,7 @@ plot(cars$speed, cars$dist)
 
 ---
 ## Diverse: Plots
-```{r}
+```{r, message = F, warning = F}
 library(ggplot2)
 ```
 
