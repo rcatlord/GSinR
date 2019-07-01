@@ -365,7 +365,7 @@ sum(gapminder_2007$lifeExp >= 60 )
 We can see that the large majority of countries, 99 out of 142, have a life expectancy over 60. But we can also see that there are some countries that have a low life expectancy. You can see how we can use visualisations to show the data and get a first feeling for how it may be distributed.
 
 
-Often we visualise data because we want to compare distributions. **Most of data analysis is about making comparisons**. We are going to explore whether the life expectancy is different for less affluent countries. The variable *gdpPercap* measures the country's GDP per capita. For the purposes of this illustration I want to dichotomies this variable. We've covered data manipulation already, so you hopefully you can remember the `if_else` command used below. Here we will be grouping anything that's got GDP higher than the mean as "high gdp", and everything else as "low gdp". 
+Often we visualise data because we want to compare distributions. **Most of data analysis is about making comparisons**. We are going to explore whether the life expectancy is different for less affluent countries. The variable *gdpPercap* measures the country's GDP per capita. For the purposes of this illustration I want to dichotomise this variable. We've covered data manipulation already, so you hopefully you can remember the `if_else` command used below. Here we will be grouping anything that's got GDP higher than the mean as "high gdp", and everything else as "low gdp". 
 
 
 ```{r}
@@ -434,7 +434,7 @@ ggplot(gapminder_2007, aes(x = lifeExp, fill = gdp_factor)) +
 ```
 
 
-Did you notice the difference with the comparative histograms? By using density plots we are resealing to ensure the same area for each of the levels in our grouping variable. This makes it easier to compare two groups that have different frequencies. The areas under the curve add up to 1 for both of the groups, whereas in the histogram the area within the bars represent the number of cases in each of the groups. If you have many more cases in one group than the other it may be difficult to make comparisons or to clearly see the distribution for the group with fewer cases. So, this is one of the reasons why you may want to use density plots.
+Did you notice the difference with the comparative histograms? By using density plots we are rescaling to ensure the same area for each of the levels in our grouping variable. This makes it easier to compare two groups that have different frequencies. The areas under the curve add up to 1 for both of the groups, whereas in the histogram the area within the bars represent the number of cases in each of the groups. If you have many more cases in one group than the other it may be difficult to make comparisons or to clearly see the distribution for the group with fewer cases. So, this is one of the reasons why you may want to use density plots.
 
 
 # Box plots
@@ -551,7 +551,7 @@ ggplot(gapminder_2007, aes(x = gdpPercap, y = lifeExp, colour = pop)) +
 ```
 
 
-You could map the third variable to a different aesthetic (rather than colour). For example, you could map `lstat` to size of the points. This is called a **bubblechart**. The problem with this, however, is that it can make overplotting more acute sometimes.
+You could map the third variable to a different aesthetic (rather than colour). For example, you could map `pop` to size of the points. This is called a **bubblechart**. The problem with this, however, is that it can make overplotting more acute sometimes.
 
 
 
@@ -618,7 +618,7 @@ ggplot(gapminder_2007, aes(x=gdp_factor)) +
 ```
 
 
-Unfortunately, the levels in this factor are ordered by alphabetical order, which is not always what we want. We can modify this by reordering the factors levels first -click [here](http://www.cookbook-r.com/Manipulating_data/Changing_the_order_of_levels_of_a_factor/) for more details. You could do this within the ggplot function (just for the visualisation), but in real life you would want to sort out your factor levels in an appropriate manner more permanently. As discussed last week, this is the sort of thing you do as part of pre-processing your data. And then plot.
+Unfortunately, the levels in this factor are ordered by alphabetical order, which is not always what we want. We can modify this by reordering the factors levels first -click [here](http://www.cookbook-r.com/Manipulating_data/Changing_the_order_of_levels_of_a_factor/) for more details. You could do this within the ggplot function (just for the visualisation), but in real life you would want to sort out your factor levels in an appropriate manner more permanently. As discussed earlier, this is the sort of thing you do as part of pre-processing your data. And then plot.
 
 
 ```{r}
