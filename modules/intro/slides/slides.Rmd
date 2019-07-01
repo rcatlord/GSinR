@@ -423,6 +423,13 @@ knitr::include_graphics('img/accidental_aRt.png')
 knitr::include_graphics('img/google_how_to.gif')
 ```
 
+---
+## Community driven
+
+```{r, out.width = "600px", echo=FALSE}
+knitr::include_graphics('img/youtube.png')
+```
+
 
 ---
 ## Community driven
