@@ -69,6 +69,8 @@ navbar:
       href: modules/extras/API_exercises/import_new_data.html
     - text: webscrape::exercise
       href: modules/extras/tidy_text/exercises/tidy_text_tutorial.nb.html
+    - text: webscrape::fixmystreet
+      href: modules/extras/fixmystreet/fixmystreet.html
   - text: Mini-project
     menu:
     - text: slides
