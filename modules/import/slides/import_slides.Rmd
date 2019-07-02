@@ -212,15 +212,15 @@ plot(st_geometry(nigeria))
 ```
 ]
 
----
-### Coercing columns to different data type
+<!-- --- -->
+<!-- ### Coercing columns to different data type -->
 
-- `logical` variables can store TRUE or FALSE
-- `integer` variables can only store whole numbers
-- `double` variables can store decimal numbers
-- `character` variables can store strings of characters
-- `date` variables can store a date - time
-- `factor` variables can store a fixed and known set of possible values
+<!-- - `logical` variables can store TRUE or FALSE -->
+<!-- - `integer` variables can only store whole numbers -->
+<!-- - `double` variables can store decimal numbers -->
+<!-- - `character` variables can store strings of characters -->
+<!-- - `date` variables can store a date - time -->
+<!-- - `factor` variables can store a fixed and known set of possible values -->
 
 ---
 #### .csv, .xls, .xlsx
@@ -244,103 +244,6 @@ glimpse(df)
 ```
 
 ---
-### Defining dates and times
-- Coerce variables as dates when you need to create a plot, extract information or conduct time series analysis.
-
-.pull-left[
-```{r comment = '#', tidy = FALSE}
-parse_date("03-07-18", "%d-%m-%y")
-parse_date("03-07-18", "%m-%d-%y")
-parse_date("03-07-18", "%y-%m-%d")
-# as.Date(x, "%d-%m-%y")
-```
-]
-
-.pull-right[
-| Symbol | Description | Example  |
-|:--- |:---- |:---- |
-|%d| day as a number | 02 |
-|%a| abbreviated day | Tue |
-|%A| day | Tuesday |
-|%m| month as a number | 07 |
-|%b| abbreviated month | Jul |
-|%B| month | July |
-|%y| 2-digit year | 18 |
-|%Y| 4-digit year |  2018 |
-]
-
----
-### Defining factors
-- Coerce variables to factors when you need a specific ordering of string values, e.g. in a model or a plot.
-
-```{r comment = '#', tidy = FALSE}
-parse_factor(df$country, levels = c("Italy", "Nigeria"))
-
-df$country <- factor(df$country, 
-                     levels = unique(df$country),
-                     ordered = FALSE)
-```
-
----
-class: inverse, middle, center
-
-# Delving into factors
-
----
-### Inspecting factors
-```{r comment = '#', tidy = FALSE}
-library(gapminder)
-class(gapminder$continent)
-levels(gapminder$continent)
-```
-
----
-### Dropping unused factor levels
-```{r comment = '#', tidy = FALSE}
-g7 <- gapminder %>% 
-  filter(country %in% c("Canada", "France", "Germany", "Italy", "Japan", "United Kingdom", "United States"))
-levels(g7$country)[1:20]
-g7$country <- droplevels(g7$country)
-levels(g7$country)
-```
-
----
-### Recoding factors
-```{r comment = '#', tidy = FALSE}
-library(forcats)
-g7$country <- g7$country %>%
-  fct_recode("UK" = "United Kingdom", "USA" = "United States") 
-levels(g7$country)
-```
-
----
-### Reordering factors
-
-```{r comment = '#', tidy = FALSE, fig.height = 4, dev = 'png'}
-g7_2007 <- g7 %>% filter(year == 2007)
-levels(g7_2007$country)
-
-ggplot(g7_2007, aes(x = gdpPercap, y = country)) +
-  geom_point() +
-  labs(x = "GDP per capita", y = NULL) +
-  theme_minimal()
-```
-
----
-### Reordering factors
-```{r comment = '#', tidy = FALSE, fig.height = 4, dev = 'png'}
-fct_reorder(g7_2007$country, g7_2007$gdpPercap, .desc = TRUE) %>% 
-  levels()
-
-ggplot(g7_2007, aes(x = gdpPercap, y = fct_reorder(country, gdpPercap))) +
-  geom_point() +
-  labs(x = "GDP per capita", y = NULL) +
-  theme_minimal()
-```
-
----
-class: inverse, middle, center
-
 # Export
 
 ---
@@ -398,3 +301,104 @@ st_write()
 
 - R stores factors as integer codes 1, 2, 3 etc. not character strings. So ensure that you set your factor levels.
 - Column type information is lost when you export to a CSV. Recommend exporting to .Rds, the native R data format using `write_rds()`
+
+
+
+---
+<!-- --- -->
+<!-- ### Defining dates and times -->
+<!-- - Coerce variables as dates when you need to create a plot, extract information or conduct time series analysis. -->
+
+<!-- .pull-left[ -->
+<!-- ```{r comment = '#', tidy = FALSE} -->
+<!-- parse_date("03-07-18", "%d-%m-%y") -->
+<!-- parse_date("03-07-18", "%m-%d-%y") -->
+<!-- parse_date("03-07-18", "%y-%m-%d") -->
+<!-- # as.Date(x, "%d-%m-%y") -->
+<!-- ``` -->
+<!-- ] -->
+
+<!-- .pull-right[ -->
+<!-- | Symbol | Description | Example  | -->
+<!-- |:--- |:---- |:---- | -->
+<!-- |%d| day as a number | 02 | -->
+<!-- |%a| abbreviated day | Tue | -->
+<!-- |%A| day | Tuesday | -->
+<!-- |%m| month as a number | 07 | -->
+<!-- |%b| abbreviated month | Jul | -->
+<!-- |%B| month | July | -->
+<!-- |%y| 2-digit year | 18 | -->
+<!-- |%Y| 4-digit year |  2018 | -->
+<!-- ] -->
+
+<!-- --- -->
+<!-- ### Defining factors -->
+<!-- - Coerce variables to factors when you need a specific ordering of string values, e.g. in a model or a plot. -->
+
+<!-- ```{r comment = '#', tidy = FALSE} -->
+<!-- parse_factor(df$country, levels = c("Italy", "Nigeria")) -->
+
+<!-- df$country <- factor(df$country,  -->
+<!--                      levels = unique(df$country), -->
+<!--                      ordered = FALSE) -->
+<!-- ``` -->
+
+<!-- --- -->
+<!-- class: inverse, middle, center -->
+
+<!-- # Delving into factors -->
+
+<!-- --- -->
+<!-- ### Inspecting factors -->
+<!-- ```{r comment = '#', tidy = FALSE} -->
+<!-- library(gapminder) -->
+<!-- class(gapminder$continent) -->
+<!-- levels(gapminder$continent) -->
+<!-- ``` -->
+
+<!-- --- -->
+<!-- ### Dropping unused factor levels -->
+<!-- ```{r comment = '#', tidy = FALSE} -->
+<!-- g7 <- gapminder %>%  -->
+<!--   filter(country %in% c("Canada", "France", "Germany", "Italy", "Japan", "United Kingdom", "United States")) -->
+<!-- levels(g7$country)[1:20] -->
+<!-- g7$country <- droplevels(g7$country) -->
+<!-- levels(g7$country) -->
+<!-- ``` -->
+
+<!-- --- -->
+<!-- ### Recoding factors -->
+<!-- ```{r comment = '#', tidy = FALSE} -->
+<!-- library(forcats) -->
+<!-- g7$country <- g7$country %>% -->
+<!--   fct_recode("UK" = "United Kingdom", "USA" = "United States")  -->
+<!-- levels(g7$country) -->
+<!-- ``` -->
+
+<!-- --- -->
+<!-- ### Reordering factors -->
+
+<!-- ```{r comment = '#', tidy = FALSE, fig.height = 4, dev = 'png'} -->
+<!-- g7_2007 <- g7 %>% filter(year == 2007) -->
+<!-- levels(g7_2007$country) -->
+
+<!-- ggplot(g7_2007, aes(x = gdpPercap, y = country)) + -->
+<!--   geom_point() + -->
+<!--   labs(x = "GDP per capita", y = NULL) + -->
+<!--   theme_minimal() -->
+<!-- ``` -->
+
+<!-- --- -->
+<!-- ### Reordering factors -->
+<!-- ```{r comment = '#', tidy = FALSE, fig.height = 4, dev = 'png'} -->
+<!-- fct_reorder(g7_2007$country, g7_2007$gdpPercap, .desc = TRUE) %>%  -->
+<!--   levels() -->
+
+<!-- ggplot(g7_2007, aes(x = gdpPercap, y = fct_reorder(country, gdpPercap))) + -->
+<!--   geom_point() + -->
+<!--   labs(x = "GDP per capita", y = NULL) + -->
+<!--   theme_minimal() -->
+<!-- ``` -->
+
+<!-- --- -->
+<!-- class: inverse, middle, center -->
