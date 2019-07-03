@@ -17,7 +17,7 @@ knitr::opts_chunk$set(echo=TRUE, cache=TRUE, prompt=FALSE, tidy=TRUE, comment=NA
 
 So now that you are familiar with the R syntax, know how to import data, and know how to get that data into the shape and form that you need for your analysis, we can begin to perform some basic operations to explore your data. 
 
-In your normal workflow, we are conscious that lot of your data exploration will come from visualisation. We cover visualisation tomorrow though, so we will stick to your basic stats in this session. We will cover
+In your normal workflow, we are conscious that lot of your data exploration will come from visualisation. We covered visualisation this morning, but in this session we will stick to your basic stats. We will cover
 
 - Univariate analysis (summary stats)
 - Bivariate analysis ( chi-square test, t-test, anova )
@@ -98,7 +98,7 @@ The default method is "pearson" so you may omit this if that is what you want. I
 Correlation coefficients
 - The default correlation returns the pearson correlation coefficient:	`cor(var1, var2)`
 - If you specify "spearman" you will get the spearman correlation coefficient:	`cor(var1, var2, method = "spearman")`
-- If you use a datset instead of separate variables you will return a matrix of all the pairwize correlation coefficients:	`cor(dataset, method = "pearson")`
+- If you use a datset instead of separate variables you will return a matrix of all the pairwise correlation coefficients:	`cor(dataset, method = "pearson")`
 
 
 Getting a correlation coefficient is generally only half the story; you will want to know if the relationship is significant. The `cor()` function in R can be extended to provide the significance testing required. The function is `cor.test()`
