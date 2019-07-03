@@ -429,7 +429,7 @@ fit_2 <- glm(dependent_variable ~ independent_variable_1 + independent_variable_
 
 R has various functions for model diagnostics. 
 
-For example the package *car* has a function `redidual plots` which produces residual plots from your model. So from our fit_2 above, we can see our resirual plots by passing the regression to the function: 
+For example the package *car* has a function `residdual plots` which produces residual plots from your model. So from our fit_2 above, we can see our residual plots by passing the regression to the function: 
 
 ```{r}
 library(car)
