@@ -198,7 +198,7 @@ ggplot(p1$data) + theme_minimal() +
 
 ```{r, echo = F, out.width="600px", fig.align = "center", fig.asp = .62}
 ggplot(p1$data) + theme_bw() +
-  geom_vline(xintercept = 1, linetype = "dashed") +
+  geom_vline(xintercept = 0, linetype = "dashed") +
   geom_errorbarh(aes(xmin = conf.low, xmax = conf.high, y = term), height = 0.2) +
   geom_point(aes(y = term, x = estimate), size = 3, col = "black") +
   labs(y = " ", x = "Estimate", title = "Figure 1: regression results example") +
