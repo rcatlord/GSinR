@@ -92,7 +92,7 @@ navbar:
   - icon: fa-github
     href: https://github.com/rcatlord/GSinR_materials
   - icon: glyphicon-camera
-    href: modules/visualise/activity/attendee_visualisations_2018.html    
+    href: modules/visualise/activity/attendee_visualisations_2019.html    
 output:
   html_document:
     theme: simplex
