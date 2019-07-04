@@ -1,0 +1,72 @@
+---
+title: "Fix My Street"
+author: "Reka Solymosi"
+date: "02/07/2019"
+output: html_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+```{r, eval = FALSE}
+
+startend <- list(c(1,10000), c(10001,20000), c(20001,30000),  c(30001,40000), c(40001,50000), c(50001,60000), c(60001,70000), c(70001,80000), c(80001,90000), c(90001,100000))
+
+
+for(se in startend){
+  
+  datalist <- list()
+  
+  for (i in se[1]:se[2]){
+    
+    tryCatch({
+      
+      l <- readLines(url(paste0('https://www.fixmystreet.com/report/',i)))
+      
+      datalist[[i]] <- data.frame(
+        repurl = paste0('https://www.fixmystreet.com/report/',i),
+        lat = l[which(grepl("latitude", l))][1],
+        lng = l[which(grepl("longitude", l))][1],
+        title = l[which(grepl("<title>", l))],
+        categorynametime = l[which(grepl("Reported", l))],
+        description = paste(l[which(grepl(' <div class="moderate-display">', l))[1]+2], collapse = " ")
+      )
+      
+    }, warning = function(w) {
+      
+      l <- readLines(url(paste0('https://www.fixmystreet.com/report/',i)))
+      
+      datalist[[i]] <- data.frame(
+        repurl = paste0('https://www.fixmystreet.com/report/',i),
+        lat = l[which(grepl("latitude", l))][1],
+        lng = l[which(grepl("longitude", l))][1],
+        title = l[which(grepl("<title>", l))],
+        categorynametime = l[which(grepl("Reported", l))],
+        description = paste(l[which(grepl(' <div class="moderate-display">', l))[1]+2], collapse = " ")
+      )
+      
+    }, error = function(e) {
+      
+      print(paste0(i, " :: ",e))
+      
+    })
+    
+    tryCatch({
+      closeAllConnections()
+    } , error = function(e) {
+      
+      print(paste0(i, " :: ",e))
+      
+    })
+    
+    
+  }
+  
+  assign(paste0("reps",i),do.call(rbind, datalist))
+  
+}
+
+
+
+```
