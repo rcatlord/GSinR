@@ -384,7 +384,7 @@ $(document).ready(function () {
 
 <hr />
 <p>So now that you are familiar with the R syntax, know how to import data, and know how to get that data into the shape and form that you need for your analysis, we can begin to perform some basic operations to explore your data.</p>
-<p>In your normal workflow, we are conscious that lot of your data exploration will come from visualisation. We cover visualisation tomorrow though, so we will stick to your basic stats in this session. We will cover</p>
+<p>In your normal workflow, we are conscious that lot of your data exploration will come from visualisation. We covered visualisation this morning, but in this session we will stick to your basic stats. We will cover</p>
 <ul>
 <li>Univariate analysis (summary stats)</li>
 <li>Bivariate analysis ( chi-square test, t-test, anova )</li>
@@ -393,7 +393,7 @@ $(document).ready(function () {
 <pre class="r"><code>library(tidyverse)</code></pre>
 <div id="the-data" class="section level1">
 <h1>The data</h1>
-<p>We will be working through the gapminder data set again. To load this data set into your environment, load the package:</p>
+<p>We will be working through the gapminder data set again. To load this data set into your environment, lfoad the package:</p>
 <pre class="r"><code>library(gapminder)</code></pre>
 <p>But we also want to do some data manipulation by filtering and creating a new variable we will use later.</p>
 <pre class="r"><code>gapminder_2007 &lt;- gapminder %&gt;% filter(year == 2007) %&gt;% mutate(gdp_factor = if_else(gdpPercap &gt; 
@@ -450,7 +450,7 @@ gapminder_2007$below_avg_life_exp &lt;- as.factor(gapminder_2007$below_avg_life_
 <p>The pseudo code to get the correlation coefficient would be:</p>
 <pre class="r"><code>cor(var1, var2, method = &quot;method&quot;)</code></pre>
 <p>The default method is “pearson” so you may omit this if that is what you want. If you type “kendall” or “spearman” then you will get the appropriate correlation coefficient.</p>
-<p>Correlation coefficients - The default correlation returns the pearson correlation coefficient: <code>cor(var1, var2)</code> - If you specify “spearman” you will get the spearman correlation coefficient: <code>cor(var1, var2, method = &quot;spearman&quot;)</code> - If you use a datset instead of separate variables you will return a matrix of all the pairwize correlation coefficients: <code>cor(dataset, method = &quot;pearson&quot;)</code></p>
+<p>Correlation coefficients - The default correlation returns the pearson correlation coefficient: <code>cor(var1, var2)</code> - If you specify “spearman” you will get the spearman correlation coefficient: <code>cor(var1, var2, method = &quot;spearman&quot;)</code> - If you use a datset instead of separate variables you will return a matrix of all the pairwise correlation coefficients: <code>cor(dataset, method = &quot;pearson&quot;)</code></p>
 <p>Getting a correlation coefficient is generally only half the story; you will want to know if the relationship is significant. The <code>cor()</code> function in R can be extended to provide the significance testing required. The function is <code>cor.test()</code></p>
 <p>To run a correlation test, the pseudo code would look like this:</p>
 <pre class="r"><code>cor.test(var1, var2, method = &quot;method&quot;)</code></pre>
@@ -736,6 +736,7 @@ Number of Fisher Scoring iterations: 2</code></pre>
 <h2>Diagnostics</h2>
 <p>R has various functions for model diagnostics.</p>
 <p>For example the package <em>car</em> has a function <code>residual plots</code> which produces residual plots from your model. So from our fit_2 above, we can see our residual plots by passing the regression to the function:</p>
+<p>For example the package <em>car</em> has a function <code>residual plots</code> which produces residual plots from your model. So from our fit_2 above, we can see our residual plots by passing the regression to the function: &gt;&gt;&gt;&gt;&gt;&gt;&gt; 59aa68eaf5c05e8fb39d788ce8b403695ea088ef</p>
 <pre class="r"><code>library(car)</code></pre>
 <pre><code>
 Attaching package: &#39;car&#39;</code></pre>
