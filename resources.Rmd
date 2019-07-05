@@ -15,6 +15,17 @@ The following is a list of online resources that you might find useful:
 - [Cookbook for R](http://www.cookbook-r.com/)
 - [RStudio Cheat Sheets](https://www.rstudio.com/resources/cheatsheets/)
 
+
+**Books**
+
+- [R 4 Data Science](https://r4ds.had.co.nz/)
+- [Introduction to Statistical Learning in R](http://www-bcf.usc.edu/~gareth/ISL/ISLR%20Seventh%20Printing.pdf)
+- [Andy Fields Discovering Statistics using R](https://uk.sagepub.com/en-gb/eur/discovering-statistics-using-r/book236067)
+- [Bookdown book](https://bookdown.org/yihui/bookdown/)
+- [Tidy text](https://www.tidytextmining.com/)
+- [Geocomputation with R](https://geocompr.robinlovelace.net/)
+
+
 **Style guides**
 
 - [The tidyverse style guide](http://style.tidyverse.org/)
